@@ -1,0 +1,72 @@
+const categoryModel = require('../../model/categorySchema');
+const productModel  =require('../../model/productSchema');
+
+    const loadCategory = async(req,res)=>{
+        try {
+            let productsValue =[];
+            const categories = await categoryModel.find();
+
+            for(let i=0; i< categories.length;i++){
+                productsValue[i]=await productModel.findOne({category:categories[i]._id})
+            }
+            res.render('Admin/categories',{categories,productsValue})
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    const loadAddCategory = async(req,res)=>{
+      
+        res.render('Admin/addCategory',{message: ""})
+    }
+
+    const addCategory = async(req,res)=>{
+        try {
+            const catogeryName = req.body.name;
+
+            const categoryData = await categoryModel.findOne({categoryName: {$regex:new RegExp(`${req.body.name}$`,"i")}})
+
+            if(categoryData){
+                res.render('Admin/addCategory',{message:"This category already exist"})
+            }else{
+                const newCategory = new categoryModel({
+                    categoryName:catogeryName
+                })
+                await newCategory.save();
+                res.redirect('/admin/category')
+            }
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+    const loadEditCategory = async(req,res)=>{
+        try {
+            const id = req.query.id;
+            const categoryData = await categoryModel.findOne({_id: id});
+            res.render('Admin/editCategory',{message:null,category: categoryData})
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    const editCategory = async (req,res)=>{
+        try {
+            const id = req.query.id
+            const categoryName = req.body.name
+    
+            await categoryModel.findByIdAndUpdate(id, { categoryName: categoryName })
+            res.redirect('/admin/category');
+        } catch (error) {
+            console.log(error.message);
+        }
+    
+    }
+
+
+    module.exports={
+        loadCategory,
+        loadAddCategory,
+        addCategory,
+        loadEditCategory,
+        editCategory
+    }

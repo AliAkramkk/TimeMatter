@@ -1,0 +1,54 @@
+<%- include('./partials/header.ejs') %>
+
+    <%- include('./partials/sidebar.ejs')%>
+
+<h2 class="text-center py-3">Coupon</h2>
+        <div style="overflow-y: auto;" class="w-100 d-flex align-items-center align-items-center px-3">
+            <div class="table">
+                <table class="table table-light table-striped table-responsive">
+                    <thead>
+
+                        <tr>
+                            
+                            <th>Coupon Name</th>
+                            <th> Discount</th>
+                            <th>Min Amount</th>
+                            <th>Max Discount</th>
+                            <th>Expiry Date</th>
+                            <th>Edit</th>
+                            
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <% Coupon.forEach((coupon)=>{ %>
+                            <tr>
+                                <td>
+                                  <%= coupon.couponName
+                                    %> 
+                                </td>
+                                <td>
+                                    <%= coupon.discount %>%
+                                </td>
+                                <td>
+                                  <%= coupon.minTotal %>
+                              </td>
+                              <td>
+                                <%= coupon.maxDiscount %>
+                            </td>
+                            <td>
+                              <%=coupon.expiryDate.getDate() %>/
+                               <%=coupon.expiryDate.toLocaleString('default', {month: 'long'}) %>
+                               /<%=coupon.expiryDate.getFullYear() %>
+                          </td>
+                                <td><a href="#"><button>Edit</button></a></td>
+                            </tr>
+                            <%})%>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    <%- include('./partials/footer.ejs') %>

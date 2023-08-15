@@ -1,0 +1,122 @@
+<%- include('./partials/header.ejs') %>
+<header class="header">
+
+  
+      <div class="row">
+          <div class="col-lg-3">
+              <div class="header__logo">
+                  <a class="navbar-brand text-dark fs-4 fw-bold" href="#">Time<span class="text-danger">Matter</span></a>
+              </div>
+          </div>
+          <div class="col-lg-6">
+              <nav class="header__menu">
+                  <ul>
+                      <li><a href="/">Home</a></li>
+                      <li class="active"><a href="/shop">Shop</a></li>
+                      <li><a href="#">About</a></li>
+                      <li><a href="#">Contact</a></li>
+                  </ul>
+              </nav>
+          </div>
+          <div class="col-lg-3">
+              <div class="header__cart">
+                 
+                  <div class="header_topright_auth">
+
+                  
+                      
+
+
+                   
+                      
+
+                      <ul>
+                          <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
+                          <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li> 
+                      </ul>
+  
+                      <div class="header__top__right__auth">
+                          <a href="/profile"><i class="fa fa-user"></i><%= user.username %></a>
+                      </div>
+  
+                      <div class="header__top__right__auth">
+                          <a href="/logout" style="box-shadow: none;border: none;" class="btn btn-sm btn-outline-danger">Logout</a>
+                      </div>
+                      
+
+                    
+                      
+                     
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      </div>
+    
+  </div>
+</header>
+<div class="wishlist-main">
+<div class="container" style="width: 100%;" >
+ 
+  <h3 class="wish-head">Order History <i class="fa fa-shopping-bag"></i></h3>
+  <div class="containerprob mt-3">
+   
+    <div class="row">
+     
+      <% orders.forEach((item)=>{ %> 
+       
+           
+      <div class="d-flex  col-md-12 mt-3 mb-3 p-2 container pro" >
+       
+        <div class="col-lg-4" style="height: 100%;">
+         
+          <% item.product.forEach((productItem,i)=> {%>
+            <% if(i==0){%>
+              <a href="/orderDetails?order_id=<%= item.order_id%>&address=<%= item.address%>" >
+              
+              <img src="<%=productItem.product_id.image[0].url%>" class="card-img-top" alt="..." style="height: 8rem; width: 8rem;">
+            </a>
+          <%}%>
+          <%})%>
+        </div>
+        
+        <div class="col-lg-4" style="padding-top: 1rem;">
+          <h5 class="">order id:<%= item.order_id%></h5><br>
+          
+
+
+
+          <h4 class="">Total Price:<%= item.total_amount%></h4>
+          
+        </div>
+       
+ <div class="order-status d-flex">
+  <div class="<%=item.orderStatus%>">
+     <%= item.status%>
+    </div>
+  </div>
+    </div>
+
+     
+         
+      <% }) %> 
+      
+      
+      
+    </div>
+    <% if(!orders[0]){ %>
+    <div
+      class="d-flex flex-column justify-content-center align-items-center"
+      style="gap: 10px"
+    >
+      <img src="/img/noOrders.png" style="width: 300px" alt="" />
+      <h3>No Orders found!</h3>
+      <p class="text-center">Looks like you haven't ordered anything yet</p>
+    </div>
+    <% } %>
+  </div>
+</div>
+</div>
+
+<%- include('./partials/footer.ejs') %>

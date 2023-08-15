@@ -1,0 +1,26 @@
+.pro {
+  background-color: #cfd8e3;
+  display: block;
+  border: 2px solid #cfd8e3;
+  /* Add a solid border with a specific color */
+  padding: 10px;
+  /* Add some padding to create space between content and border */
+}
+
+.custom-button {
+  display: inline-block;
+  background-color: black;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.custom-button button {
+  background-color: black;
+  color: rgb(242, 234, 234);
+  border: none;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 5px;
+}

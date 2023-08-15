@@ -1,0 +1,51 @@
+<%- include('./partials/header.ejs') %> 
+<%- include('./partials/sidebar.ejs') %>
+        <div class="container my-5 card">
+            <div class="card-body">
+                <form action="/admin/editOrder/<%=order._id%>" method="post" class="form">
+                    <div class="container bg-white p-4 mb-4">
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="name">Order ID</label>
+
+                            <input type="text" id="orderId" name="orderId" class="form-control"
+                                value="<%=order.order_id%>" visibility: hidden; disabled />
+                        </div>
+                        <div class="my-4"><label for="Name">User</label><br>
+                            <input type="text" placeholder="category" value="<%= order.user.username %>" disabled></div>
+                            <div class="my-4"><label for="Name">Products</label><br>
+                                <% order.product.forEach((item)=>{ %>
+                                  <input type="text" placeholder="category" disabled
+                                        value="<%= item.product_id.productName %>">
+                                    <%}) %>
+                                    </div>
+                        
+                                <label for="Name">Order Status</label><br>
+                                <select name="status" value="<%=order.status%>">
+                                    <% if(order.status=="returned" ){ %>
+                                        <!-- <% }else if(order.status=="returnProcessing" ){ %>
+                                            <option value="returnProcessing">Return Processing</option>
+                                            <option value="returned">Returned</option> -->
+                                            <% }else{ %>
+                                                <option value="pending">Pending</option>
+                                                <option value="delivered">Delivered</option>
+                                                <option value="outForDelivery">Out For Delivery</option>
+                                                <% } %>
+                                </select>
+                    </div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-block mb-4 col-lg-3" style="background-color: #FFD333">
+                    UPDATE
+                </button>
+            </div>
+            </form>
+        </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <%- include('./partials/footer.ejs') %>
+
+
+
+

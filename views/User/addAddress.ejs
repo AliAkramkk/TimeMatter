@@ -1,0 +1,150 @@
+<%- include('./partials/header.ejs') %>
+<header class="header">
+
+  <div class="container">
+      <div class="row">
+          <div class="col-lg-3">
+              <div class="header__logo">
+                  <a class="navbar-brand text-dark fs-4 fw-bold" href="#">Time<span class="text-danger">Matter</span></a>
+              </div>
+          </div>
+          <div class="col-lg-6">
+              <nav class="header__menu">
+                  <ul>
+                      <li class="active"><a href="/">Home</a></li>
+                      <li><a href="/shop">Shop</a></li>
+                      <li><a href="#">About</a></li>
+                      <li><a href="#">Contact</a></li>
+                  </ul>
+              </nav>
+          </div>
+          <div class="col-lg-3">
+              <div class="header__cart">
+                 
+
+                  <div class="header__top__right__auth">
+
+                    
+                      
+                      
+
+      
+
+                      
+
+                      <ul>
+                          <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
+                          <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li> 
+                      </ul>
+
+                     
+
+        <div class="header__top__right__auth">
+                          <a href="/logout" style="box-shadow: none;border: none;" class="btn btn-sm btn-outline-danger">Logout</a>
+                      </div>
+                      
+                   
+                  </div>
+
+              </div>
+          </div>
+      </div>
+
+      </div>
+      <div class="humberger__open">
+          <i class="fa fa-bars"></i>
+      </div>
+  </div>
+</header>
+<!-- end of header section -->
+<div class="add-address-main">
+  <div class="container">
+    <h3>Add Address</h3>
+    <div class="add-address-container">
+      <form
+        class="add-box mt-3"
+        id="addAddressForm"
+        action="/add-address?redirect=<%=redirect%>"
+        method="post"
+      >
+        <input
+          type="text"
+          name="redirect"
+          value="<%=redirect%>"
+          style="height: 0px; visibility: hidden"
+          required
+        />
+        <h4 class="mt-3">Manage Address</h4>
+        <div class="add-row mt-1">
+          <div class="add-row-col">
+            <label for="">Name</label>
+            <input type="text" name="username" placeholder="Name" required />
+          </div>
+          <div class="add-row-col">
+            <label for="">Mobile</label>
+            <input
+              type="text"
+              name="mobile"
+              placeholder="mobile"
+              pattern="[0-9]*"
+              maxlength="10"
+              required
+            />
+          </div>
+        </div>
+        <div class="add-row">
+          <div class="add-row-col">
+            <label for="">PIN Code</label>
+            <input
+              type="number"
+              name="pincode"
+              placeholder="PIN code"
+              required
+            />
+          </div>
+          <div class="add-row-col">
+            <label for="">Locality</label>
+            <input
+              type="text"
+              name="locality"
+              placeholder="locality"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="add-row text-area">
+          <div class="add-row-col">
+            <label for="">Address</label>
+            <textarea
+              name="address"
+              placeholder="Address"
+              rows="5"
+              form="addAddressForm"
+              required
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="add-row">
+          <div class="add-row-col">
+            <label for="">City/Village/Town</label>
+            <input
+              type="text"
+              name="city"
+              placeholder="city/village/town"
+              required
+            />
+          </div>
+          <div class="add-row-col">
+            <label for="">State</label>
+            <input type="text" name="state" placeholder="state" required />
+          </div>
+        </div>
+        <div class="add-row">
+          <button type="submit">Add Address</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

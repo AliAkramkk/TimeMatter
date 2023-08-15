@@ -1,0 +1,47 @@
+.custom-button {
+  background-color: black;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.custom-button {
+  background-color: black;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  text-decoration: none;
+  /* Remove underline from the link */
+}
+
+.custom-button:hover {
+  background-color: #333;
+  /* Darken the background color on hover */
+}
+
+.man-ad-right {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.man-ad-right i {
+  font-size: 1.2rem;
+  color: red;
+  font-weight: 500;
+}
+
+.man-ad-right i:last-child {
+  color: blue;
+}
+
+.man-ad-top-right {
+  position: absolute;
+  top: 0px;
+  right: -300px;
+  margin-left: 100px;
+}

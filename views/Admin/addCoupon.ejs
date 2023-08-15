@@ -1,0 +1,100 @@
+<%- include('./partials/header.ejs')%>
+
+    <%- include('./partials/sidebar.ejs')%>
+
+
+
+  
+<div class="col-12">
+
+  <div class="col-9 mx-5">
+      <div class="container py-3 mt-5 px-5" style="height: 400px">
+          <div class="row d-flex justify-content-center align-items-center h-100">
+              <div class="col-lg-8 col-xl-12">
+                  <div class="card rounded-3">
+                      <form action="/Admin/addCoupon/" id="form" method="post" class="px-md-2 mt-5 m-5">
+                          <div class="row mb-4 mt-5" >
+                              <div class="col-md-4">
+                                  <label class="form-label pt-2" for="form3Example1q">Enter Coupon
+                                      Name:</label>
+                              </div>
+                              <div class="col-md-8">
+                                  <input type="text" id="couponname" class="form-control" name="couponname"
+                                      placeholder="Enter Coupon Name" required />
+                              </div>
+                              
+                          </div>
+                          <div class="row mb-4 mt-5" >
+                            <div class="col-md-4">
+                                <label class="form-label pt-2" for="form3Example1q">Enter Discount in %:</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="number" id="name" class="form-control" name="discount"
+                                    placeholder="Enter Discount" required />
+                            </div>
+                            
+                        </div>
+                        <div class="row mb-4 mt-5" >
+                            <div class="col-md-4">
+                                <label class="form-label pt-2" for="form3Example1q">Enter Min amount
+                                    </label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="number" id="name" class="form-control" name="minamount"
+                                    placeholder="Enter Min amount" required />
+                            </div>
+                            
+                        </div>
+                        <div class="row mb-4 mt-5" >
+                            <div class="col-md-4">
+                                <label class="form-label pt-2" for="form3Example1q">Enter maximum discount
+                                    </label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="number" id="name" class="form-control" name="maxdiscount"
+                                    placeholder="Enter maximum discount" required />
+                            </div>
+                            
+                        </div>
+                        <div class="row mb-4 mt-5" >
+                            <div class="col-md-4">
+                                <label class="form-label pt-2" for="form3Example1q">Enter Expiry date
+                                    </label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="date" id="name" class="form-control" name="date"
+                                    placeholder="Enter Expiry date" required />
+                            </div>
+                            
+                        </div>
+
+                          <!--------------------Sub-Category---------------------------------------------------------------------------------------------------------------------------------------->
+                          <!-- <div class="row mb-4">
+                                  <div class="col-md-4">
+                                      <label class="form-label pt-2" for="form3Example1q">Enter Sub
+                                          Categories</label>
+                                  </div>
+                              <div class="col-md-8">
+                                  <input type="text" id="form3Example1q username" class="form-control"
+                                      name="sub" placeholder="Enter Sub Categories" required />
+                              </div> -->
+                  </div>
+
+                  <p class="text-danger bg-alert">
+                      <!-- <%=message%> -->
+                  </p>
+
+                  <div class="d-flex justify-content-center">
+                      <button type="submit" style="background-color: #88C8BC; width: 200px"
+                          class="btn align-items-center p-2">
+                          Confirm
+                      </button>
+                  </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<%- include('./partials/footer.ejs') %>

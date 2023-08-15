@@ -1,0 +1,112 @@
+<%- include('./partials/header.ejs') %>
+<div class="add-address-main">
+  <div class="container">
+    <h3>Edit Address</h3>
+    <div class="add-address-container">
+      <form
+        class="add-box mt-3"
+        id="addAddressForm"
+        action="/edit-address"
+        method="post"
+      >
+        <h4 class="mt-3">Manage Address</h4>
+        <input
+          type="text"
+          name="id"
+          placeholder="Name"
+          required
+          value="<%=address.id %>"
+          style="height: 0px; visibility: hidden"
+        />
+        <div class="add-row mt-1">
+          <div class="add-row-col">
+            <label for="">Name</label>
+            <input
+              type="text"
+              name="username"
+              placeholder="Name"
+              required
+              value="<%=address.username %>"
+            />
+          </div>
+          <div class="add-row-col">
+            <label for="">Mobile</label>
+            <input
+              type="text"
+              name="mobile"
+              placeholder="mobile"
+              pattern="[0-9]*"
+              maxlength="10"
+              required
+              value="<%=address.mobile %>"
+            />
+          </div>
+        </div>
+        <div class="add-row">
+          <div class="add-row-col">
+            <label for="">PIN Code</label>
+            <input
+              type="number"
+              name="pincode"
+              placeholder="PIN code"
+              required
+              value="<%=address.pincode %>"
+            />
+          </div>
+          <div class="add-row-col">
+            <label for="">Locality</label>
+            <input
+              type="text"
+              name="locality"
+              placeholder="locality"
+              required
+              value="<%=address.locality %>"
+            />
+          </div>
+        </div>
+
+        <div class="add-row text-area">
+          <div class="add-row-col">
+            <label for="">Address</label>
+            <textarea
+              name="address"
+              placeholder="Address"
+              rows="5"
+              form="addAddressForm"
+              required
+            >
+<%=address.address %>
+                        </textarea
+            >
+          </div>
+        </div>
+
+        <div class="add-row">
+          <div class="add-row-col">
+            <label for="">City/Village/Town</label>
+            <input
+              type="text"
+              name="city"
+              placeholder="city/village/town"
+              required
+              value="<%=address.city %>"
+            />
+          </div>
+          <div class="add-row-col">
+            <label for="">State</label>
+            <input
+              type="text"
+              name="state"
+              placeholder="state"
+              required
+              value="<%= address.state%>"
+            />
+          </div>
+        </div>
+        <div class="add-row">
+          <button type="submit">Edit Address</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

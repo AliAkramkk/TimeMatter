@@ -1,0 +1,96 @@
+<%- include('./partials/header.ejs') %>
+<!-- Header Section Begin -->
+ 
+<header class="header">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="header__logo">
+                    <a class="navbar-brand text-dark fs-4 fw-bold" href="#">Time<span class="text-danger">Matter</span></a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <nav class="header__menu">
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li class="active"><a href="/shop">Shop</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3">
+                <div class="header__cart">
+                   
+                    <div class="header_topright_auth">
+
+                    
+                        
+<!-- 
+                        <div class="header_topright_auth">
+                            <a onclick="login()"><i class="fa fa-user"></i> Login</a>
+                        </div> -->
+
+                     
+                        
+
+                        <ul>
+                            <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
+                            <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li> 
+                        </ul>
+
+                       
+
+                      
+                        
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div>
+      
+    </div>
+</header>
+
+<!-- Header Section End -->
+<div class="edit-profile-main">
+  <div class="container d-flex flex-column align-items-center">
+    <h4>Edit Profile</h4>
+    <form  action="/edit-profile" method="post" class="edit-profile-container">
+      <div class="form-row">
+        <label>Name</label>
+        <input
+          type="text"
+          name="username"
+          placeholder="name"
+          value="<%=user.username%>"
+        />
+      </div>
+      <div class="form-row">
+        <label>Email</label>
+        <input
+          type="email"
+          readonly
+          style="color: rgb(77, 77, 77)"
+          name="email"
+          placeholder="email"
+          value="<%=user.email%>"
+        />
+      </div>
+      <div class="form-row">
+        <label>Current Password</label>
+        <input type="password" name="password" placeholder="password" />
+      </div>
+      <div class="form-row">
+        <label>New Password</label>
+        <input type="password" name="newPassword" placeholder="password" />
+      </div>
+      <div class="form-row">
+        <button type="submit">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
