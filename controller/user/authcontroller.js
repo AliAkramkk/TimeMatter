@@ -5,6 +5,7 @@ const Product = require("../../model/productSchema");
 const Category = require("../../model/categorySchema");
 const createdId = require("../../actions/createdId");
 const Cart = require("../../model/cartSchema");
+const { log } = require("console");
 
 const signup = async (req, res) => {
   res.render("User/usersignup", { message: "" });
@@ -245,7 +246,9 @@ const deleteAddress = async (req, res) => {
         },
       }
     );
-    res.redirect("/profile");
+    const redirect = req.query.redirect;
+    console.log(redirect);
+    res.redirect("/"+redirect);
   } catch (error) {
     console.log(error.message);
   }

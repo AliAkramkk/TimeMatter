@@ -81,7 +81,7 @@
               <div class="filter-options mt-3">
                   <div class="ft-option">
                       <input type="radio" value="" name="category" id="d" <% if(category=="" ){ %> checked <% } %>
-                          onchange="handleChange('category', '')"/>
+                          onchange="loadAllCategory()"/>
                           <label for="d">All</label>
                   </div>
                   <% categories.forEach(item=>{ %>
@@ -241,6 +241,7 @@
 `;
                   productList.appendChild(div);
               });
+          
               if (data?.pageCount <= 1) {
                   let pagination = document.getElementById('pagination')
                   pagination.innerHTML = ""
@@ -279,8 +280,100 @@
 `
                   paginationUl.appendChild(li3)
               }
-          })
+        
+
+    })
       }
+
+
+      function loadAllCategory(){
+        fetch(`http://localhost:3003/allCat`, {
+              method: 'GET',
+              headers: {
+                  'Accept': 'application/json',
+                  "Content-Type": "application/json",
+              }
+          }).then((response) => response.json()).then((data) => {
+              console.log(data)
+              let productList = document.getElementById('productList');
+              productList.innerHTML = "";
+              data.products.forEach((item, index) => {
+                  let div = document.createElement('div');
+                  div.setAttribute('class', "col-12 col-sm-6 col-md-4");
+                  div.innerHTML = `
+ 
+                  
+                      <div class="card mb-3">
+                          <a href="/productDetails?id= ${item._id}" class="text-decoration-none"
+                              style="color: black;">
+                              <img src="${item.image[0].url}" class="card-img-top"
+                                  style="aspect-ratio: 1 / 1" />
+                              <div class="card-body">
+                                  <h4 class="card-title">
+                                    ${item.productName}
+                                  </h4>
+                                  <p class="card-text">
+                                    ${item.blurb}
+                                  </p>
+                                  <div class="buy d-flex justify-content-between align-items-center">
+                                      <div class="price text-success">
+                                          <h5 class="mt-4">₹${item.price}
+                                          </h5>
+                                      </div>
+                                  </div>
+                              </div>
+                          </a>
+                      </div>
+                  
+               
+
+`;
+                  productList.appendChild(div);
+              });
+          
+              if (data?.pageCount <= 1) {
+                  let pagination = document.getElementById('pagination')
+                  pagination.innerHTML = ""
+              } else {
+                  let pagination = document.getElementById('pagination')
+                  pagination.innerHTML = `
+<nav aria-label="Page navigation example text-dark pl-pagination">
+      <ul class="pagination d-flex justify-content-center mt-3 categoryPagination" id="paginationUl">
+      </ul>
+    </nav>
+`
+                  let paginationUl = document.getElementById('paginationUl');
+                  let li1 = document.createElement('li');
+                  li1.setAttribute('class', 'page-item if(data.page == 0) { disabled }')
+                  li1.innerHTML = `
+    <span class="page-link text-dark" aria-label="Previous">
+      <span aria-hidden="true" onclick="gotoPage('${data.page - 1}')">&laquo;</span>
+    </span>
+`
+                  paginationUl.appendChild(li1)
+                  for (let i = 0; i < data.pageCount; i++) {
+                      let li2 = document.createElement('li');
+                      li2.setAttribute('class', 'page-item')
+                      li2.innerHTML = `
+  <span onclick="gotoPage('${i}')" class="page-link text-dark" > ${i + 1} </span>
+  
+  `
+                      paginationUl.appendChild(li2)
+                  }
+                  let li3 = document.createElement('li');
+                  li3.setAttribute('class', 'page-item')
+                  li3.innerHTML = `
+<span class="page-link text-dark" aria-label="Next">
+            <span aria-hidden="true" onclick="gotoPage('${data.page + 1}')">&raquo;</span>
+          </span>
+`
+                  paginationUl.appendChild(li3)
+              }
+        
+
+    })
+      }
+
 
       function handleChange(setName, value) {
           searchParams.set(setName, value);

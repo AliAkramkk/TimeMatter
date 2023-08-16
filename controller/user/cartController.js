@@ -70,6 +70,7 @@ const deleteCartItems = async (req, res) => {
     "product"
   );
   const count = await Cart.findOne({ user: req.session.User_id }).count();
+  console.log(count);
   const total = totalAmount(carts);
   res.send({
     data: "this is data",
@@ -113,13 +114,14 @@ const decrementCartItems = async (req, res) => {
   const { cartId } = req.query;
   await Cart.findOneAndUpdate({ _id: cartId }, { $inc: { quantity: -1 } });
   const carts = await Cart.find({ user: userId }).populate("product");
-  const count = await Cart.find({ user: userId }).count();
   const total = totalAmount(carts);
   const product = await Cart.findOne({ _id: cartId }).populate("product");
   if (product.quantity <= 0) {
     await Cart.deleteOne({ _id: cartId });
     quantityZero = true;
   }
+  const count = await Cart.find({ user: userId }).count()
+  const newCount=count
   const newPrice = parseInt(product.product.price * product.quantity);
   res.send({
 
@@ -129,6 +131,7 @@ const decrementCartItems = async (req, res) => {
     total,
     newPrice,
     product,
+    newCount
   });
 };
 const checkQuantity = async (req, res) => {

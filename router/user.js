@@ -5,6 +5,8 @@ const productController = require("../controller/user/productController");
 const cartController = require("../controller/user/cartController");
 const userSess = require("../middleware/user");
 const { catchErrors } = require("../utility/errorHandler");
+
+
 routers.get("/login", userSess.islogin, user.loadHome);
 routers.post("/login", user.verifyLogin);
 routers.get("/signup", user.signup);
@@ -23,7 +25,7 @@ routers.post("/edit-profile", user.updatedProfile);
 routers.get("/add-address", userSess.islogin, user.getAddAddress);
 routers.post("/add-address", userSess.islogin, user.addAddress);
 routers.get("/edit-address/:id", userSess.islogin, user.getEditAddress);
-routers.post("/edit-address", user.editAddress);
+routers.post("/edit-address", userSess.islogin,user.editAddress);
 routers.get("/delete-address/:id", userSess.islogin, user.deleteAddress);
 routers.get("/cart", userSess.islogin, cartController.getCart);
 routers.put(
@@ -58,5 +60,6 @@ routers.put("/verifyOnlinePayment", cartController.verifyOnlinePayment);
 
 routers.get('/category',productController.viewCategories)
 routers.get('/getProducts',productController.getRadioProducts)
-routers.get('/filterCat',productController.filterCat)
+routers.get('/filterCat',productController.filterCat);
+routers.get('/allCat',productController.allCategory);
 module.exports = routers;

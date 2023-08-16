@@ -119,23 +119,18 @@ const filterCat = async (req, res) => {
         length: false,
       });
     }
-  } else {
-    // If no specific category is selected, return all products
-    const allProducts = await productModel.find();
-    if (allProducts.length !== 0) {
-      return res.send({
-        data: 'this is data',
-        products: allProducts,
-        length: true,
-      });
-    } else {
-      return res.send({
-        data: 'this is data',
-        products: allProducts,
-        length: false,
-      });
-    }
-  }
+  } 
+};
+
+const allCategory= async (req, res) => {
+const products= await  productModel.find({});
+console.log(products);
+return res.send({
+  data:'this is data',
+  products,
+ 
+})
+
 };
 
 const getRadioProducts = async (req, res) => {
@@ -237,5 +232,6 @@ module.exports = {
   productDetails,
   viewCategories,
   getRadioProducts,
-  filterCat
+  filterCat,
+  allCategory
 };

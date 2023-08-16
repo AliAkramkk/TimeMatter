@@ -29,6 +29,7 @@ routers.get("/product/add", adminSess.isLogin, product.loadAddProducts);
 routers.post("/product/add", product.addProduct);
 routers.get("/product/edit", adminSess.isLogin,product.loadEditProduct);
 routers.post("/product/edit", product.editProduct);
+
 routers.get("/product/delete", product.deleteProduct);
 routers.get("/orders",adminSess.isLogin, product.viewOrder);
 routers.get("/orderSummary/:id",adminSess.isLogin, product.orderDetails);

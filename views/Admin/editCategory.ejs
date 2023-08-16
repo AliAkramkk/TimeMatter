@@ -20,15 +20,20 @@
                                                 Name:</label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input type="text" id="name" class="form-control" name="name"
-                                                value="<%=category.name%>" placeholder="Enter Category Name" required />
+                                            <input type="text" id="categoryName" class="form-control" name="categoryName"
+                                                value="<%=category.categoryName%>" placeholder="Enter Category Name" required />
                                         </div>
                                     </div>
+                                    <div class="text-center text-danger">
+                                        <%= message %>
+                                    </div>
+
                                     <div class="d-flex justify-content-center mt-2">
                                         <button type="submit" style="background-color: #88C8BC; width: 200px"
                                             class="btn align-items-center p-2">
                                             Update
                                         </button>
+                                       
                                     </div>
                                 </form>
                             </div>

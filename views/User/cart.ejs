@@ -66,11 +66,16 @@
   <div class="container pt-3">
       <% if(count!==0) { %>
           <h3 class="cart-head">Cart <i class="ri-shopping-cart-line"></i></h3>
+          <div class="" id="newDiv">
+            
+          </div>
+        
           <% } %>
               <div class="alert alert-dark alert-dismissible fade show" role="alert" style="display: none;"
                   id="cartAlert">
                   <div>
                       <strong>Out Of Stock!</strong>
+                    
                   </div>
 
 
@@ -182,16 +187,16 @@
                                   </div>
 
                     </div> <% } %>
-                      <div class="row" id="showEmpty" style="display: none;">
-                          <div class="empty-container w-100 h-50 d-flex flex-column justify-content-center align-items-center"
-                              style="gap:10px">
-                              <img src="img/emptyCart.png" height="300px" alt="">
-                              <h3>Your Cart is empty!</h3>
-                              <p>Looks like you haven't added anything to your cart </p>
-                          </div>
-                      </div>
-                     
-  </div>
+                    
+                </div>
+                <div class="row" id="showEmpty" style="display: none;">
+                    <div class="empty-container w-100 h-50 d-flex flex-column justify-content-center align-items-center"
+                        style="gap:10px">
+                        <img src="img/emptyCart.png" height="300px" alt="">
+                        <h3>Your Cart is empty!</h3>
+                        <p>Looks like you haven't added anything to your cart </p>
+                    </div>
+                </div>
 </div>
 
 
@@ -214,9 +219,11 @@
                             document.getElementById('totalPrice').innerText = data.total
                             document.getElementById(`pricePerUnit${data.product.product._id}`).innerText = data.product.product.price
                             if (data.quantityZero == true) {
+                                console.log(data.count)
                                 document.getElementById(`cart${data.product.product._id}`).remove()
                             }
                             if (data.count == 0) {
+                                console.log(data.count)
                                 document.getElementById('showCards').style.display = 'none'
                                 document.getElementById('showEmpty').style.display = 'block'
                             }

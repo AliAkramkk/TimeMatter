@@ -2,6 +2,7 @@ const productModel = require("../../model/productSchema");
 const categoryModel = require("../../model/categorySchema");
 const multiple = require("../../utility/uploadImage");
 const Order = require("../../model/orderSchema");
+const User = require('../../model/userSchema');
 
 const loadProducts = async (req, res) => {
   const products = await productModel.find();
@@ -134,9 +135,22 @@ const editOrder = async (req, res) => {
 }
 const postEditOrder =async(req,res)=>{
    const _id=req.params.id
-   const order=await Order.find({_id:_id})
+   console.log("_id "+_id);
+   const order=await Order.findOne({_id:_id})
+   console.log("_id "+_id);
+   const paymentM=order.payment_method   
+   console.log("_PM "+paymentM);
+   const user = order.user
+   console.log("User "+user);
+   const total = order.netTotal
+   console.log("total "+total);
    const status=req.body.status
+   console.log("status "+status);
    const orderStatus=await Order.findOneAndUpdate({_id:_id},{$set:{status:status}})
+   if(status=="cancelled"&&paymentM=="Online"){
+    const walletUpdate = await User.findOneAndUpdate({_id:user},{$inc:{wallet:total}})
+   }
+ 
    res.redirect("/admin/orders");
 }
 module.exports = {

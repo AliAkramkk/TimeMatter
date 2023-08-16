@@ -8,7 +8,7 @@
                             <label class="form-label" for="name">Order ID</label>
 
                             <input type="text" id="orderId" name="orderId" class="form-control"
-                                value="<%=order.order_id%>" visibility: hidden; disabled />
+                                value="<%=order.order_id%>"  disabled />
                         </div>
                         <div class="my-4"><label for="Name">User</label><br>
                             <input type="text" placeholder="category" value="<%= order.user.username %>" disabled></div>
@@ -21,14 +21,14 @@
                         
                                 <label for="Name">Order Status</label><br>
                                 <select name="status" value="<%=order.status%>">
-                                    <% if(order.status=="returned" ){ %>
+                                    <% if(order.status=="canceled" ){ %>
                                         <!-- <% }else if(order.status=="returnProcessing" ){ %>
                                             <option value="returnProcessing">Return Processing</option>
                                             <option value="returned">Returned</option> -->
                                             <% }else{ %>
                                                 <option value="pending">Pending</option>
                                                 <option value="delivered">Delivered</option>
-                                                <option value="outForDelivery">Out For Delivery</option>
+                                                <option value="cancelled">cancelled</option>
                                                 <% } %>
                                 </select>
                     </div>
