@@ -206,12 +206,13 @@ const addAddress = async (req, res) => {
 };
 
 const getEditAddress = async (req, res) => {
+  const redirect = req.query.redirect;
   let { address } = await User.findOne(
     { "address.id": req.params.id },
     { _id: 0, address: { $elemMatch: { id: req.params.id } } }
   );
 
-  res.render("user/editAddress", { key: "", address: address[0] });
+  res.render("user/editAddress", { key: "", address: address[0],redirect });
 };
 
 const editAddress = async (req, res) => {
@@ -225,7 +226,7 @@ const editAddress = async (req, res) => {
   );
     const redirect = req.query.redirect;
   console.log(redirect);
-  res.redirect("/profile" + redirect);
+  res.redirect("/"+redirect);
   // res.redirect("/profile");
 };
 

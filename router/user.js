@@ -56,4 +56,7 @@ routers.put("/returnOrder/:orderId", cartController.returnOrder);
 routers.get("/applyCoupon", cartController.applyCoupon);
 routers.put("/verifyOnlinePayment", cartController.verifyOnlinePayment);
 
+routers.get('/category',productController.viewCategories)
+routers.get('/getProducts',productController.getRadioProducts)
+routers.get('/filterCat',productController.filterCat)
 module.exports = routers;

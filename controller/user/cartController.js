@@ -162,8 +162,10 @@ const getCheckOut = async (req, res) => {
 };
 
 const checkout = async (req, res) => {
+  const {productPrice,updatedPrice,discountPrice,couponName} = req.body;
   if (req.body.payment === 'wallet') {
-    const userId = req.session.User_id
+    const userId = req.session.User_id;
+    const id = req.session.User_id;
     const user =await User.findOne({_id:userId});
     const walletAmount =user.wallet;
     console.log(walletAmount);
@@ -201,9 +203,47 @@ const checkout = async (req, res) => {
       if (!couponInfo) {
         return res.status(400).send({ message: 'Coupon name not valid' });
       }
-      couponInfo.users.push(userId);
+      couponInfo.user.push(userId);
       await couponInfo.save();
     }
+    const cartItems = await Cart.find({ user: userId });
+    const productArray = cartItems.map((item) => ({
+      product_id: item.product,
+      quantity: item.quantity,
+    }));
+    for (const item of productArray) {
+      const productId = item.product_id;
+      const { quantity } = item;
+      await Product.findOneAndUpdate(
+        { _id: productId },
+        { $inc: { stock: -quantity } }
+      );
+    }
+    const lastOrder = await Order.find().sort({ _id: -1 }).limit(1);
+    let orderId = 'EMRT000001';
+    if (lastOrder.length > 0) {
+      const lastOrderId = lastOrder[0].order_id;
+      const orderIdNumber = parseInt(lastOrderId.slice(4));
+      orderId = `EMRT${`000000${orderIdNumber + 1}`.slice(-6)}`;
+    }
+
+    const newOrder = new Order({
+      order_id: orderId,
+      user: userId,
+      product: productArray,
+      address: req.body.address,
+      total_amount: req.body.totalAmount,
+      payment_method: 'wallet',
+    });
+    if (couponName) {
+      newOrder.coupon_used = couponName;
+    }
+    await newOrder.save();
+    await Cart.deleteMany({ user: userId });
+    res.status(200).send({
+      msg: 'Order placed',
+    });
+
   }
 
 

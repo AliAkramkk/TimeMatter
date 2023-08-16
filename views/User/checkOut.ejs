@@ -103,7 +103,7 @@
                                     <input type="radio" value="<%= item.id %>,<%= item.username %>,<%= item.address %>,<%= item.pincode %>" name="address" id="" required>
                                 </div>
                                 <div class="man-ad-top-right">
-                                    <a href="/edit-address?redirect=checkOut"><i class="ri-edit-box-line text-dark"></i></a>
+                                    <a href="/edit-address/<%=item.id%>?redirect=checkOut"><i class="ri-edit-box-line text-dark"></i></a>
                                     <i class="ri-delete-bin-5-fill text-dark" onclick="deleteAddress('<%= item.id %>')"></i>
                                 </div>
                             </label>
