@@ -29,6 +29,10 @@ routers.get("/product/add", adminSess.isLogin, product.loadAddProducts);
 routers.post("/product/add", product.addProduct);
 routers.get("/product/edit", adminSess.isLogin,product.loadEditProduct);
 routers.post("/product/edit", product.editProduct);
+routers.get('/product/image',adminSess.isLogin,product.loadImages);
+routers.delete('/product/image/delete',product.deleteProductImage)
+routers.get('/product/image/add',adminSess.isLogin,product.loadAddImage);
+routers.post('/product/image/add',product.editImage);
 
 routers.get("/product/delete", product.deleteProduct);
 routers.get("/orders",adminSess.isLogin, product.viewOrder);

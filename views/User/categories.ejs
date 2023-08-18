@@ -96,29 +96,8 @@
                       <% }) %>
               </div>
             
-              <div class="row mt-5">
-                  <h6>Sort By </h6>
-              </div>
-              <div class="filter-options mt-3">
-                  <div class="ft-option">
-                      <input type="radio" value="1" name="filter" id="lowToHigh" <% if(filter==1){ %> checked
-                      <% } %>
-                          onchange="handleChange('filter', 1)" />
-                          <label for="lowToHigh">Price - Low to High</label>
-                  </div>
-                  <div class="ft-option">
-                      <input type="radio" value="-1" name="filter" id="highToLow" <% if(filter==-1){ %>
-                      checked <% } %>
-                          onchange="handleChange('filter', -1)" />
-                          <label for="highToLow">Price - High to Low</label>
-                  </div>
-                  <div class="ft-option">
-                      <input type="radio" value="1" name="filter" id="newLaunches" <% if(filter==0){ %> checked <%
-                          } %>
-                          onchange="handleChange('filter', 1)"
-                          />
-                          <label for="newLaunches">New Launches</label>
-                  </div>
+             
+                 
 
               </div>
           </form>

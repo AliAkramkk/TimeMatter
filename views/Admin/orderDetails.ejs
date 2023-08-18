@@ -21,17 +21,33 @@
                         
                                 <label for="Name">Order Status</label><br>
                                 <select name="status" value="<%=order.status%>">
-                                    <% if(order.status=="canceled" ){ %>
+                                    <% if(order.status=="cancelled" ){ %>
                                         <!-- <% }else if(order.status=="returnProcessing" ){ %>
                                             <option value="returnProcessing">Return Processing</option>
                                             <option value="returned">Returned</option> -->
-                                            <% }else{ %>
+                                            <% }else if(order.status=="pending"){ %>
                                                 <option value="pending">Pending</option>
                                                 <option value="delivered">Delivered</option>
                                                 <option value="cancelled">cancelled</option>
-                                                <% } %>
+                                                <option value="returnPending">returnPending</option>
+                                                <option value="returned">returned</option>
+                                                <% } else if(order.status=="delivered"){ %>
+                                                   
+                                                    <option value="delivered">Delivered</option>
+                                                    <option value="cancelled">cancelled</option>
+                                                    <option value="returnPending">returnPending</option>
+                                                    <option value="returned">returned</option>
+                                                    <% }else if(order.status=="returnPending"){ %>
+                                                        <option value="returned">returned</option>
+                                                        <% }else{ %>
+                                                           
+                                                            <% } %>  
                                 </select>
                     </div>
+
+                    <div class="my-4"><label for="Name">Transaction</label><br>
+                        <input type="text" placeholder="category" value="<%= order.payment_method %>" disabled></div>
+
             </div>
             <div class="d-flex justify-content-center">
                 <button type="submit" class="btn btn-block mb-4 col-lg-3" style="background-color: #FFD333">

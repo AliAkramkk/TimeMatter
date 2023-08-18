@@ -65,10 +65,11 @@
             </div> -->
 
             <div class="d-flex justify-content-between">
-              <p class="text-muted mb-0">Invoice Date : <%=orderDetails.orderTime%></p>
+              <p class="text-muted mb-0">Invoice Date : <%= orderDetails.orderTime.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }) %></p>
                
               <!-- <p class="text-muted mb-0"><span class="fw-bold me-4">GST 18%</span> 123</p> -->
             </div>
+            
 
             <!-- <div class="d-flex justify-content-between mb-5">
               <p class="text-muted mb-0">Recepits Voucher : 18KU-62IIK</p>

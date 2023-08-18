@@ -36,7 +36,7 @@ routers.put(
 routers.put("/productInc", userSess.islogin, cartController.incrementCartItems);
 routers.put("/productDec", userSess.islogin, cartController.decrementCartItems);
 routers.get("/quantityCheck", userSess.islogin, cartController.checkQuantity);
-routers.get("/checkOut", userSess.islogin, cartController.getCheckOut);
+routers.get("/checkOut", userSess.islogin,userSess.isAccess ,cartController.getCheckOut);
 routers.get("/forget", user.forget);
 routers.post("/forget", user.forgetverif);
 routers.get("/changepass/:email", userSess.islogin, user.changePass);

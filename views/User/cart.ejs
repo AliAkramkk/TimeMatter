@@ -84,7 +84,7 @@
                 <div class="row" id="showEmpty">
                     <div class="empty-container w-100 h-50 d-flex flex-column justify-content-center align-items-center"
                         style="gap:10px">
-                        <img src="img/emptyCart.png" height="300px" alt="">
+                        <img src="image/emptyCart.png" height="300px" alt="">
                         <h3>Your Cart is empty!</h3>
                         <p>Looks like you haven't added anything to your cart </p>
                     </div>
@@ -192,7 +192,7 @@
                 <div class="row" id="showEmpty" style="display: none;">
                     <div class="empty-container w-100 h-50 d-flex flex-column justify-content-center align-items-center"
                         style="gap:10px">
-                        <img src="img/emptyCart.png" height="300px" alt="">
+                        <img src="image/emptyCart.png" height="300px" alt="">
                         <h3>Your Cart is empty!</h3>
                         <p>Looks like you haven't added anything to your cart </p>
                     </div>
@@ -289,23 +289,10 @@
                   const discountPrice = document.getElementById('totalDiscount').innerText
                   const updatedPrice = document.getElementById('totalAmount').innerText
                   const productPrice =parseInt(productPric)
-                    fetch(`${url}/quantityCheck`, {
-                        method: 'GET',
-                        headers: {
-                            "Content-Type": "application/json",
-                        }
-                    }).then((response) => response.json()).then((data) => {
-                        if (data.insufficientStock == true) {
-                            Swal.fire({
-                                title: 'Sorry',
-                                text: "Out of stock product present in cart",
-                                icon: 'warning',
-                                showConfirmButton: true,
-                            })
-                        } else {
+                    
                             window.location.href = `${url}/checkout?couponName=${couponName}&&discountPrice=${discountPrice}&&productPrice=${productPrice}&&updatedPrice=${updatedPrice}`;
-                        }
-                    })
+                        
+                    
                 }
                 function applycoupon() {
                     const url = window.location.origin

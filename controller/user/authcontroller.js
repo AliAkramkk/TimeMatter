@@ -82,9 +82,13 @@ const verifyLogin = async (req, res) => {
 // Home if session, else Login
 const loadHome = async (req, res) => {
   const id = req.session.User_id;
+
   const user = await User.findOne({ _id: id });
+
   const categories = await Category.find();
+
   const products = await Product.find({ isActive: true });
+
   res.render("User/home", {
     categories,
     products,

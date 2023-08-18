@@ -3,6 +3,8 @@ const categoryModel = require("../../model/categorySchema");
 const multiple = require("../../utility/uploadImage");
 const Order = require("../../model/orderSchema");
 const User = require('../../model/userSchema');
+const imageUpload = require('../../utility/uploadImage');
+const multipleImage = require('../../utility/uploadImage').multipleImage;
 
 const loadProducts = async (req, res) => {
   const products = await productModel.find();
@@ -135,24 +137,98 @@ const editOrder = async (req, res) => {
 }
 const postEditOrder =async(req,res)=>{
    const _id=req.params.id
-   console.log("_id "+_id);
+  //  console.log("_id "+_id);
    const order=await Order.findOne({_id:_id})
-   console.log("_id "+_id);
+  //  console.log("_id "+_id);
+ 
    const paymentM=order.payment_method   
-   console.log("_PM "+paymentM);
+  //  console.log("_PM "+paymentM);
    const user = order.user
-   console.log("User "+user);
+  //  console.log("User "+user);
    const total = order.netTotal
-   console.log("total "+total);
+  //  console.log("total "+total);
    const status=req.body.status
-   console.log("status "+status);
+  //  console.log("status "+status);
    const orderStatus=await Order.findOneAndUpdate({_id:_id},{$set:{status:status}})
-   if(status=="cancelled"&&paymentM=="Online"){
+   if((status=="cancelled"||"returned")&&paymentM=="Online"){
     const walletUpdate = await User.findOneAndUpdate({_id:user},{$inc:{wallet:total}})
    }
  
    res.redirect("/admin/orders");
 }
+
+const loadImages = async (req, res)=>{
+
+  try {
+
+      const { id } = req.query;
+      const product = await productModel.findOne({_id: id});
+
+      res.render('Admin/editImages',{product});
+      
+  } catch (error) {
+      console.log(error);
+  }
+  
+}
+
+
+
+const deleteProductImage = async (req, res)=>{
+  const { public_id, productId } = req.query;
+
+  await deleteImage(public_id);
+ 
+
+  await productModel.updateOne({_id: productId, "image.public_id": public_id},
+      {
+          $pull: {
+              "image": {public_id: public_id}
+          }
+      }
+  )
+
+
+
+  
+  res.json({response: true})
+}
+
+const loadAddImage = (req, res)=>{
+  try {
+
+      const {productId} = req.query;
+      
+      res.render('Admin/addImage',{productId})
+
+  } catch (error) {
+      console.log(error);
+  }
+}
+
+const editImage = async (req, res)=>{
+  try {
+
+      const { image } = req.files;
+      const { productId } = req.query;
+
+      const result = await imageUpload(image);
+
+      await productModel.updateOne({_id: productId},
+          {
+              $push: {
+                  image: result 
+              }
+          })
+      
+      res.redirect('/admin/product')
+      
+  } catch (error) {
+      console.log(error);
+  }
+}
+
+
 module.exports = {
   loadProducts,
   loadAddProducts,
@@ -163,5 +239,9 @@ module.exports = {
   viewOrder,
   orderDetails,
   editOrder,
-  postEditOrder
+  postEditOrder,
+  loadImages,
+  deleteProductImage,
+  loadAddImage,
+  editImage
 };

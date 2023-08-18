@@ -434,15 +434,22 @@ const cancelOrder = async (req, res) => {
   });
 };
 const returnOrder = async (req, res) => {
-  const _id = req.params.orderId;
-  await Order.updateOne(
-    { _id },
+  const id = req.params.orderId;
+  const order = await Order.findOne({_id:id})
+  const total = order.netTotal;
+  const user = req.session.User_id
+ 
+  const newStatus=await Order.updateOne(
+    { _id:id },
     {
       $set: {
-        status: "returned",
+        status: "returnPending",
       },
     }
   );
+ 
+ 
+
   return res.json({
     msg: "status changed",
   });
