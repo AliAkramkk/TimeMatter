@@ -36,10 +36,13 @@
 
                       
 
-                      <ul>
-                          <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                          <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li> 
-                      </ul>
+                     
+                    <ul><% if(wishlist!=null && wishlist.items.length!=0){%>
+                        <li><a href="/wishlist"><i class="fa fa-heart"></i> <span><%= wishlist.items.length%></span></a></li> <%}else{%>
+                            <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a></li><%}%>
+                        <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span><%=carts.length%></span></a></li> 
+                    </ul>
+
 
                       <div class="header__top__right__auth">
                           <a href="/profile"><i class="fa fa-user"></i><%= user.username %></a>
@@ -65,7 +68,7 @@
 
 <!-- Header Section End -->
 
-<div class="checkout-main">
+<div class="checkout-main mt-4">
   <div class="container">
     <form class="row form" id="checkout-form" >
       <input type="hidden" value="<%= total %>" name="totalAmount" />
@@ -79,15 +82,18 @@
         </h3> -->
        <!-- ... Your checkout form ... -->
 
-       <div class="col-12 col-md-7">
-        <h3 class="mt-5 d-flex justify-content-between align-items-center">
+       <div class="col-12 col-md-7 mt-5">
+        <div class="card shadow-0 border mb-4 m-4 ">
+            <div class="card-body">
+        <h5 class="mt-3 d-flex justify-content-between align-items-center">
           <div style="color: black;">Choose Address</div>
           <a href="/add-Address?redirect=checkOut" class="custom-button">Add Address</a>
-        </h3>
-        <div class="card shadow-0 border mb-4 m-4">
-            <div class="card-body">
+        </h5><br>
+       
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
+                        <div class="card shadow-0 ">
+                            <div class="card-body">
                         <% user.address.forEach(item => { %>
                             <label class="address-box mt-3 position-relative" for="">
                                 <div class="address-detail">
@@ -98,7 +104,7 @@
                                     <b><%= item.address %> </b>
                                     <b>PIN: <%= item.pincode %> </b>
                                     <b>id: <%= item.id %> </b>
-                                </div>
+                               
                                 <div class="address-radio">
                                     <input type="radio" value="<%= item.id %>,<%= item.username %>,<%= item.address %>,<%= item.pincode %>" name="address" id="" required>
                                 </div>
@@ -106,34 +112,57 @@
                                     <a href="/edit-address/<%=item.id%>?redirect=checkOut"><i class="ri-edit-box-line text-dark"></i></a>
                                     <i class="ri-delete-bin-5-fill text-dark" onclick="deleteAddress('<%= item.id %>')"></i>
                                 </div>
+                            </div>
                             </label>
+                       
                         <% }) %>
+                    </div>
+                </div>
+                           
+
                     </div>
                 </div>
             </div>
         </div>
         
        </div>
-<div class="col-12 col-md-5">
-<h3 class="mt-5">Payment Info</h3>
+
+       
+<div class="col-12 col-md-5 mt-4">
+    <div class="card shadow-0 border mb-2 m-4 mt-5">
+        <div class="card-body ">
+
+<h3 class="mt-3">Payment Info</h3>
 
 <div class="checkout-payment mt-3">
 
     <b>Use Wallet</b>
     <div class="pay-option mt-4 mb-4">
-        
+        <label for="wallet" class="checkout-wallet">
+            <div class="cw-label">
+                <i class="ri-wallet-2-line me-2"></i>
+                <b>Wallet</b> 
+            </div>
+            <div class="cw-cash">
+                <b>
+                    ₹
+                    <span id="walletAmount"><%=  parseFloat(user.wallet).toFixed(2) %></span>
+                </b>
+                <input type="checkbox" id="wallet" name="wallet"  value=true>
+            </div>
+        </label>
         <div class="mt-3">
             <span class="me-2">Amount Payable</span>
             <b>
                 ₹<span id="totalAmount">
-                    <%= updatedPrice %>
+                    <%= parseFloat(updatedPrice).toFixed(2) %>
                 </span>
             </b>
         </div>
     </div>
-    <b>Payment Method</b>
+    <b>Payment Method</b><br>
     
-        <div class="cw-label">
+        <!-- <div class="cw-label">
             <i class="ri-wallet-2-line me-2"></i>
             <b>Wallet</b>
         </div>
@@ -141,12 +170,12 @@
             <b>
                 ₹
                 <span id="walletAmount"style="color: green;">
-                    <%= user.wallet %>
-                </span>
-            </b><br>
+                   <%= parseFloat(user.wallet).toFixed(2) %>
+                </span> -->
+            <!-- </b><br>
             <input type="radio" id="wallet" name="payment" value="wallet" required>
             <label for="cod">Wallet</label>
-        </div>
+        </div> -->
     
     <div class="pay-option mt-4">
         <input type="radio" id="cod" name="payment" value="cod" required>
@@ -166,13 +195,24 @@
 <button type="submit" class="custom-button">Place Order</button>
 
 
+
+
     </div>
 
 </div>
+
+
+
+
 </div>
+    </div>    
 </form>
+
 </div>
 </div>
+
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>

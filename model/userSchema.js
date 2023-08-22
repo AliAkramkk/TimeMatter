@@ -43,6 +43,10 @@ const Schema = mongoose.Schema
       wallet: {
         type: Number,
         default: 0,
+      },
+      wishlist: {
+        type: Array,
+        default: [],
       }
     });
     

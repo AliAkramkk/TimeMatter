@@ -45,7 +45,9 @@ const multipleImage = async (files) => {
   }
 };
 
+// ... Other code ...
+
 module.exports = {
-  multipleImage,
+  multipleImage: multipleImage, // Export the function within an object
   imageUpload,
 };

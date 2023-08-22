@@ -76,9 +76,10 @@
                             <% } else {%>
                             
 
-                            <ul>
-                                <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                                <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li> 
+                            <ul><% if(wishlist!=null && wishlist.items.length!=0){%>
+                                <li><a href="/wishlist"><i class="fa fa-heart"></i> <span><%= wishlist.items.length%></span></a></li> <%}else{%>
+                                    <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a></li><%}%>
+                                <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span><%=cart.length%></span></a></li> 
                             </ul>
 
                             <div class="header__top__right__auth">
@@ -101,13 +102,13 @@
                 <i class="fa fa-bars"></i>
             </div>
         </div>
-    </header>
+    </header><br>
     <!-- Header Section End -->
 
     <!-- Hero Section Begin -->
-    <section class="hero">
-        <div class="container">
-            <div class="row">
+    <section class="hero mt-5">
+        <div class="container mt-5">
+            <div class="row mt-">
                 <div class="col-lg-3">
                     <div class="hero__categories">
                         <div class="hero__categories__all">

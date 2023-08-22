@@ -71,10 +71,12 @@
                             <% } else {%>
                             
 
-                            <ul>
-                                <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                                <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li> 
-                            </ul>
+                           
+                    <ul><% if(wishlist!=null && wishlist.items.length!=0){%>
+                        <li><a href="/wishlist"><i class="fa fa-heart"></i> <span><%= wishlist.items.length%></span></a></li> <%}else{%>
+                            <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a></li><%}%>
+                        <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span><%=cart.length%></span></a></li> 
+                    </ul>
 
                             <div class="header__top__right__auth">
                                 <a href="/profile"><i class="fa fa-user"></i><%= user.username %></a>
@@ -191,29 +193,22 @@
                                
                                 
                                 <div class="mb-2">
-                                    <% if(product.quantity !== 0){ %>
-                                   <!-- Modify the onclick attribute to pass the correct product ID -->
-    <button style="box-shadow: none; background-color: #7fad39;" class="btn primary-btn text-light" <% if (id) { %> onclick="addToClick('<%= product._id %>')" <% } else { %> onclick="notLogin()" <% } %>>ADD TO CART</button>
-    
-                                    <button href="#" style="border: none;" class="heart-icon" <% if(!id) {%> disabled <% } %>  ><span class="icon_heart"></span></button>
-                                    <% }else{ %>
-                                        <kbd class="bg-danger text-dark"><b>No Stock Available</b></kbd>
-                                        <div class="mt-2"><b>Please try after some time!</b></div>
-                                    <%  } %>
-                                </div>
-                                
-                                <% if(product.quantity !== 0 && product.quantity < 5){ %>
-                                <kbd>Only <%= product.quantity %> stock left</kbd>
-                                <% } %>
-    
-                                <ul>
-                                    <% if(product.quantity !== 0 ){ %>
-                                    <li><b>Availability</b> <span>In Stock</span></li>
-                                    <li><b>Shipping</b> <span>01 day shipping. <samp>
-                                    </samp></span></li>
-                                    <% }else{ %>
-                                        <li><b>Availability</b> <span>Out of Stock</span></li>
-                                        <% } %>
+                                    <% if(product.quantity !==0){ %>
+                                        <button style="box-shadow: none;background-color: #15A78F;" class=" btn primary-btn text-light" <%
+                                          if(user) {%> onclick="addToClick('<%=product._id%>')" <% }else{ %> onclick="notLogin()" <% } %> >ADD
+                                                TO CART</button>
+                                        <button id="wishlist-icon" style="border: none;" class="heart-icon rounded" <% if(user) {%>
+                                          onclick="addToWishlist('<%=product._id%>')" <% }else{ %> onclick="notLogin()" <% } %> ><span
+                                                  class="icon_heart h5 <% if(wish){ %>text-danger<% } %>"></span></button>
+                                        <% }else{ %>
+                                          <kbd class="bg-danger text-dark"><b>No Stock Available</b></kbd>
+                                          <div class="mt-2"><b>Please try after some time!</b></div>
+                                          <% } %>
+                                    </div>
+                        
+                                    <% if(product.quantity !==0 && product.quantity < 5){ %>
+                                      <kbd>Only <%= product.quantity %> stock left</kbd>
+                                      <% } %>
                                 </ul>
                             
                         </div>
@@ -336,64 +331,101 @@
     <!-- sweet alert cdn -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script>
 
-        function addToClick(id){
-            
-            console.log("hai",id);
-            axios.get(`/addToCart?productId=${id}`)
-            .then((result)=>{
-                console.log(result);
-                if(result){
-                    let x = document.getElementById("snackbar");
-                    x.className = "show";
-                    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);       
-                }else{
-                    let x = document.getElementById("snackbar-error");
-                    x.className = "show";
-                    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-                }
-                
-            })
-                
-        }
-
-        function notLogin(){
-            Swal.fire({
-                icon: "warning",
-                title: "You Are Not Login",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Login",
-            }).then((result)=>{
-                if(result.isConfirmed){
-                    const currentUrl = location.href;
-                    location.href= `/login?url=${currentUrl}`
-                }
-            })
-        }
-
-        function login(){
-            const currentUrl = location.href;
-            location.href= `/login?url=${currentUrl}`
-        }
-
-    </script>
-
+    
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script> 
 
 
-
-<script>
-  $(document).ready(function() {
-    $('.zoom').elevateZoom({
-      zoomWindowWidth: 300, 
-      zoomWindowHeight: 200
-    });
-  });
-</script>
     
+
+    <script>
+
+        function addToClick(id) {
+  
+          axios.get(`/addToCart?productId=${id}`)
+            .then((result) => {
+              if (result.data.response) {
+                let x = document.getElementById("snackbar");
+                x.className = "show";
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+                $.get(location.href, function (data) {
+                  $("#cart").html($(data).find("#cart").html());
+                  $("#cartCount").html($(data).find("#cartCount").html());
+                })
+              } else {
+                let x = document.getElementById("snackbar-error");
+                x.className = "show";
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+              }
+  
+            })
+  
+        }
+  
+        function addToWishlist(id) {
+          $.ajax({
+            type: "GET",
+            url: "/addToWishlist",
+            data: {
+              productId: id,
+            },
+            success: function (res) {
+              $.get(location.href, function (data) {
+                $("#wishlist").html($(data).find("#wishlist").html());
+                $("#wishlist-icon").html($(data).find("#wishlist-icon").html());
+              })
+            }
+          })
+        }
+  
+        function notLogin() {
+          Swal.fire({
+            icon: "warning",
+            title: "You Are Not Logged In",
+            showCancelButton: true,
+            confirmButtonColor: "#15A78F",
+            cancelButtonColor: "#d33",
+            confirmButtonText: " Login ",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              const currentUrl = location.href;
+              location.href = `/login?url=${currentUrl}`
+            }
+          })
+        }
+  
+        function login() {
+          const currentUrl = location.href;
+          location.href = `/login?url=${currentUrl}`
+        }
+  
+  
+  
+        function zoomIn(event) {
+          var element = document.getElementById("overlay");
+          element.style.display = "inline-block";
+          var img = document.getElementById("imgZoom");
+          const src = img.getAttribute('src');
+          var posX = event.offsetX ? (event.offsetX) : event.pageX - img.offsetLeft;
+          var posY = event.offsetY ? (event.offsetY) : event.pageY - img.offsetTop;
+  
+          element.style.backgroundImage = `url(${src})`;
+  
+          element.style.backgroundPosition = (-posX * 2) + "px " + (-posY * 2) + "px";
+        }
+  
+        function zoomOut() {
+          var element = document.getElementById("overlay");
+          element.style.display = "none";
+        }
+  
+        function productsInCat(catId) {
+          location.href = `/category?categoryId=${catId}`
+        }
+  
+      </script>
+  
+
 
     <%- include('./partials/footer.ejs') %>

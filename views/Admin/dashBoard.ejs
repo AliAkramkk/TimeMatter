@@ -5,7 +5,220 @@
     <%- include('./partials/sidebar.ejs') %>
 
 
-        <h1 class="text-center py-5">Hello</h1>
+    <div class="orders-main">
+
+        <div class="order-container">
+            <div class="row mt-4">
+                <div class="dashboard">
+                    <div class="row">
+                        <div class="col-12 col-md-6 col-lg-3 mt-2">
+                            <div class="dashboard-item">
+                                <div class="dash-img one">
+                                    <img src="/img/moneyBag.png" alt="" />
+                                </div>
+                                <div class="dash-desc">
+                                    <h3>₹ <%= totalRevenue[0].total %>
+                                    </h3>
+                                    <h5>Total revenue</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3 mt-2">
+                            <div class="dashboard-item">
+                                <div class="dash-img two">
+                                    <img src="/img/shoppingBags.png" alt="" />
+                                </div>
+                                <div class="dash-desc">
+                                    <h3>
+                                        <%= orderCount %>
+                                    </h3>
+                                    <h5>Total orders</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3 mt-2">
+                            <div class="dashboard-item">
+                                <div class="dash-img three">
+                                    <img src="/img/chronometer.png" alt="" />
+                                </div>
+                                <div class="dash-desc">
+                                    <h3>
+                                        <%= pendingOrders %>
+                                    </h3>
+                                    <h5>Total pending</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3 mt-2">
+                            <div class="dashboard-item">
+                                <div class="dash-img four">
+                                    <img src="/img/delivery.png" alt="" />
+                                </div>
+                                <div class="dash-desc">
+                                    <h3>
+                                        <%= ordersOnTheWay %>
+                                    </h3>
+                                    <h5>Total dispatch</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h3 class="mt-3">Sales Revenue Overview</h3>
+            <div class="row mt-2 p-3">
+                <div class="chart-container">
+                    <div id="chart"></div>
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="row mt-2 p-3">
+                    <h3 class="mt-5">Payment Method Overview</h3>
+                    <div class="chart-container">
+                        <div id="paymentChart"></div>
+                    </div>
+                </div>
+                <div class="row mt-2 p-3">
+                    <h3 class="mt-5">Category Sales Overview</h3>
+                    <div class="chart-container">
+                        <div id="categoryChart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        const monthlyData = '<%= JSON.stringify(monthlyData)%>'
+        const paymentData = '<%= JSON.stringify(paymentData)%>'
+        let categoryData = '<%= categoryName%>'
+        const sales = '<%= JSON.stringify(totalPrice)%>'
+        console.log(categoryData)
+        var options = {
+            series: [
+                {
+                    data: JSON.parse(monthlyData),
+                },
+            ],
+            chart: {
+                height: 350,
+                type: "bar",
+                events: {
+                    click: function (chart, w, e) {
+                    },
+                },
+            },
+            colors: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(255, 205, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(201, 203, 207, 1)'
+            ],
+            plotOptions: {
+                bar: {
+                    columnWidth: "45%",
+                    distributed: true,
+                },
+            },
+            dataLabels: {
+                enabled: false,
+            },
+            legend: {
+                show: false,
+            },
+            xaxis: {
+                categories: [
+                    "Jan",
+                    "Feb",
+                    "Mar",
+                    "Apr",
+                    "May",
+                    "Jun",
+                    "Jul",
+                    "Aug",
+                    "Sep",
+                    "Oct",
+                    "Nov",
+                    "Dec",
+                ],
+                labels: {
+                    style: {
+                        colors: [
+                            "rgba(255, 99, 132, 1)",
+                            "rgba(255, 159, 64, 1)",
+                            "rgba(255, 205, 86, 1)",
+                            "rgba(75, 192, 192, 1)",
+                            "rgba(54, 162, 235, 1)",
+                            "rgba(153, 102, 255, 1)",
+                            "rgba(201, 203, 207, 1)",
+                        ],
+                        fontSize: "12px",
+                    },
+                },
+            },
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+    </script>
+
+    <script>
+        var options = {
+            series: [
+                ...JSON.parse(paymentData),
+
+            ],
+            chart: {
+                width: 500,
+                type: 'pie',
+            },
+            labels: ['Cash on Delivery', 'Online payment', 'Wallet'],
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }]
+        };
+        var chart = new ApexCharts(document.querySelector("#paymentChart"), options);
+        chart.render();
+    </script>
+    <script>
+
+        var options = {
+            series: [
+                ...JSON.parse(sales),
+
+            ],
+            chart: {
+                width: 500,
+                type: 'pie',
+            },
+            labels: [...categoryData.split(',')],
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }]
+        };
+        var chart = new ApexCharts(document.querySelector("#categoryChart"), options);
+        chart.render();
+    </script>
 
 
         <%- include('./partials/footer.ejs') %>

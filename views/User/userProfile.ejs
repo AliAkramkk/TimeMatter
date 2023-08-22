@@ -33,10 +33,13 @@
                      
                         
 
-                        <ul>
-                            <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                            <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li> 
-                        </ul>
+                      
+                    <ul><% if(wishlist!=null && wishlist.items.length!=0){%>
+                        <li><a href="/wishlist"><i class="fa fa-heart"></i> <span><%= wishlist.items.length%></span></a></li> <%}else{%>
+                            <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a></li><%}%>
+                        <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span><%=cart.length%></span></a></li> 
+                    </ul>
+
     
                         <div class="header__top__right__auth">
                             <a href="/profile"><i class="fa fa-user"></i><%= user.username %></a>
@@ -95,7 +98,7 @@
                 <div class="porfile-items">
                     <a href="#" class="profile-item">
                         <b class="d-flex align-items-center"><i class="ri-wallet-2-line me-2"></i> Wallet</b>
-                        <b>₹ <% if(user.wallet) { %><%= user.wallet%><% } else{ %>0 <% } %> </b>
+                        <b>₹ <% if(user.wallet) { %><%=  parseFloat(user.wallet).toFixed(2) %><% } else{ %>0 <% } %> </b>
                     </a>
                 </div>
                 <div class="porfile-items">
@@ -140,7 +143,7 @@
                         </div>
                         <div class="man-ad-right">
                             <i class="ri-delete-bin-5-fill text-dark" onclick="deleteAddress('<%=item.id%>')"></i>
-                            <a href="/edit-address/<%=item.id %>"><i class="ri-edit-box-line text-dark"></i></a>
+                            <a href="/edit-address/<%=item.id %>?redirect=profile"><i class="ri-edit-box-line text-dark"></i></a>
                         </div>
                     </div>
                     <% }) %> 

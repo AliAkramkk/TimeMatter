@@ -5,6 +5,7 @@ const productController = require("../controller/user/productController");
 const cartController = require("../controller/user/cartController");
 const userSess = require("../middleware/user");
 const { catchErrors } = require("../utility/errorHandler");
+const wishlistController = require("../controller/user/wishlistController")
 
 
 routers.get("/login", userSess.islogin, user.loadHome);
@@ -62,4 +63,13 @@ routers.get('/category',productController.viewCategories)
 routers.get('/getProducts',productController.getRadioProducts)
 routers.get('/filterCat',productController.filterCat);
 routers.get('/allCat',productController.allCategory);
+
+routers.get('/addToWishlist',userSess.islogin,userSess.isAccess , wishlistController.addToWishlist);
+routers.get('/wishlist', userSess.islogin,userSess.isAccess ,wishlistController.loadWishlist);
+routers.get('/removeFromWishlist', userSess.islogin,userSess.isAccess , wishlistController.removeFromWishlist);
+// coupon
+// routers.post('/applyCoupon', catchErrors(userController.applyCoupon)); // apply coupon at checkout
+// routers.delete('/deleteCoupon', catchErrors(userController.deleteCoupon)); // delete coupon which is added at checkout
+routers.get( '/coupons',userSess.islogin,userSess.isAccess,cartController.viewCoupons); // list all coupons available to user
+
 module.exports = routers;

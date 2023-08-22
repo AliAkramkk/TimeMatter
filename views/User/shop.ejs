@@ -1,39 +1,4 @@
 <%- include('./partials/header.ejs') %>
-<!-- .product_item_pic {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%; /* You can adjust the width as needed */
-}
-
-.product_itempic_hover {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.product_image {
-    width: 100%;
-    height: auto;
-    max-height: 200px; /* Set a maximum height to limit image size */
-}
-
-.product_icons {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-    padding-top: 10px; /* Add padding to separate icons from the image */
-}
-
-.product_icons a {
-    text-decoration: none;
-    color: #000;
-    font-size: 20px;
-    margin: 0 5px;
-}
-
-/* Adjust the icon size and other styles as needed */ -->
 
     <!-- Page Preloder -->
     <div id="preloder">
@@ -109,10 +74,13 @@
                             <% } else {%>
                             
 
-                            <ul>
-                                <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                                <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li> 
-                            </ul>
+                            
+                    <ul><% if(wishlist!=null && wishlist.items.length!=0){%>
+                        <li><a href="/wishlist"><i class="fa fa-heart"></i> <span><%= wishlist.items.length%></span></a></li> <%}else{%>
+                            <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a></li><%}%>
+                        <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span><%=cart.length%></span></a></li> 
+                    </ul>
+
 
                             <div class="header__top__right__auth">
                                 <a href="/profile"><i class="fa fa-user"></i><%= user.username %></a>
@@ -211,14 +179,16 @@
                                     <ul class="shop__item__pic__hover">
                                            
                                         <li>   
-                                             <a href="/shopDetails?id=<%= product._id %>"><i class="fa fa-info"></i>
-                                            </a> 
+                                             <!-- <a href="/shopDetails?id=<%= product._id %>"><i class="fa fa-info"></i>
+                                            </a>  -->
+                                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
                                             </li>
                                         
                                             </ul>
                                     <div class="product_itempic_hover image-fluid">
-                                        <img class="product_image" src="<%= product.image[0].url %>" alt="">
-                                      
+                                        <a href="/shopDetails?id=<%= product._id %>">
+                                       <img class="product_image" src="<%= product.image[0].url %>" alt="">
+                                    </a>  
 
                                         </div>
                                     </div>

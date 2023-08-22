@@ -1,14 +1,19 @@
 const Category = require("../../model/categorySchema");
 const productModel = require("../../model/productSchema");
 const userModel = require("../../model/userSchema");
+const Cart = require("../../model/cartSchema");
+const wishlistModel = require("../../model/wishList")
+
 
 const loadShop = async (req, res) => {
   const id = req.session.User_id;
   const user = await userModel.findOne({ _id: id });
-
+ 
   const products = await productModel.find();
   const categories = await Category.find();
-  res.render("User/shop", { categories, products, user, id });
+  const cart = await Cart.find({ user: id }).populate("product");
+  const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
+  res.render("User/shop", { categories, products, user, id ,cart,wishlist});
 };
 
 // const productDetails = async (req, res) => {
@@ -26,6 +31,7 @@ const productDetails = async (req, res) => {
   try {
     const id = req.session.User_id;
     const user = await userModel.findOne({ _id: id });
+    
     const productId = req.query.id; // Get the product ID from the request body
     // console.log(req.query);
 
@@ -33,6 +39,15 @@ const productDetails = async (req, res) => {
     const relatedProducts = await productModel.find().limit(8);
     const product = await productModel.findOne({ _id: productId });
     const categories = await Category.find();
+    const cart = await Cart.find({ user: id}).populate("product");
+    const wishlists = await wishlistModel.findOne({ userId: id });
+    const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
+    let wish = false;
+    if (user && wishlist && wishlist.items.length > 0) {
+        if (wishlist.items.includes(product._id)) {
+            wish = true;
+        }
+    }
     res.render("User/productDetails", {
       categories,
       product,
@@ -40,15 +55,50 @@ const productDetails = async (req, res) => {
       relatedProducts,
       user,
       id,
+      cart,
+      wish,
+      wishlist
+      
     });
   } catch (error) {
     console.log(error);
   }
 };
+
+const loadWishlist = async (req, res) => {
+  try{
+    const id = req.session.User_id;
+    const cart = await cartModel.findOne({ userId: id })
+    const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
+    const user = await userModel.findOne({ _id: id })
+    const products = await productModel.find({
+        _id: { $in: user.wishlist },
+    }).lean()
+    res.render('User/wishlist', { user, products, cart,wishlist });
+  }catch (error) {
+    res.render('User/404page')
+  }
+}
+
+
+const addToWishlist = async (req, res) => {
+  try {
+    const id = req.session.User_id;
+    const productid = req.query.productId;
+    await userModel.updateOne({ _id: id }, { $push: { wishlist: productid } });
+    res.json({ success: true });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: "Failed to add to wishlist" });
+    }
+}
+
 const viewCategories = async (req, res) => {
   const id = req.session.User_id;
+  const cart = await Cart.find({ user: id }).populate("product");
   const user = await userModel.findOne({ _id: id });
   const categories = await Category.find({});
+  const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
   const filter = req.query.filter ?? '';
   const limit = 6;
   const key = req.query.key ?? '';
@@ -66,6 +116,7 @@ const viewCategories = async (req, res) => {
       status: true,
     }).count();
     const pageCount = Math.ceil(productCount / limit);
+   
     return res.render('User/categories', {
       categories,
       products,
@@ -74,7 +125,9 @@ const viewCategories = async (req, res) => {
       key,
       pageCount,
       page,
-      user
+      user,
+      cart,
+      wishlist
     });
 }
 if (category) {
@@ -89,6 +142,7 @@ if (category) {
     { status: true }
   ).count();
   const pageCount = Math.ceil(productCount / limit);
+  const cart = await Cart.find({ user: id }).populate("product");
   res.render('categories', {
     categories,
     products,
@@ -97,6 +151,7 @@ if (category) {
     key,
     pageCount,
     page,
+    cart
   });
 }
 }
@@ -233,5 +288,7 @@ module.exports = {
   viewCategories,
   getRadioProducts,
   filterCat,
-  allCategory
+  allCategory,
+  addToWishlist,
+  loadWishlist,
 };

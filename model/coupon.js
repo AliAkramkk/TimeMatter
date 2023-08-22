@@ -2,10 +2,15 @@ const mongoose=require('mongoose');
 
 const {Schema} = mongoose;
 
-const couponSchema=new Schema({
+const couponSchema=new Schema(
+  {
   couponName: {
       type: String,
       required: true
+  },
+  code: {
+    type: String,
+    required: true,
   },
   discount: {
     type: Number,
@@ -19,11 +24,17 @@ maxDiscount: {
   type: Number,
   required: true
 },
-user: [{
+un_list: {
+  type: Boolean,
+  default: false,
+},
+user: [
+  {
   type: mongoose.SchemaTypes.ObjectId,
   ref: "User",
  
-}],
+}
+],
 expiryDate: {
   type: Date,
   required: true
@@ -33,3 +44,4 @@ expiryDate: {
 );
 
 module.exports=mongoose.model('coupon',couponSchema)
+

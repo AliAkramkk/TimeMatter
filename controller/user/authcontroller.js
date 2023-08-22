@@ -5,7 +5,11 @@ const Product = require("../../model/productSchema");
 const Category = require("../../model/categorySchema");
 const createdId = require("../../actions/createdId");
 const Cart = require("../../model/cartSchema");
+const wishlistModel =require("../../model/wishList");
+
 const { log } = require("console");
+
+
 
 const signup = async (req, res) => {
   res.render("User/usersignup", { message: "" });
@@ -86,14 +90,16 @@ const loadHome = async (req, res) => {
   const user = await User.findOne({ _id: id });
 
   const categories = await Category.find();
-
+  const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
   const products = await Product.find({ isActive: true });
-
+  const cart = await Cart.find({ user: id }).populate("product");
   res.render("User/home", {
     categories,
     products,
     user,
     id,
+    cart,
+    wishlist,
     message: req.query.message,
   });
 };
@@ -123,12 +129,12 @@ const getUserProfile = async (req, res) => {
   try {
     const userId = req.session.User_id;
     const user = await User.findOne({ _id: userId });
-
+    const wishlist = await wishlistModel.findOne({ userId: userId }).populate("items");
     if (!user) {
       return res.render("User/userlogin", { message: "Invalid User" });
     }
-
-    res.render("User/userProfile", { user, message: req.query.message });
+    const cart = await Cart.find({ user: userId }).populate("product");
+    res.render("User/userProfile", { user, message: req.query.message,cart ,wishlist });
   } catch (error) {
     console.log(error.message);
   }
@@ -138,11 +144,13 @@ const profileEdit = async (req, res) => {
   try {
     const userId = req.session.User_id;
     const user = await User.findOne({ _id: userId });
-
+    const cart = await Cart.find({ user: userId }).populate("product");
+    const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
     if (!user) {
       return res.render("User/userlogin");
     }
-    res.render("User/editProfile", { user, message: req.query.message });
+   
+    res.render("User/editProfile",{cart,wishlist,user});
   } catch (error) {
     console.log(error.message);
   }
@@ -155,12 +163,7 @@ const updatedProfile = async (req, res) => {
   console.log(newPassword);
 
   if (username == "" || email == "" || newPassword == "") {
-    return res.render("User/editProfile", {
-      error: true,
-      key: "",
-      message: "fill every fields",
-      user: req.user,
-    });
+    return res.redirect("/edit-Profile")
   }
   const user = await User.findOne({ email });
   if (bcrypt.compareSync(password, user.password)) {
@@ -172,16 +175,13 @@ const updatedProfile = async (req, res) => {
     );
     return res.redirect("/profile");
   }
-  return res.render("User/editProfile", {
-    error: true,
-    key: "",
-    message: "Invalid Password",
-    user: req.user,
-  });
+  return res.redirect("/edit-Profile" );
 };
 const getAddAddress = async (req, res) => {
+  const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
+  const cart = await Cart.find({ user: userId }).populate("product");
   const redirect = req.query.redirect;
-  res.render("User/addAddress", { redirect });
+  res.render("User/addAddress", { redirect,wishlist ,cart});
 };
 
 const addAddress = async (req, res) => {
@@ -211,13 +211,16 @@ const addAddress = async (req, res) => {
 };
 
 const getEditAddress = async (req, res) => {
+  const userId =req.session.User_id
   const redirect = req.query.redirect;
+  const cart = await Cart.find({ user: userId }).populate("product");
+  const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
   let { address } = await User.findOne(
     { "address.id": req.params.id },
     { _id: 0, address: { $elemMatch: { id: req.params.id } } }
   );
 
-  res.render("user/editAddress", { key: "", address: address[0],redirect });
+  res.render("user/editAddress", { key: "", address: address[0],redirect,cart,wishlist });
 };
 
 const editAddress = async (req, res) => {

@@ -4,7 +4,8 @@ const multiple = require("../../utility/uploadImage");
 const Order = require("../../model/orderSchema");
 const User = require('../../model/userSchema');
 const imageUpload = require('../../utility/uploadImage');
-const multipleImage = require('../../utility/uploadImage').multipleImage;
+const {multipleImage} = require("../../utility/uploadImage")
+const deleteImage = require("../../utility/deleteImage")
 
 const loadProducts = async (req, res) => {
   const products = await productModel.find();
@@ -206,27 +207,56 @@ const loadAddImage = (req, res)=>{
   }
 }
 
-const editImage = async (req, res)=>{
+// const editImage = async (req, res)=>{
+//   try {
+
+//       const { image } = req.files;
+//       const { productId } = req.query;
+
+//       const result = await imageUpload(image);
+
+//       await productModel.updateOne({_id: productId},
+//           {
+//               $push: {
+//                   image: result 
+//               }
+//           })
+      
+//       res.redirect('/admin/product')
+      
+//   } catch (error) {
+//       console.log(error);
+//   }
+// }
+
+const editImage = async (req, res) => {
   try {
+    const { image } = req.files;
+    const { productId } = req.query;
 
-      const { image } = req.files;
-      const { productId } = req.query;
+    const result = await imageUpload(image);
 
-      const result = await imageUpload(image);
+    // Use the multipleImage function to handle multiple images
+    const images = await multipleImage(result);
 
-      await productModel.updateOne({_id: productId},
-          {
-              $push: {
-                  image: result 
-              }
-          })
-      
-      res.redirect('/admin/product')
-      
+    await productModel.updateOne(
+      { _id: productId },
+      {
+        $push: {
+          image: { $each: images }, // Use $each to push multiple images
+        },
+      }
+    );
+
+    res.redirect('/admin/product');
   } catch (error) {
-      console.log(error);
+    console.log(error);
   }
-}
+};
+
+
+
+
 
 
 module.exports = {

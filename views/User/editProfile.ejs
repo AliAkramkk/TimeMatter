@@ -35,10 +35,13 @@
                      
                         
 
-                        <ul>
-                            <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                            <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li> 
-                        </ul>
+                       
+                    <ul><% if(wishlist!=null && wishlist.items.length!=0){%>
+                      <li><a href="/wishlist"><i class="fa fa-heart"></i> <span><%= wishlist.items.length%></span></a></li> <%}else{%>
+                          <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a></li><%}%>
+                      <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span><%=cart.length%></span></a></li> 
+                  </ul>
+
 
                        
 

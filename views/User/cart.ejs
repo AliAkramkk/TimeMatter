@@ -6,7 +6,7 @@
       <div class="row">
           <div class="col-lg-3">
               <div class="header__logo">
-                  <a class="navbar-brand text-dark fs-4 fw-bold" href="#">Time<span class="text-danger">Matter</span></a>
+                  <a class="navbar-brand text-dark fs-4 fw-bold" href="/">Time<span class="text-danger">Matter</span></a>
               </div>
           </div>
           <div class="col-lg-6">
@@ -35,10 +35,12 @@
                   
                     
 
-                    <ul>
-                        <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                        <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li> 
+                    <ul><% if(wishlist!=null && wishlist.items.length!=0){%>
+                        <li><a href="/wishlist"><i class="fa fa-heart"></i> <span><%= wishlist.items.length%></span></a></li> <%}else{%>
+                            <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a></li><%}%>
+                        <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span><%=carts.length%></span></a></li> 
                     </ul>
+
 
                     <div class="header__top__right__auth">
                         <a href="/profile"><i class="fa fa-user"></i><%= user.username %></a>
@@ -62,7 +64,7 @@
   </div>
 </header>
 <!-- Header Section End -->
-<div class="cartlist-main" style="width: 100%;">
+<div class="cartlist-main mt-5 " style="width: 100%;">
   <div class="container pt-3">
       <% if(count!==0) { %>
           <h3 class="cart-head">Cart <i class="ri-shopping-cart-line"></i></h3>
@@ -84,7 +86,7 @@
                 <div class="row" id="showEmpty">
                     <div class="empty-container w-100 h-50 d-flex flex-column justify-content-center align-items-center"
                         style="gap:10px">
-                        <img src="image/emptyCart.png" height="300px" alt="">
+                        <img src="image/empty.png" height="300px" alt="">
                         <h3>Your Cart is empty!</h3>
                         <p>Looks like you haven't added anything to your cart </p>
                     </div>
@@ -151,13 +153,51 @@
                                               </div>
                                           </div>
 
-                                          <% }) %>
+                                          <% }
+                                          ) %>
                                   </div>
-                                  <div class=" col-12 col-md-5">
-                                      <div class="row">
-                                    
-                                          <div class="cart-price-details">
-                                            <div class="p-2" ><label  for="">Coupon</label><input id="coupon_id" type="text"      name="couponname"style="background-color: ;" ><button style="background-color: rgb(3, 3, 3);color: rgb(255, 255, 252);" onclick="applycoupon()">apply coupon</button></div>
+                                  
+<div class="col-12 col-md-5 mb-2">
+    <div class="row">
+        <div class="cart-price-details">
+            <div class="hero__categories">
+                <div class="hero__categories__all">
+                    <i class="fa fa-bars"></i>
+                    <span id="allCouponButton">All Coupon</span>
+                </div>
+                <ul id="couponList"> <!-- Add the id here -->
+                    <% coupon.forEach((coupon) => { %>
+                    <li><a href="/coupons"><%= coupon.couponName %></a></li>
+                    <% }) %>
+                </ul>
+            </div>
+            <div class="p-2">
+                <label for="">Coupon</label>
+                <input id="coupon_id" type="text" name="couponname">
+                <button style="background-color: rgb(3, 3, 3); color: rgb(255, 255, 252);" onclick="applycoupon()">Apply Coupon</button>
+            </div>
+
+
+                                          
+                               
+                                            <div id="coupon_id" class="mt-2 " >
+                                            </div>
+                                            <!-- <div id=" coupon_id" class="input-group my-2">
+                                                <input type="text" id="coupon_id" class="form-control text-uppercase rounded"
+                                                    placeholder="Coupon name" aria-label="Recipient's username"
+                                                    aria-describedby="basic-addon2">
+                                                <div class="input-group-append">
+                                                    <button class="btn loginButton" type="button"
+                                                        onclick="applyCoupon()">Apply</button>
+                                                </div>
+                                            </div> -->
+                                            <div id="discountField" style="display: none;">
+                                                <div class="price-item">
+                                                    <label for="">Discount</label>
+                                                    <b class="text-success"> ₹ <span id="totalDiscount"></span> </b>
+                                                </div>
+                                            </div>
+                                         
                                               <h4>Price details</h4>
                                               <div class="price-item">
                                                   <label for="">Total Price</label>
@@ -166,11 +206,12 @@
                                                     <%= total %>
                                                       </span></b>
                                               </div>
+
                                               <div class="price-item">
-                                                  <label for="">Discount</label>
+                                                  <!-- <label for="">Discount</label>
                                                   <b class="text-success"> ₹ <span id="totalDiscount">
                                                           
-                                                      </span> </b>
+                                                      </span> </b> -->
                                               </div>
                                               <div class="price-item">
                                                   <label for="">Total amount</label>
@@ -202,6 +243,18 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const allCouponButton = document.getElementById("allCouponButton");
+        const couponList = document.getElementById("couponList");
+
+        allCouponButton.addEventListener("click", function () {
+            couponList.classList.toggle("show");
+        });
+    });
+</script>
+
 
 <script>
     function decQuantity(cartId) {
@@ -294,27 +347,139 @@
                         
                     
                 }
+
                 function applycoupon() {
-                    const url = window.location.origin
-                   const couponName = document.getElementById('coupon_id').value
-               
-                    fetch(`${url}/applyCoupon?coupon=${couponName}`, {
-                        method: 'GET',
-                        headers: {
-                            "Content-Type": "application/json",
-                        }
-                    }).then((response) => response.json()).then((data) => {
-                        console.log(data.msg);
-                        const discountCoupon=data.Discount
-                        console.log(discountCoupon);
-                        const total=document.getElementById('totalPrice').innerText
-                        console.log(total);
-                        const discountdPrice = (total*discountCoupon)/100
-                        console.log(discountdPrice);
-                        
-                        document.getElementById('totalDiscount').innerText = discountdPrice
-                        document.getElementById('totalAmount').innerText = total-discountdPrice
-                    })
-                }
+        const url = window.location.origin;
+        const couponName = document.getElementById('coupon_id').value;
+
+        fetch(`${url}/applyCoupon?coupon=${couponName}`, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+            }
+        }).then((response) => response.json()).then((data) => {
+            console.log(data.msg);
+            const discountCoupon = data.Discount;
+            console.log(discountCoupon);
+            const total = parseFloat(document.getElementById('totalPrice').innerText);
+            console.log(total);
+            const discountdPrice = (total * discountCoupon) / 100;
+            console.log(discountdPrice);
+
+            document.getElementById('totalDiscount').innerText = discountdPrice;
+            document.getElementById('totalAmount').innerText = total - discountdPrice;
+
+            // Show the discount field
+            document.getElementById('discountField').style.display = 'block';
+        });
+    }
+
+
+
+//                    function applyCoupon() {
+//                     const couponName = document.getElementById('couponName').value;
+//                     const couponMessage = document.getElementById('couponMessage');
+//                     const orderTotalAmount = document.getElementById('totalAmount').innerText;
+//                     const url = window.location.origin;
+//                     fetch(`${url}/applyCoupon`, {
+//                         method: 'POST',
+//                         headers: {
+//                             'Accept': 'application/json',
+//                             'Content-Type': 'application/json'
+//                         },
+//                         body: JSON.stringify({
+//                             couponName,
+//                             orderTotalAmount,
+//                         })
+//                     }).then((response) => {
+//                         if (response.status === 200) {
+//                             return response.json().then((data) => {
+//                                 couponApply = true
+//                                 const discountTotal = parseInt(data.discountTotal)
+//                                 const discountAmount = parseInt(data.discountAmount)
+//                                 discount = discountAmount;
+//                                 couponMessage.innerHTML =
+//                                     `<div class="alert alert-success alert-dismissible fade show d-flex " role="alert" >
+//     <strong style="flex: 1;" >${data.message}</strong>
+    
+//         <div ><a class="delete"
+//                                                                     style="color: black;"
+//                                                                     onclick="deleteCoupon()">
+//                                                                     <i class="fa fa-times "></i>
+//                                                                 </a>
+//                                                             </div>
+//     </div>
+    
+// `
+
+
+
+//                                 document.getElementById('totalAmount').innerText = discountTotal
+//                                 totalCash = discountTotal;
+//                                 document.getElementById('discount').innerHTML =
+//                                     `<div id="discountAmount"><span id="discountText" class="text-success">
+//                                    Discount : ₹ ${discountAmount}
+//                                 </span>
+//                                 <hr>
+//                             </div>`
+//                             })
+//                         } else if (response.status === 400) {
+//                             return response.json().then((data) => {
+//                                 couponApply = false
+//                                 couponMessage.innerHTML =
+//                                     `<div class="alert alert-warning alert-dismissible fade show" role="alert">
+//                             <strong>${data.message}</strong>
+
+//                         </div>`
+
+//                                 setTimeout(() => {
+//                                     couponMessage.innerHTML = `<div></div>`
+//                                 }, 5000);
+//                                 document.getElementById('discountAmount').style.display = "none"
+
+
+//                             })
+//                         }
+//                     })
+//                 }
+
+//                 function deleteCoupon() {
+//                     const couponName = document.getElementById('couponName').value;
+//                     const couponMessage = document.getElementById('couponMessage');
+//                     const url = window.location.origin;
+//                     fetch(`${url}/deleteCoupon`, {
+//                         method: 'DELETE',
+//                         headers: {
+//                             'Accept': 'application/json',
+//                             'Content-Type': 'application/json'
+//                         },
+//                         body: JSON.stringify({
+//                             couponName,
+//                         })
+//                     }).then((response) => response.json())
+//                         .then((data) => {
+//                             couponApply = false
+//                             couponMessage.innerHTML =
+//                                 `<div class="alert alert-warning alert-dismissible fade show" role="alert">
+//                             <strong>${data.message}</strong>
+//                         </div>`
+
+//                             setTimeout(() => {
+//                                 couponMessage.innerHTML = `<div></div>`
+//                             }, 3000);
+//                             document.getElementById('totalAmount').innerText = totalCash + discount
+//                             totalCash = totalCash + discount;
+//                             document.getElementById('discountAmount').style.display = "none"
+
+//                             document.getElementById('couponInputBox').innerHTML =
+//                                 `<input type="text" id="couponName" class="form-control text-uppercase rounded"
+//                                             placeholder="Coupon name" aria-label="Recipient's username"
+//                                             aria-describedby="basic-addon2">
+//                                         <div class="input-group-append">
+//                                             <button class="btn btn-warning" type="button"
+//                                             onclick="applyCoupon()">Apply</button>
+//                                         </div>`
+//                         })
+//                 }
 </script>
 <%- include('./partials/footer.ejs') %>
