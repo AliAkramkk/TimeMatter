@@ -168,7 +168,7 @@
       let newMainUrl = ''
       let trial = new URLSearchParams(window.location.search);
       let cat = trial.get('category')
-      let url = new URL(`http://localhost:3003/getProducts?category=${cat}`);
+      let url = new URL(`http://localhost:3004/getProducts?category=${cat}`);
       let searchParams = url.searchParams;
 
       function gotoPage(page) {
@@ -180,7 +180,7 @@
       }
 
       function filterCategory(catId){
-        fetch(`http://localhost:3003/filterCat?category=${catId}`, {
+        fetch(`http://localhost:3004/filterCat?category=${catId}`, {
               method: 'GET',
               headers: {
                   'Accept': 'application/json',

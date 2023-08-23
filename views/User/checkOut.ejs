@@ -189,7 +189,7 @@
     <div class="pay-option mt-4">
 <input id="updatedPrice" type="hidden" name="updatedPrice" value="<%= updatedPrice %>">
 <input id="discountPrice" type="hidden" name="discountPrice" value="<%= discountPrice %>">
-<input id="couponName" type="hidden"  name="couponName"  value="<%= couponName %>">
+<input id="code" type="hidden"  name="code"  value="<%= code %>">
 <input id="productPrice" type="hidden" name="productPrice" value="<%= productPrice %>">
 
 <button type="submit" class="custom-button">Place Order</button>
@@ -221,6 +221,7 @@
 
                 const formEl = document.querySelector('.form');
                 const url = window.location.origin;
+                const history = `${url}/orders`
                 formEl.addEventListener('submit', click => {
                     event.preventDefault();
                     const formData = new FormData(formEl);
@@ -258,7 +259,7 @@
                                     });
                                     setTimeout(() => {
                                         Swal.close(); // Close the alert
-                                        window.location.href = `${url}`;
+                                        window.location.href = `${history}`;
                                     }, 1500);
                                     // Redirect to home page with a success message as a URL parameter
                                 }
@@ -293,11 +294,12 @@
 
                 function storeOrderData(payment, order, userId, address) {
                     const url = window.location.origin;
-                    const couponName = document.getElementById('couponName').value;
+                    const history = `${url}/orders`
+                    const code = document.getElementById('code').value;
                     const productPrice = document.getElementById('productPrice').value;
                     
                     console.log(url);
-                    fetch(`${url}/verifyOnlinePayment?couponName=${couponName}&&productPrice=${productPrice}`, {
+                    fetch(`${url}/verifyOnlinePayment?code=${code}&&productPrice=${productPrice}`, {
                         method: 'PUT',
                         headers: {
                             'Accept': 'application/json',
@@ -324,7 +326,7 @@
                         })
                         setTimeout(() => {
                             Swal.close(); // Close the alert
-                            window.location.href = `${url}`;
+                            window.location.href = `${history}`;
                         }, 1500);
                         // Redirect to home page with success message as a URL parameter
 

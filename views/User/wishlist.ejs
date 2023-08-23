@@ -69,83 +69,85 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.min.css">
   </head>
 
-  <div class="wishlist mt-5">
-    <div class="container" id="row">
-      <% if(wishlist){%>
-        <% if(wishlist.items.length> 0) {%>
-          <h3 class="wish-head text-center mb-5 font-weight-bold">Wishlist <i class="ri-heart-line"></i></h3>
-          <%}%>
-            <div class="row" id="wishlistRow">
-              <% for(let i=0;i<wishlist.items.length;i++) { %>
-                <div class="col-lg-4 col-md-6" id="<%= wishlist.items[i]._id %>">
-                  <div class="wish-item">
-                    <a href="/product/<%= wishlist.items[i]._id %>" class="wish-img">
-                      <img src="<%= wishlist.items[i].image[0].url %>" alt="" style="height: 20rem; width: 15rem;">
-                    </a>
-                    <div class="wish-detail">
-                      <b>
-                        <%= wishlist.items[i].productName %>
-                      </b>
-                      <h5>₹<%= wishlist.items[i].price %>
-                      </h5> <!-- Corrected the closing tag of h5 -->
-                    </div>
-                    <div class="wish-cancel">
-                      <button style="box-shadow: none;background-color: #15A78F;" class="btn primary-btn text-light"
-                        onclick="addToClick('<%=wishlist.items[i]._id%>')">ADD
-                        TO CART</button>
-                      <button class="btn-danger" style="border: none; border-radius: 3px; width: 5rem; height: 2rem;"
-                        onclick="removeFromWishlist('<%= wishlist.items[i]._id %>')">Remove</button>
-                      <!-- Corrected the function name -->
-                    </div><br>
-                  </div>
-                  <div id="snackbar">
-                    <%= wishlist.items[i].productName %> added to cart
-                  </div>
-                  <div id="snackbar-error">
-                    <%= wishlist.items[i].productName %> has no stock left
-                  </div>
-                </div>
-                <% } %>
+  
+<div class="wishlist mt-5">
+  <div class="container" id="row">
+    <% if(wishlist){%>
+      <% if(wishlist.items.length > 0) {%>
+        <h3 class="wish-head text-center mb-5 font-weight-bold p-3">Wishlist <i class="ri-heart-line"></i></h3>
+      <%}%>
+      <div class="row">
+        <% for(let i=0; i<wishlist.items.length; i++) { %>
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="wish-item border p-3">
+              <a href="/product/<%= wishlist.items[i]._id %>" class="wish-img">
+                <img src="<%= wishlist.items[i].image[0].url %>" alt="" class="img-fluid rounded">
+              </a>
+              <div class="wish-detail mt-2">
+                <b><%= wishlist.items[i].productName %></b>
+                <h5>₹<%= wishlist.items[i].price %></h5>
+              </div>
+              <div class="wish-actions mt-2">
+                <button class="btn btn-primary btn-block" style="background-color: #15A78F;" onclick="addToClick('<%=wishlist.items[i]._id%>')">ADD TO CART</button>
+                <button class="btn btn-danger btn-block mt-2" onclick="removeFromWishlist('<%= wishlist.items[i]._id %>')">Remove</button>
+              </div>
             </div>
-            <div class="row" id="emptyWishlist">
-              <% if(wishlist.items.length==0){ %>
-                <div class="empty-container w-100 h-50 d-flex flex-column justify-content-center align-items-center"
-                  style="gap:10px">
-                  <img src="https://res.cloudinary.com/dtbohkfpy/image/upload/v1691169381/wishlist_mekzmp.png"
-                    height="250px" alt="" style="opacity: 0.5;">
-                  <h3>Your wishlist is empty!</h3>
-                  <p>Tap Heart button to start saving your favourites</p>
-                </div>
-                <% } %>
-                  <% } %>
-            </div>
-    </div>
-  </div><br>
-  <link rel="stylesheet" href="path/to/sweetalert2.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-  <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+          </div>
+        <% } %>
+      </div>
+      <div class="row" id="emptyWishlist">
+        <% if(wishlist.items.length == 0){ %>
+          <div class="empty-container w-100 h-50 d-flex flex-column justify-content-center align-items-center gap-3">
+            <img src="https://res.cloudinary.com/dtbohkfpy/image/upload/v1691169381/wishlist_mekzmp.png" height="250px" alt="" style="opacity: 0.5;">
+            <h3>Your wishlist is empty!</h3>
+            <p>Tap the Heart button to start saving your favorites</p>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script>
-    function addToClick(id) {
-
-      axios.get(`/addToCart?productId=${id}`)
-        .then((result) => {
-          if (result.data.response) {
-            let x = document.getElementById("snackbar");
-            x.className = "show";
-            setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
-            $.get(location.href, function (data) {
-              $("#cart").html($(data).find("#cart").html());
-              $("#cartCount").html($(data).find("#cartCount").html());
-            })
-          } else {
-            let x = document.getElementById("snackbar-error");
-            x.className = "show";
-            setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
-          }
-        })
+   const addToClick = async (id) => {
+  try {
+    const result = await axios.get(`/addToCart?productId=${id}`);
+    
+    if (result.data.response) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: `${result.data.productName} added to cart`,
+        showConfirmButton: false,
+        timer: 1500
+      });
+      
+      // Update the cart and cart count on the page
+      $.get(location.href, function (data) {
+        $("#cart").html($(data).find("#cart").html());
+        $("#cartCount").html($(data).find("#cartCount").html());
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: `${result.data.productName} has no stock left`
+      });
     }
+  } catch (error) {
+    console.error(error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Failed to add to cart'
+    });
+  }
+};
+
 
     async function removeFromWishlist(productId) {
       const confirmResult = await Swal.fire({

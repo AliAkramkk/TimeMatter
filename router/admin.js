@@ -46,5 +46,8 @@ routers.get("/addCoupon",adminSess.isLogin, couponController.addCoupon);
 routers.post("/addCoupon",adminSess.isLogin, couponController.newCoupon);
 routers.get("/coupon",adminSess.isLogin, couponController.viewCoupon);
 
+routers.get('/editCoupons/:id',adminSess.isLogin, couponController.viewEditCoupons)
+routers.post('/editCoupons', couponController.editCoupons);
+
 
 module.exports = routers;

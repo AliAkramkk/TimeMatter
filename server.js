@@ -5,7 +5,7 @@ const user = require("./router/user")
 const admin = require("./router/admin")
 const session = require('express-session')
 const cloudinary = require('cloudinary').v2;
-
+const flash = require("connect-flash")
 const fileUpload = require('express-fileupload')
 const mongo = require('./config/mongo');
 
@@ -37,6 +37,14 @@ app.use(session({
     saveUninitialized: true,
     resave: false
 }))
+
+app.use(flash());
+
+app.use((req, res, next) => {
+    res.locals.flashes = req.flash();
+    next();
+  });
+  
 
 app.use((req, res, next) => {
     res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate');

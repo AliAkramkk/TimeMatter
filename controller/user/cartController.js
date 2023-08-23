@@ -162,8 +162,8 @@ const checkQuantity = async (req, res) => {
 };
 
 const getCheckOut = async (req, res) => {
-  const {couponName,discountPrice,productPrice,updatedPrice}=req.query;
-  
+  const {code,discountPrice,productPrice,updatedPrice}=req.query;
+  console.log(code);
   const userId = req.session.User_id;
   const user = await User.findOne({ _id: userId });
   const address = user.address;
@@ -172,11 +172,11 @@ const getCheckOut = async (req, res) => {
   const wishlist = await wishlistModel.findOne({ userId: userId }).populate("items");
   const categories = await Category.find({});
   const total = totalAmount(carts);
-  res.render("User/checkOut", { categories, address, total, user,couponName,discountPrice,productPrice,updatedPrice,carts,wishlist });
+  res.render("User/checkOut", { categories, address, total, user,code,discountPrice,productPrice,updatedPrice,carts,wishlist });
 };
 
 const checkout = async (req, res) => {
-  const {productPrice,updatedPrice,discountPrice,couponName} = req.body;
+  const {productPrice,updatedPrice,discountPrice,code} = req.body;
   if (req.body.payment === 'wallet') {
     const userId = req.session.User_id;
     const id = req.session.User_id;
@@ -212,8 +212,8 @@ const checkout = async (req, res) => {
       });
       await wallet.save();
     }
-    if (couponName) {
-      const couponInfo = await Coupon.findOne({ code: couponName });
+    if (code) {
+      const couponInfo = await Coupon.findOne({ code: code });
       if (!couponInfo) {
         return res.status(400).send({ message: 'Coupon name not valid' });
       }
@@ -249,8 +249,8 @@ const checkout = async (req, res) => {
       total_amount: req.body.totalAmount,
       payment_method: 'wallet',
     });
-    if (couponName) {
-      newOrder.coupon_used = couponName;
+    if (code) {
+      newOrder.coupon_used = code;
     }
     await newOrder.save();
     await Cart.deleteMany({ user: userId });
@@ -263,7 +263,7 @@ const checkout = async (req, res) => {
 
   if (req.body.payment === "cod") {
     const userId = req.session.User_id;
-    const {productPrice,updatedPrice,discountPrice,couponName} = req.body;
+    const {productPrice,updatedPrice,discountPrice,code} = req.body;
     const productPrice1=parseInt(productPrice)
     const updatedPrice1=parseInt(updatedPrice)
    
@@ -292,9 +292,10 @@ const checkout = async (req, res) => {
       const orderIdNumber = parseInt(lastOrderId.slice(4));
       orderId = `EMRT${`000000${orderIdNumber + 1}`.slice(-6)}`;
     }
-    if(couponName!=""){
+    if(code!=""){
      
-        const couponId = await Coupon.findOne({couponName:couponName});
+        const couponId = await Coupon.findOne({code:code});
+        console.log(couponId);
     
       var newOrder = new Order({
         order_id: orderId,
@@ -470,9 +471,8 @@ const returnOrder = async (req, res) => {
 };
 
 const applyCoupon = async (req, res) => {
-  const coupon = req.query.coupon
-  
-  const couponDetails = await Coupon.findOne({couponName:coupon});
+  const code = req.query.coupon
+  const couponDetails = await Coupon.findOne({code});
   const Discount = couponDetails.discount;
  
    res.json({
@@ -480,10 +480,11 @@ const applyCoupon = async (req, res) => {
     Discount,
   });
   }
+
   const verifyOnlinePayment =async (req, res) => {try {
     const { payment } = req.body;
     const orderDetails = req.body.order;
-    const {couponName,productPrice}=req.query
+    const {code,productPrice}=req.query
 
     
     let hmac = crypto.createHmac('sha256', process.env.RAZORPAY_SECRET);
@@ -511,9 +512,9 @@ const applyCoupon = async (req, res) => {
 
 
 
-    if(couponName!=""){
+    if(code!=""){
      
-      const couponId = await Coupon.findOne({couponName:couponName});
+      const couponId = await Coupon.findOne({code:code});
       
       var newOrder = new Order({
         order_id: orderDetails.receipt,

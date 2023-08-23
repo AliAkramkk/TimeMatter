@@ -1,0 +1,53 @@
+<%- include('./partials/header.ejs') %>
+
+    <%- include('./partials/sidebar.ejs') %>
+
+    <div class="container my-5">
+      <h3>Edit Coupon</h3>
+      <form id="myForm" method="POST" action="/admin/editCoupons" style="display: block;z-index: 1000;">
+          <div class="mb-3 ">
+            
+                  <input type="text" name="_id" style="height: 0px; visibility: hidden;"
+                      value="<%=coupons._id  %>" />
+                  <div class="my-3">
+                      <label for="Name" class="pb-1">Coupon name</label>
+                      <input type="text" class="form-control" id="exampleFormControlInput1"
+                          placeholder="Coupon Name" name="name" value="<%=coupons. couponName%>" required>
+                  </div>
+                  <div class="my-3">
+                      <label for="Name" class="pb-1">Coupon Code</label>
+                      <input type="text" class="form-control" id="exampleFormControlInput1"
+                          placeholder="Coupon Code" name="code" value="<%=coupons. code%>" required>
+                  </div>
+                  <div class="mb-3">
+                      <label for="Name" class="pb-1">Minimum amount of purchase </label>
+                      <input type="text" class="form-control" id="exampleFormControlInput1"
+                          placeholder="minimum amount of purchase" name="minAmount" value="<%=coupons.minTotal%>"
+                          required>
+                  </div>
+                  <div class="mb-3">
+                      <label for="Name" class="pb-1">Discount </label>
+                      <input type="text" class="form-control" id="exampleFormControlInput1"
+                          placeholder="Discount (in percentage)" name="discount" value="<%=coupons.discount%>"
+                          required>
+                  </div>
+                  <div class="mb-3">
+                      <label for="Name" class="pb-1">Max discount </label>
+                      <input type="text" class="form-control" id="exampleFormControlInput1"
+                          placeholder="Max discount amount" name="maxDiscountAmount"
+                          value="<%=coupons.maxDiscount%>" required>
+                  </div>
+                  <div class="mb-3">
+                      <label for="Name">Expiry </label>
+                      <input type="date" name="expiry" placeholder="expiry"
+                          value="<%= coupons.expiryDate.toISOString().substr(0, 10) %>" required />
+                  </div>
+                  <button type="submit" class="btn btn-success mt-3">UPDATE</button>
+                
+      </form>
+
+  </div>
+
+  <%- include('./partials/footer.ejs') %>
+
+

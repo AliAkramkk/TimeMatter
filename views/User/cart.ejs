@@ -350,9 +350,10 @@
 
                 function applycoupon() {
         const url = window.location.origin;
-        const couponName = document.getElementById('coupon_id').value;
+        const code = document.getElementById('coupon_id').value;
+        console.log(code)
 
-        fetch(`${url}/applyCoupon?coupon=${couponName}`, {
+        fetch(`${url}/applyCoupon?coupon=${code}`, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",

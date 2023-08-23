@@ -202,18 +202,25 @@
                         </div>
                         <% }) %>
                     </div>
-                    <div class="product__pagination">
-                        <a href="#">1</a>
-                        <a href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#"><i class="fa fa-long-arrow-right"></i></a>
-                    </div>
+                   
                 </div>
             </div>
         </div>
     </section>
     <!-- Product Section End -->
-
+    <nav aria-label="Page navigation example p-4">
+        <ul class="pagination justify-content-center">
+          <li class="page-item <% if(page==1){%>disabled <%}%> ">
+            <a class="page-link" href="/shop?page=<%=page-1%>">Previous</a>
+          </li>
+          <% for(let i =1; i<=count;i++){%>
+          <li class="page-item"><a class="page-link" href="/shop?page=<%=i%>"><%=i%></a></li>
+         <%}%>
+          <li class="page-item <% if(count ==page){%>disabled <%}%> ">
+            <a class="page-link" href="/shop?page=<%=page+1%>">Next</a>
+          </li>
+        </ul>
+      </nav><br>
 
      <!-- axios cdn -->
      <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>

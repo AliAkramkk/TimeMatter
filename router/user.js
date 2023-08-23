@@ -42,11 +42,7 @@ routers.get("/forget", user.forget);
 routers.post("/forget", user.forgetverif);
 routers.get("/changepass/:email", userSess.islogin, user.changePass);
 routers.post("/resetPass", user.resetPass);
-routers.post(
-  "/checkOut",
-  userSess.islogin,
-  catchErrors(cartController.checkout)
-);
+routers.post("/checkOut",userSess.islogin,catchErrors(cartController.checkout));
 // orders
 routers.get(
   "/orders",

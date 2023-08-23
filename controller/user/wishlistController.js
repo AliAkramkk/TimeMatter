@@ -20,7 +20,7 @@ const loadWishlist = async (req, res) => {
     res.render('User/wishlist', { id, user, wishlist, cart });
 
   } catch (error) {
-    res.render('User/404page')
+    console.log(error);
   }
 }
 

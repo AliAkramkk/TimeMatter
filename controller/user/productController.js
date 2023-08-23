@@ -6,14 +6,29 @@ const wishlistModel = require("../../model/wishList")
 
 
 const loadShop = async (req, res) => {
+  try{
   const id = req.session.User_id;
+  
   const user = await userModel.findOne({ _id: id });
  
-  const products = await productModel.find();
+  // const products = await productModel.find();
   const categories = await Category.find();
   const cart = await Cart.find({ user: id }).populate("product");
   const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
-  res.render("User/shop", { categories, products, user, id ,cart,wishlist});
+  
+  const PageSize = 4;
+  const page = parseInt(req.query.page) || 1;
+  const skip = (page - 1) * PageSize;
+  const productCount = await productModel.find().count();
+  const count = Math.ceil(productCount/PageSize);
+  
+  const products = await productModel.find().skip(skip).limit(PageSize);
+
+   res.render("User/shop", { categories, products, user, id ,cart,wishlist,count,page });
+
+  }catch(error){
+    console.log(error);
+  }
 };
 
 // const productDetails = async (req, res) => {
@@ -40,7 +55,7 @@ const productDetails = async (req, res) => {
     const product = await productModel.findOne({ _id: productId });
     const categories = await Category.find();
     const cart = await Cart.find({ user: id}).populate("product");
-    const wishlists = await wishlistModel.findOne({ userId: id });
+    
     const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
     let wish = false;
     if (user && wishlist && wishlist.items.length > 0) {
@@ -85,12 +100,23 @@ const addToWishlist = async (req, res) => {
   try {
     const id = req.session.User_id;
     const productid = req.query.productId;
-    await userModel.updateOne({ _id: id }, { $push: { wishlist: productid } });
-    res.json({ success: true });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, error: "Failed to add to wishlist" });
+    
+    // Fetch the product
+    const product = await productModel.findOne({ _id: productid });
+
+    // Check if there's stock left
+    if (product.stock <= 0) {
+      return res.status(400).json({ success: false, error: "No stock left" });
     }
+
+    // Add the product to the wishlist
+    await userModel.updateOne({ _id: id }, { $push: { wishlist: productid } });
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: "Failed to add to wishlist" });
+  }
 }
 
 const viewCategories = async (req, res) => {

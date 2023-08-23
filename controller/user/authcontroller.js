@@ -214,7 +214,7 @@ const getEditAddress = async (req, res) => {
   const userId =req.session.User_id
   const redirect = req.query.redirect;
   const cart = await Cart.find({ user: userId }).populate("product");
-  const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
+  const wishlist = await wishlistModel.findOne({ userId: userId }).populate("items");
   let { address } = await User.findOne(
     { "address.id": req.params.id },
     { _id: 0, address: { $elemMatch: { id: req.params.id } } }
