@@ -67,99 +67,112 @@
   </div>
 </header>
 
-
 <div class="container mt-3 mb-3">
-  <div class="row">
+    <div class="row">
       <div class="col-12 col-md-3">
-          <form class="filter-sec" method="get">
-              <div class="row bg-white d-md-none d-flex p-2">
-                  <div class="col d-flex flex-row-reverse align-items-center" onclick="hideFilter()">
-                      <i class="ri-close-fill" style="margin-top: 10px; font-size: 1.8rem;"></i>
-                  </div>
-              </div>
-              <input type="text" value="" name="key" style="height: 0px; visibility: hidden;">
-              <div class="row">
-                  <h6>Category</h6>
-              </div>
-              <div class="filter-options mt-3">
-                  <div class="ft-option">
-                      <input type="radio" value="" name="category" id="d" <% if(category=="" ){ %> checked <% } %>
-                          onchange="loadAllCategory()"/>
-                          <label for="d">All</label>
-                  </div>
-                  <% categories.forEach(item=>{ %>
-                      <div class="ft-option">
-                          <input type="radio" value="<%= item._id%>"  name="category" id="<%= item._id%>" <%
-                              if(category==item._id){ %>
-                          checked <% } %> onchange="filterCategory('<%= item._id%>')" />
-                                  <label for="<%=item._id%>">
-                                      <%=item. categoryName%>
-                                  </label>
-                      </div>
-                      <% }) %>
-              </div>
-            
-             
-                 
+        <form class="filter-sec" method="get">
+          <div class="row bg-white d-md-none d-flex p-2">
+            <div class="col d-flex flex-row-reverse align-items-center" onclick="hideFilter()">
+              <i class="ri-close-fill" style="margin-top: 10px; font-size: 1.8rem;"></i>
+            </div>
+          </div>
+          <input type="text" value="" name="key" style="height: 0px; visibility: hidden;">
+          <div class="row p-2">
+            <h6>Category</h6>
+          </div>
+          <div class="filter-options mt-3">
+            <div class="ft-option">
+              <input type="radio" value="" name="category" id="d" <% if (category == "") { %> checked <% } %>
+                onchange="loadAllCategory()" />
+              <label for="d">All</label>
+            </div>
+            <% categories.forEach(item => { %>
+            <div class="ft-option">
+              <input type="radio" value="<%= item._id %>" name="category" id="<%= item._id %>" <% 
+                if (category == item._id) { %> checked <% } %> onchange="filterCategory('<%= item._id %>')" />
+              <label for="<%=item._id%>">
+                <%=item.categoryName%>
+              </label>
+            </div>
+            <% }) %>
+          </div>
+          <div class="row mt-5">
+            <h6>Sort By </h6>
+        </div>
+        <div class="filter-options mt-3">
+            <div class="ft-option">
+                <input type="radio" value="1" name="filter" id="lowToHigh" <% if(filter==1){ %> checked
+                <% } %>
+                    onchange="handleChange('filter', 1)" />
+                    <label for="lowToHigh">Price - Low to High</label>
+            </div>
+            <div class="ft-option">
+                <input type="radio" value="-1" name="filter" id="highToLow" <% if(filter==-1){ %>
+                checked <% } %>
+                    onchange="handleChange('filter', -1)" />
+                    <label for="highToLow">Price - High to Low</label>
+            </div>
+            <div class="ft-option">
+                <input type="radio" value="0" name="filter" id="newLaunches" <% if(filter==0){ %> checked <%
+                    } %>
+                    onchange="handleChange('filter', 0)"
+                    />
+                    <label for="newLaunches">New Launches</label>
+            </div>
 
-              </div>
-          </form>
+        </div>
+        </form>
       </div>
       <div class="col-12 col-md-9 pt-5">
-          <h2 class="mb-3"> Products </h2>
-          <div class="row d-flex flex-wrap" id="productList">
-              <% products.forEach((object)=> { %>
-                  <div class="col-12 col-sm-6 col-md-4">
-                      <div class="card mb-3">
-                          <a href="/productDetails?id=<%=object._id %>" class="text-decoration-none"
-                              style="color: black;">
-                              <img src="<%= object.image[0].url %>" class="card-img-top"
-                                  style="aspect-ratio: 1 / 1" />
-                              <div class="card-body">
-                                  <h4 class="card-title">
-                                      <%= object.productName %>
-                                  </h4>
-                                  <p class="card-text">
-                                      <%= object. blurb %>
-                                  </p>
-                                  <div class="buy d-flex justify-content-between align-items-center">
-                                      <div class="price text-success">
-                                          <h5 class="mt-4">₹<%= object.price %>
-                                          </h5>
-                                      </div>
-                                  </div>
-                              </div>
-                          </a>
-                      </div>
+        <h2 class="mb-3">Products</h2>
+        <div class="row d-flex flex-wrap" id="productList">
+          <% products.forEach((object) => { %>
+          <div class="col-12 col-sm-6 col-md-4">
+            <div class="card mb-3">
+              <a href="/productDetails?id=<%=object._id %>" class="text-decoration-none" style="color: black;">
+                <img src="<%= object.image[0].url %>" class="card-img-top" style="aspect-ratio: 1 / 1" />
+                <div class="card-body">
+                  <h4 class="card-title">
+                    <%= object.productName %>
+                  </h4>
+                  <p class="card-text">
+                    <%= object.blurb %>
+                  </p>
+                  <div class="buy d-flex justify-content-between align-items-center">
+                    <div class="price text-success">
+                      <h5 class="mt-4">₹<%= object.price %></h5>
+                    </div>
                   </div>
-                  <% }) %>
+                </div>
+              </a>
+            </div>
           </div>
-          <nav aria-label="Page navigation example text-dark pl-pagination" id="pagination">
-              <% if(pageCount>1) {%>
-                  <ul class="pagination d-flex justify-content-center text-dark categoryPagination">
-                      <li class="page-item <% if(page == 0) { %> disabled <% } %>">
-                          <span class="page-link text-dark  " aria-label="Previous">
-                              <span aria-hidden="true" onclick="gotoPage('<%=parseInt(page)-1%>')">&laquo;</span>
-                          </span>
-                      </li>
-                      <% for(let i=0; i<pageCount; i++) {%>
-                          <li class="page-item"><span onclick="gotoPage('<%=i%>')" class="page-link text-dark" <%
-                                  if(page==i){ %> style="font-weight:1000;" <% } %>
-                                      ><%= i+1 %> </span></li>
-                          <% } %>
-                              <li class="page-item <% if(parseInt(page)+1 == pageCount) { %> disabled <% } %>">
-                                  <span class="page-link text-dark" aria-label="Next" >
-                                      <span aria-hidden="true"
-                                          onclick="gotoPage('<%=parseInt(page)+1%>')">&raquo;</span>
-                                  </span>
-                              </li>
-                  </ul>
-          </nav>
+          <% }) %>
+        </div>
+        <nav aria-label="Page navigation example text-dark pl-pagination" id="pagination">
+          <% if (pageCount > 1) { %>
+          <ul class="pagination d-flex justify-content-center text-dark categoryPagination">
+            <li class="page-item <% if (page == 0) { %> disabled <% } %>">
+              <span class="page-link text-dark" aria-label="Previous">
+                <span aria-hidden="true" onclick="gotoPage('<%=parseInt(page)-1%>')">&laquo;</span>
+              </span>
+            </li>
+            <% for (let i = 0; i < pageCount; i++) { %>
+            <li class="page-item"><span onclick="gotoPage('<%=i%>')" class="page-link text-dark" <%
+                if (page == i) { %> style="font-weight:1000;" <% } %>
+                  ><%= i + 1 %> </span></li>
+            <% } %>
+            <li class="page-item <% if (parseInt(page) + 1 == pageCount) { %> disabled <% } %>">
+              <span class="page-link text-dark" aria-label="Next">
+                <span aria-hidden="true" onclick="gotoPage('<%=parseInt(page)+1%>')">&raquo;</span>
+              </span>
+            </li>
+          </ul>
           <% } %>
+        </nav>
       </div>
+    </div>
   </div>
-</div>
-
 
   <script>
       let key = '<%=key%>'

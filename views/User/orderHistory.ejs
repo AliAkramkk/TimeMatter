@@ -87,10 +87,18 @@
           <h5 class="">order id:<%= item.order_id%></h5><br>
           
 
+         <h5 class="">order date:<%= item.orderTime.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }) %></h5><br>
 
+         
 
           <h4 class="">Total Price:<%= item.total_amount%></h4>
           
+
+          <% item.product.forEach((productItem) => { %>
+            <h4>Quantity:  
+               <%= productItem.product_id.productName %>
+               :<%= productItem.quantity %></h4>
+          <% }) %>
         </div>
        
  <div class="order-status d-flex">
@@ -119,6 +127,25 @@
     <% } %>
   </div>
 </div>
-</div>
+</div><br>
+<nav aria-label="Page navigation example p-4">
+  <ul class="pagination justify-content-center">
+    <li class="page-item <% if(page==1){%>disabled <%}%> ">
+      <a class="page-link" href="/orders?page=<%=page-1%>">Previous</a>
+    </li>
+    <% for(let i =1; i<=pageCount;i++){%>
+    <li class="page-item"><a class="page-link" href="/orders?page=<%=i%>"><%=i%></a></li>
+   <%}%>
+    <li class="page-item <% if(pageCount ==page){%>disabled <%}%> ">
+      <a class="page-link" href="/orders?page=<%=page+1%>">Next</a>
+    </li>
+  </ul>
+</nav><br>
+
+
+
+
+<!-- axios cdn -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
 
 <%- include('./partials/footer.ejs') %>

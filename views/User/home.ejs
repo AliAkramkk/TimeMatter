@@ -118,7 +118,7 @@
         
                         <ul>
                             <% categories.forEach((category)=>{ %>
-                            <li><a href="/category?catId=<%= category._id %>"><%= category.categoryName %></a></li>
+                            <li><a href="category?catId=<%= category._id %>"><%= category.categoryName %></a></li>
                             <% }) %>
                         </ul>
 
@@ -188,15 +188,11 @@
     <div class="banner">
         <div class="container">
             <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="banner__pic">
-                        <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.com%2Ffree-photos-vectors%2Fwatch-banner&psig=AOvVaw0dbHLi95tDxeaanObi9zRC&ust=1691132582341000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCKiq0_j1v4ADFQAAAAAdAAAAABAE" alt="">
-                    </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 mb-3">
+                    <div class="hero__item1 set-bg" data-setbg="/image/banner/banner-4.jpg"></div>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="banner__pic">
-                        <img src="/img/banner/banner5.jpg" alt="">
-                    </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 mb-3">
+                    <div class="hero__item1 set-bg" data-setbg="/image/banner/banner-6.jpg"></div>
                 </div>
             </div>
         </div>

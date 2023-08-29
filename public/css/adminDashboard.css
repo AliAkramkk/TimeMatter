@@ -1,0 +1,159 @@
+.order-container {
+  flex: 85%;
+  padding-right: 100px;
+  padding-left: 20px;
+}
+
+.dashboard-item {
+  display: flex;
+  padding: 20px;
+  gap: 20px;
+  border-radius: 10px;
+}
+
+.dash-img {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50px;
+}
+
+.dash-img.one {
+  background-color: #65d04a57;
+}
+
+.dash-img.two {
+  background-color: #f7e4654c;
+}
+
+.dash-img.three {
+  background-color: #E4EEF9;
+}
+
+.dash-img.four {
+  background-color: #ffc36950;
+}
+
+.dash-img img {
+  object-fit: contain;
+  max-height: 50px;
+}
+
+.dash-desc {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.dash-desc h5 {
+  color: grey;
+}
+
+.chart-container {
+  width: 100%;
+  height: 400px;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  padding: 50px;
+}
+
+#chart {
+  width: 70%;
+}
+
+.orders-table {
+  border-radius: 10px;
+  padding: 20px 15px;
+}
+
+.del-status {
+  border-radius: 5px;
+  font-weight: 500;
+  color: rgb(0, 0, 207);
+  background-color: rgba(0, 0, 255, 0.181);
+}
+
+.del-status.pending,
+.del-status.returnProcessing {
+  background-color: #ff99002f;
+  color: #FF9900;
+}
+
+.del-status.returned,
+.del-status.cancelled {
+  background-color: #ca01012d;
+  color: #CA0101;
+}
+
+.del-status.delivered {
+  background-color: #0090292b;
+  color: #009028;
+}
+
+.product-search {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  padding: 0px 15px;
+}
+
+.product-search {
+  margin-left: 20px;
+  border-radius: 5px;
+}
+
+.product-search input {
+  border: none;
+  outline: none;
+  background: none;
+}
+
+.product-search button {
+  border: none;
+  outline: none;
+  background: none;
+}
+
+table th,
+table td {
+  text-align: center;
+}
+
+.dropdown-menu li,
+.dropdown-menu a {
+  cursor: pointer
+}
+
+.order-status-filter {
+  margin-left: 20px;
+}
+
+.order-status-filter {
+  width: 150px;
+  height: 50px !important;
+  border: none;
+  font-size: 1rem;
+  background-color: rgb(32, 32, 32);
+  color: white;
+}
+
+.orders-table th,
+.orders-table td {
+  font-size: .9rem;
+}
+
+@media(max-width:1200px) {
+
+  .orders-table th,
+  .orders-table td {
+    font-size: .7rem;
+  }
+
+  .orders-table img {
+    max-height: 20px;
+  }
+}

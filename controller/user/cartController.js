@@ -14,13 +14,28 @@ const wishlistModel =require("../../model/wishList");
 
 
 const addToCart = async (req, res) => {
+  try {
+    
+  
   const userId = req.session.User_id;
   const productId = req.query.productId;
   // if (req.user.wishlist) {
   //   await User.updateOne({ _id: userId }, { $pull: { wishlist: productId } });
   // }
   // const wishlistSize = req.user.wishlist.length - 1;
-  const existingProduct = await Cart.findOne({
+  if(req.query.wishlist){
+  await wishlistModel.updateOne(
+    {
+      userId: userId
+    },
+    {
+      $pull: {
+        items: productId,
+      }
+    }
+  );
+  }
+    const existingProduct = await Cart.findOne({
     user: userId,
     product: productId,
   });
@@ -36,7 +51,13 @@ const addToCart = async (req, res) => {
     });
     await newCart.save();
   }
-  res.json({ success: true });
+  const name = await Product.findOne({_id:productId})
+  const newProduct = name.productName
+  res.json({ success: true ,response:true,productName:newProduct});
+} 
+  catch (error) {
+    console.log(error);
+  }
 };
 
 function totalAmount(products) {
@@ -52,17 +73,12 @@ const getCart = async (req, res) => {
   try {
     const user = req.session.User_id;
     if (user) {
-   
-      const categories = await Category.find({});
       const carts = await Cart.find({ user: user }).populate("product");
-   
       const count = await Cart.find({ user: user }).count();
       const total = totalAmount(carts);
       const wishlist = await wishlistModel.findOne({ userId: user }).populate("items");
-      const coupon = await Coupon.find({});
-   
-    
-      res.render("User/cart", { categories, carts, count, total, user,wishlist,coupon });
+      const coupon = await Coupon.find({})
+      res.render("User/cart", {carts, count, total, user,wishlist,coupon });
     } else {
       req.flash("error", "Please login to purchase products");
       res.redirect("/login");
@@ -302,7 +318,7 @@ const checkout = async (req, res) => {
         user: userId,
         product: productArray,
         address: req.body.address,
-        total_amount: productPrice1,
+        total_amount: updatedPrice1,
         payment_method: "COD",
         coupon:couponId._id,
         
@@ -315,7 +331,7 @@ const checkout = async (req, res) => {
         user: userId,
         product: productArray,
         address: req.body.address,
-        total_amount: productPrice1,
+        total_amount: updatedPrice1,
         payment_method: "COD",
        
         
@@ -338,6 +354,7 @@ const checkout = async (req, res) => {
 
       // const carts = await Cart.find({ user: userId }).populate('product');
       const amount = req.body.updatedPrice;
+      console.log(amount);
       const lastOrder = await Order.find().sort({ _id: -1 }).limit(1);
       let orderId = 'EMRT000001';
       if (lastOrder.length > 0) {
@@ -375,32 +392,78 @@ const checkout = async (req, res) => {
 
 };
 
-const viewOrders = async (req, res) => {
-  const userId = req.session.User_id;
-  const user = await User.findOne({ _id: userId });
-  const cart = await Cart.find({ user: userId }).populate("product");
-  const categories = await Category.find({});
-  const wishlist = await wishlistModel.findOne({ userId: userId }).populate("items");
-  const orders = await Order.find({ user: userId })
-    .populate({
-      path: "product.product_id",
-      model: "product",
-    })
-    .sort({ order_id: -1 });
+// const viewOrders = async (req, res) => {
+//   const userId = req.session.User_id;
+//   const user = await User.findOne({ _id: userId });
+//   const cart = await Cart.find({ user: userId }).populate("product");
+//   const categories = await Category.find({});
+//   const wishlist = await wishlistModel.findOne({ userId: userId }).populate("items");
+//   const orders = await Order.find({ user: userId })
+//     .populate({
+//       path: "product.product_id",
+//       model: "product",
+//     })
+//     .sort({ order_id: -1 });
+//     const PageSize = 6;
+//     const page = parseInt(req.query.page) || 1;
+//     const skip = (page - 1) * PageSize;
+//     const productCount = await Product.countDocuments();
+//     const count = Math.ceil(productCount / PageSize);
 
-    // const products=orders.product[0].product_id.image[0].url
+//     // const products=orders.product[0].product_id.image[0].url
    
-  res.render("User/orderHistory", { categories, orders, user,cart,wishlist });
+   
+   
+//     res.render("User/orderHistory", { categories, orders, user,cart,wishlist ,page,count});
+// };
+
+const viewOrders = async (req, res) => {
+  try {
+      const userId = req.session.User_id;
+      const user = await User.findOne({ _id: userId });
+      const categories = await Category.find({});
+      const wishlist = await wishlistModel.findOne({ userId: userId }).populate("items");
+      
+      const PageSize = 6;
+      const page = parseInt(req.query.page) || 1;
+      const skip = (page - 1) * PageSize;
+
+      const orders = await Order.find({ user: userId })
+          .populate({
+              path: "product.product_id",
+              model: "product",
+          })
+          .sort({ order_id: -1 })
+          .skip(skip)
+          .limit(PageSize);
+
+      const orderCount = await Order.countDocuments({ user: userId });
+      const pageCount = Math.ceil(orderCount / PageSize);
+
+      const cart = await Cart.find({ user: userId }).populate("product");
+
+      res.render("User/orderHistory", {
+          categories,
+          orders,
+          user,
+          cart,
+          wishlist,
+          page,
+          pageCount
+      });
+  } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+  }
 };
+
 
 const orderDetails = async (req, res) => {
   const userId = req.session.User_id;
 
   const user = await User.findOne({ _id: userId });
   let address = user.address;
-
- 
-
+  const coupon = await Coupon.findOne({ user: userId });
   const order_id = req.query.order_id;
   const exactAddress = req.query.address;
   
@@ -413,7 +476,6 @@ const orderDetails = async (req, res) => {
     path: "user",
     model: "user",
   });
-
   if (order) {
     res.render("User/orderdetails", {
       user,
@@ -422,7 +484,8 @@ const orderDetails = async (req, res) => {
       address,
       order_id,
       cart,
-      wishlist
+      wishlist,
+      coupon,
     });
   } else {
     res.redirect("/orders");

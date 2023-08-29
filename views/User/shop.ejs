@@ -119,7 +119,7 @@
                                 <% categories.forEach((category)=>{ %>
                                     <li><a href="/category?catId=<%= category._id %>"><%= category.categoryName %></a></li>
                                 <% }) %>
-                            </ul>
+                            </ul>   
                         </div>
                         <div class="sidebar__item">
                             <h4>Price</h4>
@@ -145,8 +145,16 @@
                 </div>
                 <div class="col-lg-9 col-md-7">
                     
-                    <div class="filter__item">
+                    <div class="filter__item  justify-content-between align-items-center mb-3">
+                        <div class="form-outline">
+                            <form id="searchForm" action="/shop"  style="display: flex;">
+                                <input type="search" name="search" id="searchInput" placeholder=         "Search products"
+                                    style="border-radius: 5px; width: 26rem;">
+                                <input type="submit" value="Search" class="btn btn-outline-success my-2 my-sm-0 mx-2">
+                            </form>
+                        </div>
                         <div class="row">
+                           
                             <div class="col-lg-4 col-md-5">
                                 <div class="filter__sort">
                                     <span>Sort By</span>
@@ -162,14 +170,11 @@
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-3">
-                                <!-- <div class="filter__option">
-                                    <span class="icon_grid-2x2"></span>
-                                    <span class="icon_ul"></span>
-                                </div> -->
+                              
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row"id="productGrid">
                         <% products.forEach((product)=>{ %>
                         <div class="col-lg-4 col-md-6 col-sm-6 ">
                             <div  class="product__item">
@@ -181,7 +186,7 @@
                                         <li>   
                                              <!-- <a href="/shopDetails?id=<%= product._id %>"><i class="fa fa-info"></i>
                                             </a>  -->
-                                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                            <!-- <li><a href="#"><i class="fa fa-heart"></i></a></li> -->
                                             </li>
                                         
                                             </ul>
@@ -222,11 +227,14 @@
         </ul>
       </nav><br>
 
+
+      
+
      <!-- axios cdn -->
      <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
 
      <!-- sweet alert cdn -->
-     <!-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
 
      <script>
         function login(){
@@ -234,8 +242,71 @@
             location.href= `/login?url=${currentUrl}`
         }
      </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchForm = document.getElementById("searchForm");
+        const productGrid = document.getElementById("productGrid"); // Assuming this is where the products are displayed
 
-    
-    
+        searchForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            const searchInput = document.getElementById("searchInput").value;
+            searchProducts(searchInput);
+        });
+
+        function searchProducts(query) {
+            axios.get(`/shop?search=${query}`)
+                .then(response => {
+                    console.log("Response Data:", response.data);
+                    if (response.data.product && response.data.product.length > 0) {
+            const productList = response.data.product;
+                    
+
+                    // Clear existing products
+                    productGrid.innerHTML = '';
+
+                    // Populate the grid with search results
+                    console.log("Product List:", productList)
+                   
+                         
+                       productList.forEach(products => {
+                        const productHTML = `
+                        <div class="col-lg-4 col-md-6 col-sm-6 ">
+                            <div  class="product__item">
+                                
+                                <div class="product_item_pic set-bg">
+                                    <div class="product_icons">
+                                    <ul class="shop__item__pic__hover">
+                                           
+                                        
+                                        
+                                            </ul>
+                                    <div class="product_itempic_hover image-fluid">
+                                        <a href="/shopDetails?id=${products._id}">
+                                       <img class="product_image" src="${products.image[0].url} " alt="">
+                                    </a>  
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="product_item_text" style="text-align: center;">
+                                    <h6 style="font-weight: bold;"> ${products.productName} </h6>
+                                    <h5>&#8377;${products.price} </h5>
+                                </div>
+                            </div>
+                        </div>
+                        `;
+                        productGrid.insertAdjacentHTML('beforeend', productHTML);
+                    });
+                    } else {
+    console.log("No products found."); // or display a message to the user
+}
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    });
+</script>
 
     <%- include('./partials/footer.ejs') %>

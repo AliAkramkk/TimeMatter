@@ -73,9 +73,9 @@
 
                            
                     <ul><% if(wishlist!=null && wishlist.items.length!=0){%>
-                        <li><a href="/wishlist"><i class="fa fa-heart"></i> <span><%= wishlist.items.length%></span></a></li> <%}else{%>
+                        <li><a href="/wishlist"><i class="fa fa-heart"></i> <span id="wishlist-icon"><%= wishlist.items.length%></span></a></li> <%}else{%>
                             <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a></li><%}%>
-                        <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span><%=cart.length%></span></a></li> 
+                        <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span id="cartCount"><%=cart.length%></span></a></li> 
                     </ul>
 
                             <div class="header__top__right__auth">
@@ -194,7 +194,7 @@
                                 
                                 <div class="mb-2">
                                     <% if(product.quantity !==0){ %>
-                                        <button style="box-shadow: none;background-color: #15A78F;" class=" btn primary-btn text-light" <%
+                                        <button style="box-shadow: none;background-color: #930202;" class=" btn primary-btn text-light" <%
                                           if(user) {%> onclick="addToClick('<%=product._id%>')" <% }else{ %> onclick="notLogin()" <% } %> >ADD
                                                 TO CART</button>
                                         <button id="wishlist-icon" style="border: none;" class="heart-icon rounded" <% if(user) {%>
@@ -321,7 +321,7 @@
         </div>
     </section>
     
-    <div id="snackbar"><%= product.productName%> added to cart...</div>
+    <div id="snackbar" ><%= product.productName%> added to cart...</div>
     <div id="snackbar-error"><%= product.productName%> has no stock left...</div> 
     <!-- Related Product Section End
 
@@ -342,7 +342,7 @@
     <script>
 
         function addToClick(id) {
-  
+     console.log(id);
           axios.get(`/addToCart?productId=${id}`)
             .then((result) => {
               if (result.data.response) {
@@ -364,20 +364,30 @@
         }
   
         function addToWishlist(id) {
-          $.ajax({
-            type: "GET",
-            url: "/addToWishlist",
-            data: {
-              productId: id,
-            },
-            success: function (res) {
-              $.get(location.href, function (data) {
+    $.ajax({
+        type: "GET",
+        url: "/addToWishlist",
+        data: {
+            productId: id,
+        },
+        success: function (res) {
+            $.get(location.href, function (data) {
                 $("#wishlist").html($(data).find("#wishlist").html());
                 $("#wishlist-icon").html($(data).find("#wishlist-icon").html());
-              })
-            }
-          })
+
+                // Check if the product was just added to the wishlist
+                if (res.response) {
+                    // Product was added, show SweetAlert
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Added to Wishlist',
+                        text: 'This product has been added to your wishlist.',
+                    });
+                }
+            });
         }
+    });
+}
   
         function notLogin() {
           Swal.fire({

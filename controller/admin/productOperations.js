@@ -3,8 +3,8 @@ const categoryModel = require("../../model/categorySchema");
 const multiple = require("../../utility/uploadImage");
 const Order = require("../../model/orderSchema");
 const User = require('../../model/userSchema');
-const imageUpload = require('../../utility/uploadImage');
-const {multipleImage} = require("../../utility/uploadImage")
+// const imageUpload = require('../../utility/uploadImage');
+const {multipleImage , imageUpload} = require("../../utility/uploadImage")
 const deleteImage = require("../../utility/deleteImage")
 
 const loadProducts = async (req, res) => {
@@ -154,7 +154,7 @@ const postEditOrder =async(req,res)=>{
    if((status=="cancelled"||"returned")&&paymentM=="Online"){
     const walletUpdate = await User.findOneAndUpdate({_id:user},{$inc:{wallet:total}})
    }
- 
+   req.flash('success', 'Order Updated Succesfully');
    res.redirect("/admin/orders");
 }
 
@@ -195,49 +195,28 @@ const deleteProductImage = async (req, res)=>{
   res.json({response: true})
 }
 
-const loadAddImage = (req, res)=>{
+const loadAddImage = async (req, res)=>{
   try {
 
       const {productId} = req.query;
-      
-      res.render('Admin/addImage',{productId})
+      const product = await productModel.findOne({_id: productId});
+      res.render('Admin/addImage',{productId,product})
 
   } catch (error) {
       console.log(error);
   }
 }
 
-// const editImage = async (req, res)=>{
-//   try {
-
-//       const { image } = req.files;
-//       const { productId } = req.query;
-
-//       const result = await imageUpload(image);
-
-//       await productModel.updateOne({_id: productId},
-//           {
-//               $push: {
-//                   image: result 
-//               }
-//           })
-      
-//       res.redirect('/admin/product')
-      
-//   } catch (error) {
-//       console.log(error);
-//   }
-// }
 
 const editImage = async (req, res) => {
   try {
     const { image } = req.files;
     const { productId } = req.query;
 
-    const result = await imageUpload(image);
+    // const result = await imageUpload(image);
 
     // Use the multipleImage function to handle multiple images
-    const images = await multipleImage(result);
+    const images = await multipleImage(image);
 
     await productModel.updateOne(
       { _id: productId },
@@ -254,6 +233,171 @@ const editImage = async (req, res) => {
   }
 };
 
+const getSalesReport = async (req, res) => {
+  let startDate = new Date(new Date().setDate(new Date().getDate() - 8));
+  let endDate = new Date();
+  if (req.query.startDate) {
+    startDate = new Date(req.query.startDate);
+    startDate.setHours(0, 0, 0, 0);
+  }
+  if (req.query.endDate) {
+    endDate = new Date(req.query.endDate);
+    endDate.setHours(24, 0, 0, 0);
+  }
+  if (req.query.filter === 'thisYear') {
+    const currentDate = new Date();
+    startDate = new Date(currentDate.getFullYear(), 0, 1);
+    startDate.setHours(0, 0, 0, 0);
+    endDate = new Date(new Date().setDate(new Date().getDate() + 1));
+    endDate.setHours(0, 0, 0, 0);
+  }
+  if (req.query.filter === 'lastYear') {
+    const currentDate = new Date();
+    startDate = new Date(currentDate.getFullYear() - 1, 0, 1);
+    startDate.setHours(0, 0, 0, 0);
+    endDate = new Date(currentDate.getFullYear() - 1, 11, 31);
+    endDate.setHours(0, 0, 0, 0);
+  }
+  if (req.query.filter === 'thisMonth') {
+    const currentDate = new Date();
+    startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    startDate.setHours(0, 0, 0, 0);
+    endDate = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      1
+    );
+    endDate.setHours(0, 0, 0, 0);
+  }
+  if (req.query.filter === 'lastMonth') {
+    const currentDate = new Date();
+    startDate = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() - 1,
+      1
+    );
+    startDate.setHours(0, 0, 0, 0);
+    endDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    endDate.setHours(0, 0, 0, 0);
+  }
+
+  const orders = await Order.find({
+    orderTime: { $gt: startDate, $lt: endDate },
+  })
+    .populate({
+      path: 'product.product_id',
+      model: 'Product',
+    })
+    .sort({ order_id: -1, orderTime: -1 })
+    .lean();
+
+  const orderCount = await Order.find({
+    orderTime: { $gt: startDate, $lt: endDate },
+  })
+    .populate({
+      path: 'product.product_id',
+      model: 'Product',
+    })
+    .sort({ order_id: -1, orderTime: -1 })
+    .count();
+  const totalRevenue = await Order.aggregate([
+    {
+      $match: {
+        status: 'delivered',
+        orderTime: {
+          $gt: startDate,
+          $lt: endDate,
+        },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        count: { $sum: 1 },
+        sum: { $sum: '$total_amount' },
+      },
+    },
+  ]);
+  const totalPending = await Order.aggregate([
+    {
+      $match: {
+        status: 'pending',
+        orderTime: {
+          $gt: startDate,
+          $lt: endDate,
+        },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        count: { $sum: 1 },
+        sum: { $sum: '$total_amount' },
+      },
+    },
+  ]);
+  const ordersDispatched = await Order.aggregate([
+    {
+      $match: {
+        status: 'outForDelivery',
+        orderTime: {
+          $gt: startDate,
+          $lt: endDate,
+        },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        count: { $sum: 1 },
+        sum: { $sum: '$total_amount' },
+      },
+    },
+  ]);
+  const byCategory = await Order.aggregate([
+    { $match: { orderTime: { $gt: startDate, $lt: endDate } } },
+    {
+      $unwind: {
+        path: '$product',
+      },
+    },
+    {
+      $lookup: {
+        from: 'products',
+        localField: 'product.product_id',
+        foreignField: '_id',
+        as: 'product.products',
+      },
+    },
+    { $unwind: '$product.products' },
+    {
+      $group: {
+        _id: '$product.products.category_name',
+        count: { $sum: 1 },
+        price: { $sum: '$product.products.price' },
+      },
+    },
+  ]);
+  let filter = req.query.filter ?? '';
+  if (!req.query.filter && !req.query.startDate) {
+    filter = 'lastWeek';
+  }
+  res.render('admin/salesReport', {
+    orders,
+    startDate: moment(
+      new Date(startDate).setDate(new Date(startDate).getDate() + 1)
+    )
+      .utc()
+      .format('YYYY-MM-DD'),
+    endDate: moment(endDate).utc().format('YYYY-MM-DD'),
+    totalRevenue,
+    totalPending,
+    ordersDispatched,
+    byCategory,
+    filter,
+    orderCount,
+  });
+};
 
 
 
@@ -273,5 +417,6 @@ module.exports = {
   loadImages,
   deleteProductImage,
   loadAddImage,
-  editImage
+  editImage,
+  getSalesReport 
 };

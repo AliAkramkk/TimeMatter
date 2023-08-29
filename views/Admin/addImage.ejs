@@ -25,6 +25,12 @@
                                         
         
                                     </div>
+                                    <div id="progress-container" class="text-center mt-3" style="display: none;">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <div class="mt-2">Uploading...</div>
+                                    </div>
     
                                     <div id="error-field" class="text-danger"></div>
     
@@ -38,8 +44,51 @@
                 </div>
         </section>
             
-
-       
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <script>
+            $(document).ready(function() {
+                $('#form').submit(function(e) {
+                    e.preventDefault();
+        
+                    // Hide the form and show the progress indicator
+                    $('#form').hide();
+                    $('#progress-container').show();
+        
+                    // Create a FormData object for AJAX
+                    var formData = new FormData(this);
+        
+                    // Perform AJAX submission
+                    $.ajax({
+                        url: $(this).attr('action'),
+                        type: $(this).attr('method'),
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            // Hide the progress indicator and show the form again
+                            $('#progress-container').hide();
+                            $('#form').show();
+        
+                            // Show SweetAlert success message
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Image uploaded successfully!',
+                            }).then((result) => {
+                                // Redirect to the "editimages" page after SweetAlert is closed
+                                if (result.isConfirmed) {
+                                    window.location.href = '/admin/product/image?id=<%= product._id %>'; // Replace with the actual URL
+                                }
+                            });
+                        },
+                        error: function(error) {
+                            // Handle error response here
+                            // Show an error message or revert the UI
+                        }
+                    });
+                });
+            });
+        </script>
     
 
         <%- include('./partials/footer.ejs') %>

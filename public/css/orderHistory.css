@@ -24,3 +24,49 @@
   padding: 8px 16px;
   border-radius: 5px;
 }
+
+.wish-head {
+  color: #333;
+  display: flex;
+  align-items: center;
+}
+
+/* Order History Styles */
+.containerprob {
+  background-color: #f8f8f8;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pro {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.product-image img {
+  height: 8rem;
+  width: 8rem;
+}
+
+.order-details {
+  padding-top: 1rem;
+}
+
+.order-status .status {
+  font-weight: bold;
+}
+
+/* No Orders Styles */
+.no-orders {
+  margin-top: 50px;
+  text-align: center;
+  color: #888;
+}
+
+.no-orders-image {
+  width: 300px;
+}

@@ -3,6 +3,7 @@ const routers = express.Router();
 const user = require("../controller/user/authcontroller");
 const productController = require("../controller/user/productController");
 const cartController = require("../controller/user/cartController");
+const categoryController = require("../controller/user/categoryController")
 const userSess = require("../middleware/user");
 const { catchErrors } = require("../utility/errorHandler");
 const wishlistController = require("../controller/user/wishlistController")
@@ -13,10 +14,10 @@ routers.post("/login", user.verifyLogin);
 routers.get("/signup", user.signup);
 routers.post("/signup", user.createUser);
 routers.get("/logout", user.userLogout);
-routers.get("/", user.loadHome);
+routers.get("/",userSess.isAccess, user.loadHome);
 routers.get("/successemail/:username", user.successEmail);
 
-routers.get("/shop",  productController.loadShop);
+routers.get("/shop", userSess.isAccess, productController.loadShop);
 routers.get("/shopDetails",  productController.productDetails);
 routers.get("/productDetails", productController.productDetails);
 routers.get("/addToCart", userSess.islogin, cartController.addToCart);
@@ -29,11 +30,7 @@ routers.get("/edit-address/:id", userSess.islogin, user.getEditAddress);
 routers.post("/edit-address", userSess.islogin,user.editAddress);
 routers.get("/delete-address/:id", userSess.islogin, user.deleteAddress);
 routers.get("/cart", userSess.islogin, cartController.getCart);
-routers.put(
-  "/cartDelete/:id",
-  userSess.islogin,
-  cartController.deleteCartItems
-);
+routers.put( "/cartDelete/:id", userSess.islogin, cartController.deleteCartItems);
 routers.put("/productInc", userSess.islogin, cartController.incrementCartItems);
 routers.put("/productDec", userSess.islogin, cartController.decrementCartItems);
 routers.get("/quantityCheck", userSess.islogin, cartController.checkQuantity);
@@ -54,6 +51,11 @@ routers.put("/cancelOrder/:orderId", cartController.cancelOrder);
 routers.put("/returnOrder/:orderId", cartController.returnOrder);
 routers.get("/applyCoupon", cartController.applyCoupon);
 routers.put("/verifyOnlinePayment", cartController.verifyOnlinePayment);
+
+routers.get('/categories', categoryController.viewCategories); // display category page
+
+// filter products by radio button
+routers.get('/getProducts',categoryController.getRadioProducts); // 
 
 routers.get('/category',productController.viewCategories)
 routers.get('/getProducts',productController.getRadioProducts)

@@ -3,13 +3,13 @@
     <%- include('./partials/sidebar.ejs')%>
 
 <h2 class="text-center py-3">Coupon</h2>
-<% if (flashes.success) { %>
-    <div class="container alert alert-success alert-dismissible fade show" role="alert">
-        <%= flashes.success %>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                aria-label="Close"></button>
-    </div>
-    <% } %>
+  <% if (flashes.success) { %>
+                <div class="container alert alert-success alert-dismissible fade show" role="alert">
+                    <%= flashes.success %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                            aria-label="Close"></button>
+                </div>
+                <% } %>
         <div style="overflow-y: auto;" class="w-100 d-flex align-items-center align-items-center px-3">
           
             <div class="table">

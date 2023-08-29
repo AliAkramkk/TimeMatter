@@ -1,7 +1,15 @@
 <%- include('./partials/header.ejs') %> 
 <%- include('./partials/sidebar.ejs') %>
 <div class="orders-table">
-  <table class="table table-striped">
+    <% if (flashes.success) { %>
+        <div class="container alert alert-success alert-dismissible fade show" role="alert">
+            <%= flashes.success %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+        </div>
+        <% } %>
+        <div class="table-responsive">
+  <table class="table table-striped" id="ordersDataTable">
       <thead>
           <tr>
               <th scope="col">Order ID</th>
@@ -44,10 +52,14 @@
       </tbody>
   </table>
 </div>
+</div>
+
+
+
+
+<script>
+    $(document).ready(function() {
+        $('.table').DataTable();
+    });
+</script>
 <%- include('./partials/footer.ejs') %>
-<!-- <% order.forEach((item)=>{ %>
-  <div><div><p><%= item.order_id%></p>
-  <p><%= item.user.username%></p>
-  <p><%= item.total_amount%></p>
-  </div></div>
-  <%})%> -->

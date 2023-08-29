@@ -5,27 +5,48 @@ const Cart = require("../../model/cartSchema");
 const wishlistModel = require("../../model/wishList")
 
 
-const loadShop = async (req, res) => {
-  try{
-  const id = req.session.User_id;
-  
-  const user = await userModel.findOne({ _id: id });
- 
-  // const products = await productModel.find();
-  const categories = await Category.find();
-  const cart = await Cart.find({ user: id }).populate("product");
-  const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
-  
-  const PageSize = 4;
-  const page = parseInt(req.query.page) || 1;
-  const skip = (page - 1) * PageSize;
-  const productCount = await productModel.find().count();
-  const count = Math.ceil(productCount/PageSize);
-  
-  const products = await productModel.find().skip(skip).limit(PageSize);
 
-   res.render("User/shop", { categories, products, user, id ,cart,wishlist,count,page });
+  const loadShop = async (req, res) => {
+    try {
+        const id = req.session.User_id;
+        const user = await userModel.findOne({ _id: id });
+        const categories = await Category.find();
+        const cart = await Cart.find({ user: id }).populate("product");
+        const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
 
+        const PageSize = 6;
+        const page = parseInt(req.query.page) || 1;
+        const skip = (page - 1) * PageSize;
+        let products;
+        let productCount;
+
+        const searchQuery = req.query.search;
+       
+        const searchRegex = new RegExp(searchQuery, 'i'); // Case-insensitive search regex
+        if (searchQuery) {
+            products = await productModel.find({
+                productName: searchRegex
+            })
+            productCount = await productModel.countDocuments({
+                productName: searchRegex
+            });
+        } else {
+            products = await productModel.find().skip(skip).limit(PageSize);
+            productCount = await productModel.countDocuments();
+        }
+        console.log(products)
+        const count = Math.ceil(productCount / PageSize);
+
+        res.render("User/shop", {
+            categories,
+            products:products,
+            user,
+            id,
+            cart,
+            wishlist,
+            count,
+            page
+        });
   }catch(error){
     console.log(error);
   }
@@ -47,8 +68,8 @@ const productDetails = async (req, res) => {
     const id = req.session.User_id;
     const user = await userModel.findOne({ _id: id });
     
-    const productId = req.query.id; // Get the product ID from the request body
-    // console.log(req.query);
+    const productId = req.query.id;
+     // Get the product ID from the request body
 
     const products = await productModel.find().limit(4);
     const relatedProducts = await productModel.find().limit(8);
@@ -76,7 +97,8 @@ const productDetails = async (req, res) => {
       
     });
   } catch (error) {
-    console.log(error);
+    console.log("Error in productDetails:", error);
+
   }
 };
 
@@ -204,15 +226,15 @@ const filterCat = async (req, res) => {
 };
 
 const allCategory= async (req, res) => {
-const products= await  productModel.find({});
-console.log(products);
-return res.send({
-  data:'this is data',
-  products,
- 
-})
-
-};
+  const products= await  productModel.find({});
+  console.log(products);
+  return res.send({
+    data:'this is data',
+    products,
+   
+  })
+  
+  };
 
 const getRadioProducts = async (req, res) => {
   const { category } = req.query ?? '';

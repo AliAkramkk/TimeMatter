@@ -16,17 +16,16 @@
           <div class="row justify-content-center mt-4 ml-5">
             <% for(const image of product.image){ %>
               <% if(image){ %> 
-                <div class="col-md-6 col-lg-4 me-3 mb-4" style="margin-left: 4rem;">
-                  <div class="card shadow" style="width: 15rem; height: 15rem; border-radius: 15px;;">
-                    <img src="<%= image.url %>" class="card-img-top img-fluid" alt="...">
-                    <div class="card-body text-center mb-5">
-                      <div class="">
-                        <button onclick="deleteImage('<%= image.public_id %>', '<%= product._id %>')" <% if(product.image.length < 2 ){ %> disabled <% } %> type="button" class="btn btn-sm btn-danger mt-3"><% if(product.image.length < 2 ){ %> Can Not Delete <% }else {%>Delete<% } %></button>
-                        <!-- <button class="btn btn-warning mt-3">Crop</button> -->
+                <div class="col-md-6 col-lg-4 col-xl-3 me-3 mb-4">
+                  <div class="card shadow">
+                      <img src="<%= image.url %>" class="card-img-top img-fluid" alt="...">
+                      <div class="card-body text-center">
+                          <div class="">
+                              <button onclick="deleteImage('<%= image.public_id %>', '<%= product._id %>')" <% if(product.image.length < 2 ){ %> disabled <% } %> type="button" class="btn btn-sm btn-danger mt-3"><% if(product.image.length < 2 ){ %> Can Not Delete <% }else {%>Delete<% } %></button>
+                          </div>
                       </div>
-                    </div>
                   </div>
-                </div>
+              </div>
               <% } %>
             <% } %>
           </div>

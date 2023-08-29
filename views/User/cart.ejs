@@ -143,7 +143,7 @@
                                                           <button
                                                               onclick="incQuantity('<%= cart._id %>')">+</button>
                                                       </div>
-                                                  </div>
+                                                  </div> 
                                                   <div class="cart-cancel"><a class="delete"
                                                           style="color: black;"
                                                           onclick="removeProduct('<%=cart._id %>')">
@@ -203,7 +203,7 @@
                                                   <label for="">Total Price</label>
 
                                                   <b>₹ <span id="totalPrice">
-                                                    <%= total %>
+                                                    <%=  parseFloat(total).toFixed(2) %>
                                                       </span></b>
                                               </div>
 
@@ -216,7 +216,7 @@
                                               <div class="price-item">
                                                   <label for="">Total amount</label>
                                                   <b>₹ <span id="totalAmount">
-                                                    <%= total %>
+                                                    <%=  parseFloat(total).toFixed(2) %>
                                                       </span> </b>
                                               </div>
                                               <div class="price-item">
@@ -233,7 +233,7 @@
                 <div class="row" id="showEmpty" style="display: none;">
                     <div class="empty-container w-100 h-50 d-flex flex-column justify-content-center align-items-center"
                         style="gap:10px">
-                        <img src="image/emptyCart.png" height="300px" alt="">
+                        <img src="image/empty.png" height="300px" alt="">
                         <h3>Your Cart is empty!</h3>
                         <p>Looks like you haven't added anything to your cart </p>
                     </div>
@@ -336,15 +336,17 @@
  
                 function checkout() {
                     const url = window.location.origin
-                  const couponName = document.getElementById('coupon_id').value
-                  console.log("hi"+couponName+"hi");
+                  const code = document.getElementById('coupon_id').value
+                  console.log("hi"+code+"hi");
                   const productPric = document.getElementById('totalPrice').innerText
                   const discountPrice = document.getElementById('totalDiscount').innerText
                   const updatedPrice = document.getElementById('totalAmount').innerText
-                  const productPrice =parseInt(productPric)
+             console.log("new" + updatedPrice);
                     
-                            window.location.href = `${url}/checkout?couponName=${couponName}&&discountPrice=${discountPrice}&&productPrice=${productPrice}&&updatedPrice=${updatedPrice}`;
-                        
+                            const productPrice = parseFloat(productPric);
+    const formattedUpdatedPrice = parseFloat(updatedPrice).toFixed(2); // Format to two decimal places
+    const formatedDiscountPrice = parseFloat(discountPrice).toFixed(2)
+    window.location.href = `${url}/checkout?code=${code}&&discountPrice=${formatedDiscountPrice}&&productPrice=${productPrice}&&updatedPrice=${formattedUpdatedPrice}`;
                     
                 }
 
@@ -362,9 +364,9 @@
             console.log(data.msg);
             const discountCoupon = data.Discount;
             console.log(discountCoupon);
-            const total = parseFloat(document.getElementById('totalPrice').innerText);
+            const total = parseInt(document.getElementById('totalPrice').innerText);
             console.log(total);
-            const discountdPrice = (total * discountCoupon) / 100;
+            const discountdPrice = parseInt((total * discountCoupon) / 100);
             console.log(discountdPrice);
 
             document.getElementById('totalDiscount').innerText = discountdPrice;

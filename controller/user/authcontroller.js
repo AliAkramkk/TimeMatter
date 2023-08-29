@@ -145,7 +145,7 @@ const profileEdit = async (req, res) => {
     const userId = req.session.User_id;
     const user = await User.findOne({ _id: userId });
     const cart = await Cart.find({ user: userId }).populate("product");
-    const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
+    const wishlist = await wishlistModel.findOne({ userId: userId }).populate("items");
     if (!user) {
       return res.render("User/userlogin");
     }
@@ -157,11 +157,6 @@ const profileEdit = async (req, res) => {
 };
 const updatedProfile = async (req, res) => {
   const { username, email, password, newPassword } = req.body;
-  console.log(username);
-  console.log(email);
-  console.log(password);
-  console.log(newPassword);
-
   if (username == "" || email == "" || newPassword == "") {
     return res.redirect("/edit-Profile")
   }
@@ -178,7 +173,8 @@ const updatedProfile = async (req, res) => {
   return res.redirect("/edit-Profile" );
 };
 const getAddAddress = async (req, res) => {
-  const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
+  const userId = req.session.User_id;
+  const wishlist = await wishlistModel.findOne({ userId: userId }).populate("items");
   const cart = await Cart.find({ user: userId }).populate("product");
   const redirect = req.query.redirect;
   res.render("User/addAddress", { redirect,wishlist ,cart});
@@ -206,7 +202,6 @@ const addAddress = async (req, res) => {
     }
   );
   const redirect = req.query.redirect;
-  console.log(redirect);
   res.redirect("/" + redirect);
 };
 
