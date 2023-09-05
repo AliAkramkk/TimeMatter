@@ -48,5 +48,20 @@
     </div >
 
        
+   
+
+    <nav aria-label="Page navigation example p-4">
+        <ul class="pagination justify-content-center">
+          <li class="page-item <% if(page==1){%>disabled <%}%> ">
+            <a class="page-link" href="/admin/product?page=<%=page-1%>">Previous</a>
+          </li>
+          <% for(let i =1; i<=count;i++){%>
+          <li class="page-item"><a class="page-link" href="/admin/product?page=<%=i%>"><%=i%></a></li>
+         <%}%>
+          <li class="page-item <% if(count ==page){%>disabled <%}%> ">
+            <a class="page-link" href="/admin/product?page=<%=page+1%>">Next</a>
+          </li>
+        </ul>
+      </nav><br>
     </div>
 <%- include('./partials/footer.ejs') %>

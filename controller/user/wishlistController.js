@@ -20,7 +20,7 @@ const loadWishlist = async (req, res) => {
     res.render('User/wishlist', { id, user, wishlist, cart });
 
   } catch (error) {
-    console.log(error);
+    res.redirect('/errorPage');
   }
 }
 
@@ -69,7 +69,7 @@ const addToWishlist = async (req, res) => {
 
 
   }catch (error) {
-    res.render('User/404page')
+    res.redirect('/errorPage');
   }
 
 }
@@ -95,7 +95,7 @@ const removeFromWishlist = async (req, res) => {
     }
 
   } catch (error) {
-    res.render('User/404page')
+    res.redirect('/errorPage');
   }
 }
 

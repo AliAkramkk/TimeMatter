@@ -15,7 +15,7 @@ const userTable =async(req,res)=>{
         });
         res.render('Admin/userData',{user:userDetails})
     }catch(error){
-        console.log(error.message);
+        res.redirect('/errorPage');
     }
 }
 
@@ -28,7 +28,7 @@ const updateAccess = async(req,res)=>{
         await User.findByIdAndUpdate(id,{$set:{isAccess:access}})
         res.redirect('/admin/userData')
     } catch (error) {
-        console.log(error.message);
+        res.redirect('/errorPage');
     }
 }
 

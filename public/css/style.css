@@ -85,6 +85,7 @@ p {
 
 img {
 	max-width: 75%;
+	margin-left: 35px;
 }
 
 input:focus,
@@ -98,7 +99,7 @@ a:hover,
 a:focus {
 	text-decoration: none;
 	outline: none;
-	color: #ffffff;
+	color: #0b0b0b;
 }
 
 ul,
@@ -856,20 +857,43 @@ ol {
 
 .featured__item {
 	margin-bottom: 20px;
-	height: 270px;
-
-}
-
-.featured__item:hover .featured__item__pic .featured__item__pic__hover {
-	bottom: 20px;
+	height: 350px;
+	position: relative;
+	overflow: hidden;
 }
 
 .featured__item__pic {
-	height: 250px;
-	width: 150px;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: 0.5s;
+}
+
+.featured__item__pic__hover {
+	position: absolute;
+	bottom: -40px;
+	transition: 0.5s;
+}
+
+.featured__item__text {
+	text-align: center;
+}
+
+.featured__item__text h6,
+.featured__item__text h5 {
+	margin: 0;
+}
+
+.featured__item__pic {
+	margin-left: 35px;
+	padding-left: 200px;
+	height: 230px;
+	width: 100px;
 	position: relative;
 	overflow: hidden;
-	background-position: center center;
+	background-position: center;
 }
 
 .featured__item__pic__hover {
@@ -971,7 +995,7 @@ shop product
 	left: 0;
 	bottom: 50px;
 	width: 25%;
-	text-align: ;
+
 	-webkit-transition: all, 0.5s;
 	-moz-transition: all, 0.5s;
 	-ms-transition: all, 0.5s;
@@ -1613,6 +1637,7 @@ shop product
 
 .product__item {
 	margin-bottom: 50px;
+	margin-left: 30px;
 }
 
 .product__item:hover .product__item__pic .product__item__pic__hover {
@@ -3774,4 +3799,32 @@ shop product
 
 .order-detail h5 {
 	font-size: 1rem;
+}
+
+.card {
+	box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
+}
+
+.avatar {
+	width: 3rem;
+	height: 3rem;
+	font-size: .765625rem;
+}
+
+.a {
+	text-decoration: none;
+}
+
+.button-container {
+	display: flex;
+	align-items: stretch;
+	/* This ensures both buttons have the same height */
+	gap: 10px;
+	/* Adjust the gap between buttons as needed */
+}
+
+/* Optional: If you want to align the buttons vertically centered within the container */
+.button-container button {
+	display: flex;
+	align-items: center;
 }

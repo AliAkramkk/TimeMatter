@@ -56,7 +56,7 @@ const addToCart = async (req, res) => {
   res.json({ success: true ,response:true,productName:newProduct});
 } 
   catch (error) {
-    console.log(error);
+    res.redirect('/errorPage');
   }
 };
 
@@ -84,11 +84,12 @@ const getCart = async (req, res) => {
       res.redirect("/login");
     }
   } catch (error) {
-    console.log(error.message);
+    res.redirect('/errorPage');
   }
 };
 
 const deleteCartItems = async (req, res) => {
+  try{
   const cartId = req.params.id;
   const product = await Cart.findOne({ _id: cartId }).populate("product");
   await Cart.findByIdAndDelete(cartId);
@@ -104,9 +105,14 @@ const deleteCartItems = async (req, res) => {
     total,
     product,
   });
+       
+} catch (error) {
+  res.redirect('/errorPage');
+}
 };
 
 const incrementCartItems = async (req, res) => {
+  try{
   const userId = req.session.User_id;
   const { cartId } = req.query;
  
@@ -132,9 +138,14 @@ const incrementCartItems = async (req, res) => {
     newPrice,
     product,
   });
+       
+} catch (error) {
+  res.redirect('/errorPage');
+}
 };
 
 const decrementCartItems = async (req, res) => {
+  try{
   let quantityZero = false;
   const userId = req.session.User_id;
   const { cartId } = req.query;
@@ -159,39 +170,63 @@ const decrementCartItems = async (req, res) => {
     product,
     newCount
   });
+       
+} catch (error) {
+  res.redirect('/errorPage');
+}
 };
 const checkQuantity = async (req, res) => {
+  try{
   const carts = await Cart.find({ user: req.session.User_id }).populate("product");
-  // let insufficientStock = false;
-  // carts.forEach((document) => {
-  //   if (document.quantity > document.product.quantity) {
-  //     insufficientStock = true;
-  //   }
-  // });
-  // if (insufficientStock) {
-  //   req.flash('message', 'Product with no stock selected');
-  //   return res.redirect('/cart');
-  // }
-  // res.redirect('/checkOut');
-  // const {couponName,discountPrice,productPrice,updatedPrice}=req.query
-  res.send({ data: "this is data" });
+ 
+  let insufficientStock = false;
+  carts.forEach((document) => {
+    if (document.quantity > document.product.quantity) {
+      insufficientStock = true;
+    }
+  });
+  if (insufficientStock) {
+    req.flash('message', 'Product with no stock selected');
+    return res.redirect('/cart');
+}
+
+// Move the data sending code here
+const { couponName, discountPrice, productPrice, updatedPrice } = req.query;
+res.send({ data: "this is data", insufficientStock, couponName, discountPrice, productPrice, updatedPrice });
+
+// Redirect the user to /checkOut
+
+
+       
+} catch (error) {
+  res.redirect('/errorPage');
+}
 };
 
 const getCheckOut = async (req, res) => {
+  try{
   const {code,discountPrice,productPrice,updatedPrice}=req.query;
-  console.log(code);
   const userId = req.session.User_id;
   const user = await User.findOne({ _id: userId });
   const address = user.address;
-
   const carts = await Cart.find({ user: userId }).populate("product");
   const wishlist = await wishlistModel.findOne({ userId: userId }).populate("items");
   const categories = await Category.find({});
   const total = totalAmount(carts);
-  res.render("User/checkOut", { categories, address, total, user,code,discountPrice,productPrice,updatedPrice,carts,wishlist });
+  const orders = await Order.findOne({ user: userId })
+          .populate({
+              path: "product.product_id",
+              model: "product",
+          })
+  res.render("User/checkOut", { categories, address, total, user,code,discountPrice,productPrice,updatedPrice,carts,wishlist,orders });
+       
+} catch (error) {
+  res.redirect('/errorPage')
+}
 };
 
 const checkout = async (req, res) => {
+  try{
   const {productPrice,updatedPrice,discountPrice,code} = req.body;
   if (req.body.payment === 'wallet') {
     const userId = req.session.User_id;
@@ -389,6 +424,10 @@ const checkout = async (req, res) => {
       });
     }
   }
+       
+} catch (error) {
+  res.redirect('/errorPage');
+}
 
 };
 
@@ -452,13 +491,13 @@ const viewOrders = async (req, res) => {
           pageCount
       });
   } catch (error) {
-      console.error(error);
-      res.status(500).send("Internal Server Error");
+    res.redirect('/errorPage');
   }
 };
 
 
 const orderDetails = async (req, res) => {
+  try{
   const userId = req.session.User_id;
 
   const user = await User.findOne({ _id: userId });
@@ -490,9 +529,14 @@ const orderDetails = async (req, res) => {
   } else {
     res.redirect("/orders");
   }
+       
+} catch (error) {
+  res.redirect('/errorPage');
+}
 };
 
 const cancelOrder = async (req, res) => {
+  try{
   const _id = req.params.orderId;
   const userId = req.session.User_id;
   const newStatus = await Order.findOne({_id:_id})
@@ -510,8 +554,55 @@ const cancelOrder = async (req, res) => {
   return res.json({
     msg: "status changed",
   });
+       
+} catch (error) {
+  res.redirect('/errorPage');
+}
 };
+const cancelProduct = async (req, res) => {
+  try {
+    const _id = req.params.orderId;
+    const productId = req.params.productId;
+    const userId = req.session.User_id;
+
+    // Find the order and the product within the order
+    const order = await Order.findOne({ _id });
+    const productIndex = order.product.findIndex((item) => item._id.toString() === productId);
+
+    if (productIndex === -1) {
+      // Product not found in the order
+      return res.status(404).json({ msg: 'Product not found in the order' });
+    }
+
+    // Get the canceled product's price and update the user's wallet
+    const canceledProduct = order.product[productIndex];
+    const canceledProductPrice = canceledProduct.product_id.price;
+    const userWallet = await User.findOneAndUpdate({ _id: userId }, { $inc: { wallet: canceledProductPrice } });
+
+    // Remove the canceled product from the order
+    order.product.splice(productIndex, 1);
+
+    // Update the order's netTotal and status
+    order.netTotal -= canceledProductPrice;
+
+    // If there are no more products in the order, set the status to 'cancelled'
+    if (order.product.length === 0) {
+      order.status = 'cancelled';
+    }
+
+    // Save the updated order document
+    await order.save();
+
+    return res.json({
+      msg: 'Product canceled successfully',
+    });
+  } catch (error) {
+  res.redirect('/errorPage');
+}
+};
+
 const returnOrder = async (req, res) => {
+  try{
   const id = req.params.orderId;
   const order = await Order.findOne({_id:id})
   const total = order.netTotal;
@@ -531,9 +622,14 @@ const returnOrder = async (req, res) => {
   return res.json({
     msg: "status changed",
   });
+       
+} catch (error) {
+  res.redirect('/errorPage');
+}
 };
 
 const applyCoupon = async (req, res) => {
+  try{
   const code = req.query.coupon
   const couponDetails = await Coupon.findOne({code});
   const Discount = couponDetails.discount;
@@ -542,9 +638,14 @@ const applyCoupon = async (req, res) => {
     msg: "status changed",
     Discount,
   });
-  }
+       
+} catch (error) {
+  res.redirect('/errorPage');
+}
+  };
 
-  const verifyOnlinePayment =async (req, res) => {try {
+  const verifyOnlinePayment =async (req, res) => {
+    try {
     const { payment } = req.body;
     const orderDetails = req.body.order;
     const {code,productPrice}=req.query
@@ -609,14 +710,12 @@ const applyCoupon = async (req, res) => {
       res.status(200).send({ orderId });
     }
   } catch (err) {
-    console.error(`Error Verify Online Payment:`, err);
-    res.status(500).json({
-      success: false,
-      error: 'Internal server error',
-    });
-  }}
+    res.redirect('/errorPage');
+  }
+};
   
   const viewCoupons = async (req, res) => {
+    try{
     const userId = req.session.User_id;
     const user =await User.findOne({_id: userId})
     const categories = await Category.find({});
@@ -625,6 +724,10 @@ const applyCoupon = async (req, res) => {
     const coupons = await Coupon.find({  });
     console.log("hloo " + coupons);
     res.render('User/coupon', { categories, coupons,wishlist ,carts,user});
+         
+} catch (error) {
+  res.redirect('/errorPage');
+}
   };
 
   // const applyCoupon = async (req, res) => {
@@ -722,6 +825,7 @@ module.exports = {
   applyCoupon,
   verifyOnlinePayment,
   viewCoupons,
+  cancelProduct
   // viewWishList,
   // addToWishlist,
   // removeFromWishlist

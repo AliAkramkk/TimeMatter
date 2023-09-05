@@ -5,10 +5,18 @@ const Category = require('../../model/categorySchema')
 // login
 
 const adminLogin = async (req, res) => {
+  try {
+    
+ 
   res.render("Admin/adminLogin", { message: "" });
+} catch (error) {
+  res.redirect('/errorPage');
+}
 };
 
 const verifyAdminLogin = async (req, res) => {
+  try {
+
   const userName = req.body.username;
   const email = req.body.email;
   const password = req.body.password;
@@ -28,6 +36,10 @@ const verifyAdminLogin = async (req, res) => {
   } else {
     res.render("Admin/adminLogin", { message: "Invalid User" });
   }
+      
+} catch (error) {
+  res.redirect('/errorPage');
+}
 };
 
 const adminLogout = async (req, res) => {
@@ -35,7 +47,7 @@ const adminLogout = async (req, res) => {
     req.session.Admin = null;
     res.redirect("/admin/login"); // Redirect to the admin login page
   } catch (error) {
-    console.log(error.message);
+    res.redirect('/errorPage');
   }
 };
 
@@ -45,10 +57,14 @@ const blockUser = async (req, res) => {
     userData.isAccess = false;
     res.redirect("/userData");
   } catch (error) {
-    console.log(error.message);
+    res.redirect('/errorPage');
   }
 };
+
 const dashBoard = async (req, res) =>{
+  try {
+    
+ 
   const orders = await Order.find({});
   const monthlyDataArray = await Order.aggregate([
     { $match: { status: 'delivered' } },
@@ -96,7 +112,7 @@ const dashBoard = async (req, res) =>{
     { $unwind: '$product.products' },
     {
       $group: {
-        _id: '$product.products.category_name',
+        _id: '$product.products.category',
         price: { $sum: '$product.products.price' },
       },
     },
@@ -127,108 +143,130 @@ const dashBoard = async (req, res) =>{
     categoryName,
     totalPrice,
   });
+
+} catch (error) {
+  res.redirect('/errorPage');
+}
 };
 
-
  
 
 
 
-const getSalesReport = async (req, res) =>{
-  let startDate = new Date(new Date().setDate(new Date().getDate() - 8));
+// const getSalesReport = async (req, res) =>{
+//   let startDate = new Date(new Date().setDate(new Date().getDate() - 8));
  
-  let endDate = new Date();
+//   let endDate = new Date();
  
-  const orders = await Order.find({
-    orderTime: { $gt: startDate, $lt: endDate },
-  })
-    .populate({
-      path: 'product.product_id',
-      model: 'product',
-    })
-    .sort({ order_id: -1, orderTime: -1 })
-    .lean();
+//   const orders = await Order.find({
+//     orderTime: { $gt: startDate, $lt: endDate },
+//   })
+//     .populate({
+//       path: 'product.product_id',
+//       model: 'product',
+//     })
+//     .sort({ order_id: -1, orderTime: -1 })
+//     .lean();
 
-  const orderCount = await Order.find({
-    orderTime: { $gt: startDate, $lt: endDate },
-  })
-    .populate({
-      path: 'product.product_id',
-      model: 'product',
-    })
-    .sort({ order_id: -1, orderTime: -1 })
-    .count();
+//   const orderCount = await Order.find({
+//     orderTime: { $gt: startDate, $lt: endDate },
+//   })
+//     .populate({
+//       path: 'product.product_id',
+//       model: 'product',
+//     })
+//     .sort({ order_id: -1, orderTime: -1 })
+//     .count();
   
-  const totalRevenue = await Order.aggregate([
-    {
-      $match: {
-        status: 'delivered',
-        orderTime: {
-          $gt: startDate,
-          $lt: endDate,
-        },
-      },
-    },
-    {
-      $group: {
-        _id:null,
-        count: {$sum: 1 } ,
-        sum: { $sum: '$total_amount' },
+//   const totalRevenue = await Order.aggregate([
+//     {
+//       $match: {
+//         status: 'delivered',
+//         orderTime: {
+//           $gt: startDate,
+//           $lt: endDate,
+//         },
+//       },
+//     },
+//     {
+//       $group: {
+//         _id:null,
+//         count: {$sum: 1 } ,
+//         sum: { $sum: '$total_amount' },
       
-      },
-    },
-  ]);
-  const totalPending = await Order.aggregate([
-    {
-      $match: {
-        status: 'pending',
-        orderTime: {
-          $gt: startDate,
-          $lt: endDate,
-        },
-      },
-    },
-    {
-      $group: {
-        _id: null,
-        count: { $sum: 1 },
-        sum: { $sum: '$total_amount' },
-      },
-    },
-  ]);
-  const byCategory = await Order.aggregate([
-    { $match: { orderTime: { $gt: startDate, $lt: endDate },status:'delivered' } },
-    {
-      $unwind: {
-        path: '$product',
-      },
-    },
-    {
-      $lookup: {
-        from: 'products',
-        localField: 'product.product_id',
-        foreignField: '_id',
-        as: 'product.products',
-      },
-    },
+//       },
+//     },
+//   ]);
+//   const totalPending = await Order.aggregate([
+//     {
+//       $match: {
+//         status: 'pending',
+//         orderTime: {
+//           $gt: startDate,
+//           $lt: endDate,
+//         },
+//       },
+//     },
+//     {
+//       $group: {
+//         _id: null,
+//         count: { $sum: 1 },
+//         sum: { $sum: '$total_amount' },
+//       },
+//     },
+//   ]);
+//   const byCategory = await Order.aggregate([
+//     { $match: { orderTime: { $gt: startDate, $lt: endDate },status:'delivered' } },
+//     {
+//       $unwind: {
+//         path: '$product',
+//       },
+//     },
+//     {
+//       $lookup: {
+//         from: 'products',
+//         localField: 'product.product_id',
+//         foreignField: '_id',
+//         as: 'product.products',
+//       },
+//     },
    
-    { $unwind: '$product.products' },
+//     { $unwind: '$product.products' },
  
-    {
-      $group: {
-        _id: '$product.products.category',
-        count: { $sum: 1 },
-        price: { $sum: '$product.products.price' },
-      },
-    },
-  ]);
-  console.log( byCategory);
-}
+//     {
+//       $group: {
+//         _id: '$product.products.category',
+//         count: { $sum: 1 },
+//         price: { $sum: '$product.products.price' },
+//       },
+//     },
+//   ]);
+//   console.log( byCategory);
+//   let filter = req.query.filter ?? '';
+//   if (!req.query.filter && !req.query.startDate) {
+//     filter = 'lastWeek';
+//   }
+//   res.render('admin/salesReport', {
+//     orders,
+//     startDate: moment(
+//       new Date(startDate).setDate(new Date(startDate).getDate() + 1)
+//     )
+//       .utc()
+//       .format('YYYY-MM-DD'),
+//     endDate: moment(endDate).utc().format('YYYY-MM-DD'),
+//     totalRevenue,
+//     totalPending,
+//     ordersDispatched,
+//     byCategory,
+//     filter,
+//     orderCount,
+//   }); 
+
 module.exports = {
   adminLogin,
   verifyAdminLogin,
   adminLogout,
   blockUser,
   dashBoard,
-  getSalesReport
+ 
 };

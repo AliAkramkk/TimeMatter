@@ -80,10 +80,10 @@
         <% for(let i=0; i < wishlist.items.length; i++ ) { %>
           <div class="col-lg-4 col-md-6 mb-4" id="changeWish">
             <div class="wish-item border ">
-              <a href="/product/<%= wishlist.items[i]._id %>" class="wish-img">
+              <a href="" class="wish-img">
                 <img  src="<%= wishlist.items[i].image[0].url %>" alt="" class="img-fluid rounded" style="width: 140px">
               </a>
-              <div class="wish-detail mt-2">
+              <div class="wish-detail ">
                 <b><%= wishlist.items[i].productName %></b>
                 <h5>₹<%= wishlist.items[i].price %></h5>
               </div>

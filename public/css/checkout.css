@@ -48,7 +48,12 @@
 
 .card-body {
   background-color: #fafdff;
-  ;
+
+}
+
+.card-body1 {
+  background-color: #fafdff;
+  position: relative;
 }
 
 .cw-cash {
@@ -77,4 +82,42 @@
   font-weight: 650;
   position: relative;
   top: 3px;
+}
+
+.order-details {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* Adjust the gap as needed */
+}
+
+.order-details .card {
+  /* Add styles to the card containing the order details */
+  padding: 0px;
+
+  background-color: var(--lightWhite);
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  /* Add a subtle shadow */
+}
+
+/* Adjust the position of the Order Details section */
+.col-6.col-md-5 {
+  /* Add styles to the column containing the Order Details */
+  display: flex;
+  margin-left: 85px;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Adjust the position of the Order Details heading */
+.order-details h5 {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Adjust the position of the Order Details items */
+.order-details h5:not(:first-child) {
+  margin-left: 0px;
 }

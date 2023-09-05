@@ -20,7 +20,7 @@ const hashPassword = async (password) => {
     const hashPassword = await bcrypt.hash(password, 10);
     return hashPassword;
   } catch (error) {
-    console.log(error.message);
+    res.redirect('/errorPage')
   }
 };
 
@@ -48,13 +48,14 @@ const createUser = async (req, res) => {
       res.render("User/verifyEmail");
     }
   } catch (error) {
-    console.log(error.message);
+    res.redirect('/errorPage')
   }
 };
 
 // Existing user Login
 
 const verifyLogin = async (req, res) => {
+  try{
   const email = req.body.email;
   const password = req.body.password;
   const userData = await User.findOne({ email: email });
@@ -81,14 +82,20 @@ const verifyLogin = async (req, res) => {
   } else {
     return res.render("User/userlogin", { message: "Invalid User" });
   }
+}catch{
+  res.redirect('/errorPage')
+}
+  
 };
 
 // Home if session, else Login
 const loadHome = async (req, res) => {
+  try {
+    
+ 
   const id = req.session.User_id;
 
   const user = await User.findOne({ _id: id });
-
   const categories = await Category.find();
   const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
   const products = await Product.find({ isActive: true });
@@ -102,6 +109,9 @@ const loadHome = async (req, res) => {
     wishlist,
     message: req.query.message,
   });
+} catch (error) {
+    res.redirect('/errorPage')
+}
 };
 
 // User Logout
@@ -111,17 +121,21 @@ const userLogout = async (req, res) => {
     res.clearCookie("User_id");
     res.redirect("/");
   } catch (error) {
-    console.log(error.message);
+    res.redirect('/errorPage')
   }
 };
 
 const successEmail = async (req, res) => {
+  try{
   res.render("User/successEmail", { message: req.params.username });
   const username = req.params.username;
   await User.findOneAndUpdate(
     { username: username },
     { $set: { isVerified: true } }
   );
+  }catch{
+    res.redirect('/errorPage')
+  }
 };
 
 // Function to get user profile data
@@ -136,7 +150,7 @@ const getUserProfile = async (req, res) => {
     const cart = await Cart.find({ user: userId }).populate("product");
     res.render("User/userProfile", { user, message: req.query.message,cart ,wishlist });
   } catch (error) {
-    console.log(error.message);
+    res.redirect('/errorPage')
   }
 };
 
@@ -252,7 +266,7 @@ const deleteAddress = async (req, res) => {
     console.log(redirect);
     res.redirect("/"+redirect);
   } catch (error) {
-    console.log(error.message);
+    res.redirect('/errorPage');
   }
 };
 
@@ -293,6 +307,11 @@ const resetPass = async (req, res) => {
     res.render("User/usersignup", { message: "Invalid User" });
   }
 };
+
+const errorMessage =(req,res)=>{
+  res.render("User/404page")
+};
+
 module.exports = {
   signup,
   createUser,
@@ -312,4 +331,5 @@ module.exports = {
   forgetverif,
   changePass,
   resetPass,
+  errorMessage
 };

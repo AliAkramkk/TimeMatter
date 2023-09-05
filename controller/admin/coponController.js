@@ -3,7 +3,9 @@ const coupon = require('../../model/coupon');
 const addCoupon = async (req,res)=>{
 res.render('Admin/addCoupon',{message:""})
 }
+
 const newCoupon= async (req,res)=>{
+  try{
   const{couponname,discount,minamount,maxdiscount,date}=req.body
   const newcoupon = await coupon({
     couponName: couponname,
@@ -14,17 +16,33 @@ const newCoupon= async (req,res)=>{
   })
   await newcoupon.save()
   res.redirect('/admin/coupon')
-  }
+       
+} catch (error) {
+  res.redirect('/errorPage');
+}
+  };
+
   const viewCoupon= async (req,res)=>{
+
+  try{
     const Coupon = await coupon.find({});
     res.render('Admin/coupon',{Coupon})
-  }
+         
+} catch (error) {
+  res.redirect('/errorPage');
+}
+  };
 
   const viewEditCoupons = async (req, res) => {
+    try{
     const _id = req.params.id;
     console.log(_id);
     const coupons = await coupon.findOne({ _id });
     res.render('Admin/editCoupons', { coupons });
+         
+} catch (error) {
+  res.redirect('/errorPage');
+}
   };
 
   const editCoupons = async (req,res)=> {
@@ -47,9 +65,9 @@ const newCoupon= async (req,res)=>{
   req.flash('success', 'Coupon Updated Succesfully');
     res.redirect("/admin/coupon")
    } catch (error) {
-    console.log(error);
+    res.redirect('/errorPage');
    }
-  }
+  };
 
 
 

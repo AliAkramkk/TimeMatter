@@ -108,12 +108,13 @@ try {
     });
   }
 } catch (error) {
-  console.log(error);
+  res.redirect('/errorPage');
   }
 };
 
 // change products in category page based on the radio buttons
 const getRadioProducts = async (req, res) => {
+  try{
   const { category } = req.query ?? '';
   const filter = req.query.filter ?? '';
   const key = req.query.key ?? '';
@@ -165,6 +166,10 @@ const getRadioProducts = async (req, res) => {
       pageCount,
     });
   }
+       
+} catch (error) {
+  res.redirect('/errorPage');
+}
 };
 
 module.exports={

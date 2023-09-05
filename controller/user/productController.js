@@ -20,10 +20,11 @@ const wishlistModel = require("../../model/wishList")
         let products;
         let productCount;
 
-        const searchQuery = req.query.search;
+        const key = req.query.key ?? '';
+        
        
-        const searchRegex = new RegExp(searchQuery, 'i'); // Case-insensitive search regex
-        if (searchQuery) {
+        const searchRegex = new RegExp(key, 'i'); // Case-insensitive search regex
+        if (key) {
             products = await productModel.find({
                 productName: searchRegex
             })
@@ -34,7 +35,7 @@ const wishlistModel = require("../../model/wishList")
             products = await productModel.find().skip(skip).limit(PageSize);
             productCount = await productModel.countDocuments();
         }
-        console.log(products)
+       
         const count = Math.ceil(productCount / PageSize);
 
         res.render("User/shop", {
@@ -48,7 +49,7 @@ const wishlistModel = require("../../model/wishList")
             page
         });
   }catch(error){
-    console.log(error);
+    res.redirect('/errorPage');
   }
 };
 
@@ -63,12 +64,12 @@ const wishlistModel = require("../../model/wishList")
 
 //     res.render('User/productDetails', { categories, product,products, relatedProducts, user,userId });
 // };
-const productDetails = async (req, res) => {
+const  productDetails = async (req, res) => {
   try {
     const id = req.session.User_id;
     const user = await userModel.findOne({ _id: id });
     
-    const productId = req.query.id;
+    const productId = req.query.id.trim(); 
      // Get the product ID from the request body
 
     const products = await productModel.find().limit(4);
@@ -113,7 +114,7 @@ const loadWishlist = async (req, res) => {
     }).lean()
     res.render('User/wishlist', { user, products, cart,wishlist });
   }catch (error) {
-    res.render('User/404page')
+    res.redirect('/errorPage');
   }
 }
 
@@ -142,6 +143,7 @@ const addToWishlist = async (req, res) => {
 }
 
 const viewCategories = async (req, res) => {
+  try{
   const id = req.session.User_id;
   const cart = await Cart.find({ user: id }).populate("product");
   const user = await userModel.findOne({ _id: id });
@@ -152,15 +154,18 @@ const viewCategories = async (req, res) => {
   const key = req.query.key ?? '';
   const page = req.query.page ?? 0;
   const { category } = req.query ?? '';
-  if (!category) {
+  if (filter==0) {
     const products = await productModel.find({
       productName: new RegExp(key, 'i'),
+      category: new RegExp(category, 'i'),
     })
-      .sort({ price: filter })
+      
       .skip(page * limit)
       .limit(limit);
+
     const productCount = await productModel.find({
       productName: new RegExp(key, 'i'),
+      category: new RegExp(category, 'i'),
       status: true,
     }).count();
     const pageCount = Math.ceil(productCount / limit);
@@ -178,14 +183,14 @@ const viewCategories = async (req, res) => {
       wishlist
     });
 }
-if (category) {
+if (filter && !key) {
   const products = await productModel.find({ category_id: category })
     .sort({ price: filter })
     .skip(page * limit)
     .limit(limit);
   const productCount = await productModel.find(
     {
-      category_id: category,
+      category_id: new RegExp(category, 'i'),
     },
     { status: true }
   ).count();
@@ -202,8 +207,42 @@ if (category) {
     cart
   });
 }
+if (filter && key) {
+  const products = await productModel.find({
+    category: new RegExp(category, 'i'),
+    productName: new RegExp(key, 'i'),
+  })
+    .sort({ price: filter })
+    .skip(page * limit)
+    .limit(limit);
+
+  const productCount = await productModel.find(
+    {
+      category: new RegExp(category, 'i'),
+    },
+    { status: true }
+  ).count();
+  const pageCount = Math.ceil(productCount / limit);
+  res.render('categories', {
+    categories,
+    products,
+    category,
+    filter,
+    key,
+    pageCount,
+    page,
+  });
 }
+     
+} catch (error) {
+  res.redirect('/errorPage');
+}
+
+};
+
+
 const filterCat = async (req, res) => {
+  try{
   const catId = req.query.category;
   
   // Check if a specific category is selected
@@ -223,39 +262,68 @@ const filterCat = async (req, res) => {
       });
     }
   } 
+       
+} catch (error) {
+  res.redirect('/errorPage');
+}
 };
 
-const allCategory= async (req, res) => {
-  const products= await  productModel.find({});
-  console.log(products);
-  return res.send({
-    data:'this is data',
-    products,
-   
-  })
-  
-  };
+
 
 const getRadioProducts = async (req, res) => {
+  try{
   const { category } = req.query ?? '';
   const filter = req.query.filter ?? '';
   const key = req.query.key ?? '';
   const page = req.query.page ?? 0;
   const limit = 6;
-  if (!filter && category) {
+  if (filter == 0) {
+    console.log("hii");
+    console.log(category);
     const products = await productModel.find({
+      productName: new RegExp(key, 'i'),
+      category: new RegExp(category, 'i'),
+    })
+      .skip(page * limit)
+      .limit(limit)
+      .lean();
+    const productCount = await productModel.find({
+      productName: new RegExp(key, 'i'),
+      category: new RegExp(category, 'i'),
+      status: true,
+    }).count();
+    const pageCount = Math.ceil(productCount / limit);
+    
+    return res.send({
+      data: 'this is data',
+      products,
+      filter,
+      page,
+      pageCount,
+    });
+  }
+  if (filter) {
+    console.log("hii");
+    console.log(category);
+
+    const products = await productModel.find({
+      productName: new RegExp(key, 'i'),
+      category:new RegExp(category, 'i'),
+    })
+      .sort({ price: filter })
+      .skip(page * limit)
+      .limit(limit)
+      .lean();
+
+    const productCount = await productModel.find({
       productName: new RegExp(key, 'i'),
       category: category,
-    })
-      .skip(page * limit)
-      .limit(limit)
-      .lean();
-    const productCount = await productModel.find({
-      productName: new RegExp(key, 'i'),
-      category: category,
       status: true,
     }).count();
+
     const pageCount = Math.ceil(productCount / limit);
+
+    console.log(products);
     return res.send({
       data: 'this is data',
       products,
@@ -264,69 +332,10 @@ const getRadioProducts = async (req, res) => {
       pageCount,
     });
   }
-  if (category && filter !== 0) {
-    const products = await productModel.find({
-      productName: new RegExp(key, 'i'),
-      category_id: category,
-    })
-      .sort({ price: filter })
-      .skip(page * limit)
-      .limit(limit)
-      .lean();
-    const productCount = await productModel.find({
-      productName: new RegExp(key, 'i'),
-      category_id: category,
-      status: true,
-    }).count();
-    const pageCount = Math.ceil(productCount / limit);
-    return res.send({
-      data: 'this is data',
-      products,
-      filter,
-      page,
-      pageCount,
-    });
-  }
-  if (!category && filter !== '0') {
-    const products = await productModel.find({ product_name: new RegExp(key, 'i') })
-      .sort({ price: filter })
-      .skip(page * limit)
-      .limit(limit)
-      .lean();
-    const productCount = await productModel.find({
-      productName: new RegExp(key, 'i'),
-      status: true,
-    }).count();
-    const pageCount = Math.ceil(productCount / limit);
-    return res.send({
-      data: 'this is data',
-      products,
-      filter,
-      page,
-      pageCount,
-    });
-  }
-  if (!category && !filter) {
-    const products = await productModel.find({
-      productName: new RegExp(key, 'i'),
-    })
-      .sort({ price: filter })
-      .skip(page * limit)
-      .limit(limit)
-      .lean();
-    const productCount = await productModel.find({
-      productName: new RegExp(key, 'i'),
-      status: true,
-    }).count();
-    const pageCount = Math.ceil(productCount / limit);
-    return res.send({
-      data: 'this is data',
-      products,
-      filter,
-      page,
-      pageCount,
-    });
-  }
+       
+} catch (error) {
+  res.redirect('/errorPage');
+}
 };
 
 
@@ -336,7 +345,6 @@ module.exports = {
   viewCategories,
   getRadioProducts,
   filterCat,
-  allCategory,
   addToWishlist,
   loadWishlist,
 };

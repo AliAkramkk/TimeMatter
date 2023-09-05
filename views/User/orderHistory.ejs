@@ -75,35 +75,37 @@
          
           <% item.product.forEach((productItem,i)=> {%>
             <% if(i==0){%>
-              <a href="/orderDetails?order_id=<%= item.order_id%>&address=<%= item.address%>" >
+              
               
               <img src="image/orderHistory.png" class="card-img-top" alt="..." style="height: 8rem; width: 8rem;">
-            </a>
+            
           <%}%>
           <%})%>
         </div>
         
         <div class="col-lg-4" style="padding-top: 1rem;">
-          <h5 class="">order id:<%= item.order_id%></h5><br>
+          <h5 class="">order id:<%= item.order_id%></h5>
           
 
-         <h5 class="">order date:<%= item.orderTime.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }) %></h5><br>
+         <h5 class="">order date:<%= item.orderTime.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }) %></h5>
 
          
 
-          <h4 class="">Total Price:<%= item.total_amount%></h4>
+          <h5 class="">Total Price:<%= item.total_amount%></h5>
           
 
           <% item.product.forEach((productItem) => { %>
-            <h4>Quantity:  
+            <h5> 
                <%= productItem.product_id.productName %>
-               :<%= productItem.quantity %></h4>
+               :<%= productItem.quantity %></h5>
           <% }) %>
         </div>
        
  <div class="order-status d-flex">
   <div class="<%=item.orderStatus%>">
+    <a href="/orderDetails?order_id=<%= item.order_id%>&address=<%= item.address%>" >
      <%= item.status%>
+    </a>
     </div>
   </div>
     </div>

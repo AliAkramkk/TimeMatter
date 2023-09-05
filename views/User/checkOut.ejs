@@ -136,7 +136,7 @@
 
 <div class="checkout-payment mt-3">
 
-    <b>Use Wallet</b>
+    
     <div class="pay-option mt-4 mb-4">
         <label for="wallet" class="checkout-wallet">
             <div class="cw-label">
@@ -148,7 +148,7 @@
                     ₹
                     <span id="walletAmount"><%=  parseFloat(user.wallet).toFixed(2) %></span>
                 </b>
-                <input type="checkbox" id="wallet" name="wallet"  value=true>
+              
             </div>
         </label>
         <div class="mt-3">
@@ -176,15 +176,19 @@
             <input type="radio" id="wallet" name="payment" value="wallet" required>
             <label for="cod">Wallet</label>
         </div> -->
-    
-    <div class="pay-option mt-4">
-        <input type="radio" id="cod" name="payment" value="cod" required>
-        <label for="cod">Cash on Delivery</label>
-    </div>
-    <div class="pay-option mt-2">
-        <input type="radio" id="online" name="payment" value="online" required>
-        <label for="online">Online Payment</label>
-    </div>
+                <div class="pay-option mt-2">
+                   
+                    <input type="radio" id="online" name="payment" value="wallet" required>
+                    <label for="online">Wallet payment</label>
+                </div>
+            <div class="pay-option ">
+                <input type="radio" id="cod" name="payment" value="cod" required>
+                <label for="cod">Cash on Delivery</label>
+            </div>
+            <div class="pay-option ">
+                <input type="radio" id="online" name="payment" value="online" required>
+                <label for="online">Online Payment</label>
+            </div>
 
     <div class="pay-option mt-4">
 <input id="updatedPrice" type="hidden" name="updatedPrice" value="<%= updatedPrice %>">
@@ -205,15 +209,51 @@
 
 
 </div>
-    </div>    
+    </div> 
+    <div class="">
+        <div class="">
+          <div class="error-message" id="errorMessage"></div>
+          <!-- Your Order Details section content goes here -->
+        </div>
+      </div>
+      
 </form>
 
+ 
+      
+
 </div>
 </div>
+<div class="col-6 col-md-5 order-details ">
+    <div class="card shadow-0 border mb-2 m-4 mt-5">
+        <div class="card-body1 ">
 
+    <% carts.forEach((cart)=>{%> 
+      
+          <div class="row" style="padding-top: 1rem;">
 
+            <div class="col-4 cart-img">
+                <img src="<%= cart.product.image[0].url %>"
+                    alt="">
+            </div>
+            <div class="col-8">
+            <h5 class=""><%= cart.product.productName %>
+          :<%= cart.quantity %></h5>
+           <h5 class="">Type: <% if(cart.product.category == '64be6c4dcfea59110b82b3b0'){  %>
+            Analog
+        <% }else{ %>
+            Digital
+        <% } %> %></h5>
+        <h5 class=""><%= cart.product.blurb %> </h5> 
+            </div>          
+          </div>
+     
+          <%})%>
+        
+        </div>
+    </div>
 
-
+      </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
@@ -222,12 +262,25 @@
                 const formEl = document.querySelector('.form');
                 const url = window.location.origin;
                 const history = `${url}/orders`
+
                 formEl.addEventListener('submit', click => {
                     event.preventDefault();
                     const formData = new FormData(formEl);
                     const data = Object.fromEntries(formData);
-                    const orderTotalAmount = document.getElementById('totalAmount').innerText;
+                    // const orderTotalAmount = document.getElementById('totalAmount').innerText;
+                  
+                    const orderTotalAmount = parseFloat(document.getElementById('totalAmount').innerText);
                     data.totalAmount = orderTotalAmount;
+                    const walletAmount = parseFloat(document.getElementById('walletAmount').innerText);
+                    const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+
+    if (paymentMethod === 'wallet' && walletAmount < orderTotalAmount) {
+        // Wallet payment selected but balance is insufficient
+        const errorMessage = document.getElementById('errorMessage');
+        errorMessage.innerHTML = '<div class="alert alert-warning" role="alert">Your wallet balance is insufficient. Please choose another payment option.</div>';
+        return; // Prevent further processing
+    }
+
                     
                     fetch(`${url}/checkout`, {
                         method: 'POST',
@@ -244,9 +297,10 @@
                         <strong>${data.message}</strong>
                     </div>`;
 
-                                setTimeout(() => {
-                                    errorMessage.innerHTML = `<div></div>`;
-                                }, 5000);
+                    setTimeout(() => {
+    console.log('Timeout executed'); // Add this line
+    errorMessage.innerHTML = ``;
+}, 5000);
                             });
                         } else {
                             return response.json().then((res) => {

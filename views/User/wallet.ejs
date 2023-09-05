@@ -1,0 +1,224 @@
+<%- include('./partials/header.ejs') %>
+
+<header class="header">
+
+  <div class="container">
+      <div class="row">
+          <div class="col-lg-3">
+              <div class="header__logo">
+                  <a class="navbar-brand text-dark fs-4 fw-bold" href="/">Time<span class="text-danger">Matter</span></a>
+              </div>
+          </div>
+          <div class="col-lg-6">
+              <nav class="header__menu">
+                  <ul>
+                      <li><a href="/">Home</a></li>
+                      <li class="active"><a href="/shop">Shop</a></li>
+                      <li><a href="#">About</a></li>
+                      <li><a href="#">Contact</a></li>
+                  </ul>
+              </nav>
+          </div>
+          <div class="col-lg-3">
+            <div class="header__cart">
+
+                <div class="header__top__right__auth">
+
+                   
+                    
+                    
+<!-- 
+                    <div class="header__top__right__auth">
+                        <a onclick="login()"><i class="fa fa-user"></i> Login</a>
+                    </div> -->
+
+                  
+                    
+
+                    <ul><% if(wishlist!=null && wishlist.items.length!=0){%>
+                        <li><a href="/wishlist"><i class="fa fa-heart"></i> <span><%= wishlist.items.length%></span></a></li> <%}else{%>
+                            <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a></li><%}%>
+                        <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span><%=carts.length%></span></a></li> 
+                    </ul>
+
+
+                    <div class="header__top__right__auth">
+                        <a href="/profile"><i class="fa fa-user"></i><%= user.username %></a>
+                    </div>
+
+                    <div class="header__top__right__auth">
+                        <a href="/logout" style="box-shadow: none;border: none;" class="btn btn-sm btn-outline-danger">Logout</a>
+                    </div>
+                    
+                
+                </div>
+               
+
+                
+            </div>
+        </div>
+      </div>
+
+      </div>
+    
+  </div>
+</header>
+
+<div class="container align-content-center">
+  <div class="row">
+      <div class="col-xl-6 mb-3 mb-lg-5 mt-5">
+          <div class="card p-3">
+              <div class="d-flex card-header justify-content-between">
+                  <h5 class="me-3 mb-0 ps-3">Transactions</h5>
+                  <a>Remaining amount</a>
+              </div>
+              <div class="card-body">
+                  <ul class="list-group list-group-flush">
+                      <% documents.forEach((item) => { %>
+                          <% if(item.debit) { %>
+                              <!-- Debit Transaction -->
+                              <li class="list-group-item">
+                                  <div class="d-flex align-items-center">
+                                      <div class="flex-shrink-0 me-3">
+                                          <img src="/image/addToWallet.png" alt="" class="avatar rounded-circle" />
+                                      </div>
+                                      <div class="flex-grow-1">
+                                          <h6 class="mb-0">₹ <%= item.debit %> debited to wallet</h6>
+                                          <p class="mb-0 text-muted"><%= item.date.toLocaleDateString() %></p>
+                                      </div>
+                                      <div class="flex-shrink-0 text-end">
+                                          <span style="color: green;">₹<%=item.remaining_amount %></span>
+                                      </div>
+                                  </div>
+                              </li>
+                          <% } else { %>
+                              <!-- Credit Transaction -->
+                              <li class="list-group-item">
+                                  <div class="d-flex align-items-center">
+                                      <div class="flex-shrink-0 me-3">
+                                          <img src="/image/walletDeduct.png" alt="" class="avatar rounded-circle" />
+                                      </div>
+                                      <div class="flex-grow-1">
+                                          <h6 class="mb-0">₹ <%= item.credit %> credited from wallet</h6>
+                                          <p class="mb-0 text-muted"><%= item.date.toLocaleDateString() %></p>
+                                      </div>
+                                      <div class="flex-shrink-0 text-end">
+                                          <span style="color: red;">₹<%=item.remaining_amount %></span>
+                                      </div>
+                                  </div>
+                              </li>
+                          <% } %>
+                      <% }) %>
+                  </ul>
+              </div>
+          </div>
+      </div>
+      <div class="col-xl-6 justify-content-center d-flex flex-column" style="align-items: center;">
+          <div class="d-flex justify-content-center align-items-center">
+              <h3>REMAINING BALANCE:</h3>
+              <h3 class="ps-1" style="color: green;">₹ <%=user.wallet %></h3>
+          </div>
+          <div class="mt-1">
+              <form class="form d-flex">
+                  <div>
+                      <input type="text" id="Amount" name="wallet" class="form-control rounded"
+                          placeholder="Enter amount" aria-label="Recipient's wallet"
+                          aria-describedby="basic-addon1">
+                  </div>
+                  <div class="input-group-append">
+                      <button class="btn loginButton" type="submit" onclick="">Add to wallet</button>
+                  </div>
+              </form>
+          </div>
+      </div>
+
+
+  </div>
+</div>
+
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+      const formEl = document.querySelector('.form');
+      const url = window.location.origin;
+      formEl.addEventListener('submit', event => {
+          event.preventDefault();
+          const formData = new FormData(formEl);
+          const data = Object.fromEntries(formData);
+          fetch(`${url}/wallet`, {
+              method: 'POST',
+              headers: {
+                  "Content-Type": "application/json",
+                  'Accept': 'application/json',
+              },
+              body: JSON.stringify(data),
+          }).then((response) => {
+              if (response.status === 201) {
+                  return response.json().then((res) => {
+                    let orderData = res;
+                                var options = {
+                                    key: 'rzp_test_eVbAVqjcDB8erp',
+                                    amount: orderData.amount,
+                                    currency: "INR",
+                                    name: "Time Matter",
+                                    description: "Test Transaction",
+                                    image: "image/time-matter.png",
+                                    order_id: orderData.options.id,
+                                    handler: function (response) {
+                                        storeOrderData(response, orderData.options, orderData.userDetails, orderData.address);
+                                    },
+                                    prefill: {
+                                        name: orderData.userDetails.name,
+                                        email: orderData.userDetails.email,
+                                        contact: orderData.userDetails.number
+                                    },
+                                    theme: {
+                                        color: "#dd2222"
+                                    }
+                                };
+                                var rzp1 = new Razorpay(options);
+                                rzp1.open();
+                            });
+              }
+          })
+      })
+
+      function storeOrderData(payment, order, userId) {
+          const url = window.location.origin;
+          console.log(url);
+          fetch(`${url}/verifyWalletPayment`, {
+              method: 'PUT',
+              headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                  payment,
+                  order,
+                  userId
+              })
+          })
+              .then((response) => {
+                  if (response.ok) {
+                      return response.json();
+                  }
+                  throw new Error('Network response was not ok');
+              }).then((res) => {
+
+                  Swal.fire({
+                      title: 'Success',
+                      text: "Added to wallet",
+                      icon: 'success',
+                      showConfirmButton: false,
+                  })
+                  setTimeout(() => {
+                      Swal.close(); // Close the alert
+                      window.location.href = `${url}/profile`;
+                  }, 1500);
+                  // Redirect to home page with success message as a URL parameter
+
+              })
+      }
+  </script>
+  <%- include('./partials/footer.ejs') %>

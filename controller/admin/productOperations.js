@@ -6,12 +6,23 @@ const User = require('../../model/userSchema');
 // const imageUpload = require('../../utility/uploadImage');
 const {multipleImage , imageUpload} = require("../../utility/uploadImage")
 const deleteImage = require("../../utility/deleteImage")
+const moment = require('moment')
 
 const loadProducts = async (req, res) => {
-  const products = await productModel.find();
+  try{
   const categories = await categoryModel.find();
-  console.log(products);
-  res.render("Admin/product", { products, categories });
+  const PageSize = 10;
+  const page = parseInt(req.query.page) || 1;
+  const skip = (page - 1) * PageSize;
+  const products = await productModel.find().skip(skip).limit(PageSize);
+  const productCount = await productModel.countDocuments();
+        
+       
+        const count = Math.ceil(productCount / PageSize);
+  res.render("Admin/product", { products, categories ,page,count});
+  }catch(error){
+    res.redirect('/errorPage')
+  }
 };
 
 const loadAddProducts = async (req, res) => {
@@ -48,15 +59,19 @@ const addProduct = async (req, res) => {
     await newProduct.save();
     res.redirect("/admin/product");
   } catch (err) {
-    console.log(err);
+    res.redirect('/errorPage');
   }
 };
 
 const loadEditProduct = async (req, res) => {
+  try{
   const id = req.query.id;
   const categories = await categoryModel.find();
   const product = await productModel.findOne({ _id: id });
   res.render("admin/editProduct", { categories, product });
+  }catch{
+    res.redirect('/errorPage')
+  }
 };
 
 const editProduct = async (req, res) => {
@@ -83,7 +98,7 @@ const editProduct = async (req, res) => {
 
     res.redirect("/admin/product");
   } catch (error) {
-    console.log(error.message);
+    res.redirect('/errorPage');
   }
 };
 
@@ -99,21 +114,32 @@ const deleteProduct = async (req, res) => {
 
     res.redirect("/admin/product");
   } catch (error) {
-    console.log(error.message);
+    res.redirect('/errorPage');
   }
 };
 const viewOrder = async (req, res) => {
-  const order = await Order.find().populate({
-    path: "product.product_id",
-    model: "product",
-  }).populate({
-    path: "user",
-    model: "user",
-  });
-  
-  res.render("Admin/orders", { order });
+  try {
+    const order = await Order.find()
+    
+      .populate({
+        path: "product.product_id",
+        model: "product",
+      })
+      .populate({
+        path: "user",
+        model: "user",
+      }).sort({ order_id: -1 }) ;
+      console.log(order);
+
+    res.render("Admin/orders", { order }); // Pass the sorted orders to the view
+  } catch (error) {
+    res.redirect('/errorPage');
+    
+  }
 };
+
 const orderDetails = async (req, res) => {
+  try{
   const id=req.params.id
   const orderDetails= await  Order.findById(id).populate({
     path: "product.product_id",
@@ -124,8 +150,15 @@ const orderDetails = async (req, res) => {
   })
   
   res.render('Admin/orderSummary',{orderDetails})
+       
+} catch (error) {
+  res.redirect('/errorPage');
 }
+};
+
+
 const editOrder = async (req, res) => {
+  try{
   const { id } = req.params;
   const order= await  Order.findById(id).populate({
     path: "product.product_id",
@@ -135,28 +168,38 @@ const editOrder = async (req, res) => {
     model: "user",
   });
   res.render('admin/orderDetails', { order });
+       
+} catch (error) {
+  res.redirect('/errorPage');
 }
+};
+
 const postEditOrder =async(req,res)=>{
+  try{
    const _id=req.params.id
-  //  console.log("_id "+_id);
+
    const order=await Order.findOne({_id:_id})
-  //  console.log("_id "+_id);
+ 
  
    const paymentM=order.payment_method   
-  //  console.log("_PM "+paymentM);
+ 
    const user = order.user
-  //  console.log("User "+user);
+
    const total = order.netTotal
-  //  console.log("total "+total);
+  
    const status=req.body.status
-  //  console.log("status "+status);
+
    const orderStatus=await Order.findOneAndUpdate({_id:_id},{$set:{status:status}})
    if((status=="cancelled"||"returned")&&paymentM=="Online"){
     const walletUpdate = await User.findOneAndUpdate({_id:user},{$inc:{wallet:total}})
    }
    req.flash('success', 'Order Updated Succesfully');
    res.redirect("/admin/orders");
+        
+} catch (error) {
+  res.redirect('/errorPage');
 }
+};
 
 const loadImages = async (req, res)=>{
 
@@ -168,7 +211,7 @@ const loadImages = async (req, res)=>{
       res.render('Admin/editImages',{product});
       
   } catch (error) {
-      console.log(error);
+    res.redirect('/errorPage');
   }
   
 }
@@ -176,6 +219,7 @@ const loadImages = async (req, res)=>{
 
 
 const deleteProductImage = async (req, res)=>{
+  try{
   const { public_id, productId } = req.query;
 
   await deleteImage(public_id);
@@ -193,6 +237,10 @@ const deleteProductImage = async (req, res)=>{
 
   
   res.json({response: true})
+       
+} catch (error) {
+  res.redirect('/errorPage');
+}
 }
 
 const loadAddImage = async (req, res)=>{
@@ -203,7 +251,7 @@ const loadAddImage = async (req, res)=>{
       res.render('Admin/addImage',{productId,product})
 
   } catch (error) {
-      console.log(error);
+    res.redirect('/errorPage');
   }
 }
 
@@ -229,11 +277,12 @@ const editImage = async (req, res) => {
 
     res.redirect('/admin/product');
   } catch (error) {
-    console.log(error);
+    res.redirect('/errorPage');
   }
 };
 
 const getSalesReport = async (req, res) => {
+  try{
   let startDate = new Date(new Date().setDate(new Date().getDate() - 8));
   let endDate = new Date();
   if (req.query.startDate) {
@@ -286,8 +335,10 @@ const getSalesReport = async (req, res) => {
   })
     .populate({
       path: 'product.product_id',
-      model: 'Product',
+      model: 'product',
+      select: '-description -blurb',
     })
+    .select('-address')
     .sort({ order_id: -1, orderTime: -1 })
     .lean();
 
@@ -296,7 +347,7 @@ const getSalesReport = async (req, res) => {
   })
     .populate({
       path: 'product.product_id',
-      model: 'Product',
+      model: 'product',
     })
     .sort({ order_id: -1, orderTime: -1 })
     .count();
@@ -336,24 +387,24 @@ const getSalesReport = async (req, res) => {
       },
     },
   ]);
-  const ordersDispatched = await Order.aggregate([
-    {
-      $match: {
-        status: 'outForDelivery',
-        orderTime: {
-          $gt: startDate,
-          $lt: endDate,
-        },
-      },
-    },
-    {
-      $group: {
-        _id: null,
-        count: { $sum: 1 },
-        sum: { $sum: '$total_amount' },
-      },
-    },
-  ]);
+  // const ordersDispatched = await Order.aggregate([
+  //   {
+  //     $match: {
+  //       status: 'outForDelivery',
+  //       orderTime: {
+  //         $gt: startDate,
+  //         $lt: endDate,
+  //       },
+  //     },
+  //   },
+  //   {
+  //     $group: {
+  //       _id: null,
+  //       count: { $sum: 1 },
+  //       sum: { $sum: '$total_amount' },
+  //     },
+  //   },
+  // ]);
   const byCategory = await Order.aggregate([
     { $match: { orderTime: { $gt: startDate, $lt: endDate } } },
     {
@@ -370,18 +421,22 @@ const getSalesReport = async (req, res) => {
       },
     },
     { $unwind: '$product.products' },
+    
     {
       $group: {
-        _id: '$product.products.category_name',
+        _id: '$product.products.category',
         count: { $sum: 1 },
         price: { $sum: '$product.products.price' },
       },
     },
+    
   ]);
+  console.log(byCategory);
   let filter = req.query.filter ?? '';
   if (!req.query.filter && !req.query.startDate) {
     filter = 'lastWeek';
   }
+
   res.render('admin/salesReport', {
     orders,
     startDate: moment(
@@ -392,11 +447,15 @@ const getSalesReport = async (req, res) => {
     endDate: moment(endDate).utc().format('YYYY-MM-DD'),
     totalRevenue,
     totalPending,
-    ordersDispatched,
+    // ordersDispatched,
     byCategory,
     filter,
     orderCount,
   });
+       
+} catch (error) {
+  res.redirect('/errorPage');
+}
 };
 
 

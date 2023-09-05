@@ -63,13 +63,18 @@
               <p class="text-muted mb-0">Invoice Number : 788152</p>
               <p class="text-muted mb-0"><span class="fw-bold me-4">Discount</span> $19.00</p>
             </div> -->
-
+            <div class=row>
+              <div class="col-6">
             <div class="d-flex justify-content-between">
-              <p class="text-muted mb-0">Invoice Date : <%= orderDetails.orderTime.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }) %></p>
-               
-              <!-- <p class="text-muted mb-0"><span class="fw-bold me-4">GST 18%</span> 123</p> -->
+              <p class="text-muted mb-0">Invoice Date : <%= orderDetails.orderTime.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }) %></p><br>
             </div>
-            
+               <p class="text-muted mb-0"><span class="fw-bold me-4">Order Status:<%=orderDetails.status%></span></p> 
+           
+              </div>
+              <div class="col-6 text-end">
+                <p class="text-muted mb-0">Payment Method:  <%= orderDetails.payment_method %></p>
+              </div>
+            </div>
 
             <!-- <div class="d-flex justify-content-between mb-5">
               <p class="text-muted mb-0">Recepits Voucher : 18KU-62IIK</p>
@@ -87,7 +92,7 @@
                 </div>
                 <div class="col-md-6">
                   <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">
-                      Total paid: <span class="h5 mb-0 ms-2" style="color: rgb(11, 11, 11); font-weight: bold;">Total Paid:       <%=orderDetails.total_amount %></span>
+                      Total paid: <span class="h5 mb-0 ms-2" style="color: rgb(11, 11, 11); font-weight: bold;">Total Paid:       <%=orderDetails.netTotal%></span>
                   </h5>
               </div>
               

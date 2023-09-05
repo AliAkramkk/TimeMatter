@@ -64,7 +64,7 @@
 </header>
 
 <!-- Header Section End -->
-<div class="profile-main" style="width: 100%;">
+<div class="profile-main p-3" style="width: 100%;">
     <div class="container pt-5">
         <h3>Profile</h3>
         <div class="row">
@@ -96,7 +96,7 @@
                     </div>
                 </div>
                 <div class="porfile-items">
-                    <a href="#" class="profile-item">
+                    <a href="/wallet" class="profile-item">
                         <b class="d-flex align-items-center"><i class="ri-wallet-2-line me-2"></i> Wallet</b>
                         <b>₹ <% if(user.wallet) { %><%=  parseFloat(user.wallet).toFixed(2) %><% } else{ %>0 <% } %> </b>
                     </a>

@@ -162,17 +162,20 @@
                         <div class="product_details_pic">
                             <% if (product.image && product.image.length > 0) { %>
                                 <div class="product_detailspic_item" style="text-align: center;">
-                                    <img class="product_detailspic_item--larg zoom" src="<%= product.image[0].url %>" style="width: 15rem;height: 18rem;justify-content: center;" alt="">
+                                    <img id="mainImage" class="product_detailspic_item--larg zoom" src="<%= product.image[0].url %>" style="width: 15rem;height: 18rem;justify-content: center;" alt="">
                                 </div>
                                 <div class="product_detailspic_slider owl-carousel">
-                                    <% product.image.forEach((img) => { %>
-                                        <img data-imgbigurl="<%= img.url %>" src="<%= img.url %>" alt="">
+                                    <% product.image.forEach((img, index) => { %>
+                                        <div class="item">
+                                            <img data-imgbigurl="<%= img.url %>" src="<%= img.url %>" alt="" onclick="changeMainImage('<%= img.url %>')">
+                                        </div>
                                     <% }) %>
                                 </div>
                             <% } else { %>
                                 <p>No image available</p>
                             <% } %>
                         </div>
+                        
                     
                         
                     </div>
@@ -194,12 +197,14 @@
                                 
                                 <div class="mb-2">
                                     <% if(product.quantity !==0){ %>
+                                        <div class="button-container">
                                         <button style="box-shadow: none;background-color: #930202;" class=" btn primary-btn text-light" <%
                                           if(user) {%> onclick="addToClick('<%=product._id%>')" <% }else{ %> onclick="notLogin()" <% } %> >ADD
                                                 TO CART</button>
                                         <button id="wishlist-icon" style="border: none;" class="heart-icon rounded" <% if(user) {%>
                                           onclick="addToWishlist('<%=product._id%>')" <% }else{ %> onclick="notLogin()" <% } %> ><span
                                                   class="icon_heart h5 <% if(wish){ %>text-danger<% } %>"></span></button>
+                                        </div>
                                         <% }else{ %>
                                           <kbd class="bg-danger text-dark"><b>No Stock Available</b></kbd>
                                           <div class="mt-2"><b>Please try after some time!</b></div>
@@ -303,7 +308,7 @@
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="product__item">
                         <a href="/productDetails?id=<%= prod._id %>"> 
-                            <div class="product_item_pic set-bg" data-setbg="<%= prod.image[0].url %>" style="width: 75%; height: 250px; background-size: cover;">
+                            <div class="product_item_pic set-bg" data-setbg="<%= prod.image[0].url %>" style="width: 75%; height: 250px; background-size: cover; margin-left: 30px;">
                                 <ul class="product_itempic_hover">
                                     <!-- Your hover icons or actions here -->
                                 </ul>
@@ -332,12 +337,55 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
+    <!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Include ElevateZoom -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
+
+
+
     
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script> 
 
 
-    
+    <!-- Include jQuery (required for Owl Carousel) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Include Owl Carousel JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+<script>
+ 
+   
+
+    function changeMainImage(newImageUrl) {
+        document.getElementById('mainImage').src = newImageUrl;
+    }
+
+    $(document).ready(function() {
+        $('.product_detailspic_slider').owlCarousel({
+            loop: true,
+            margin: 10,
+            nav: true,
+            navText: ['<i class="fa fa-chevron-left"></i>', '<i class="fa fa-chevron-right"></i>'],
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 3
+                },
+                1000: {
+                    items: 5
+                }
+            }
+        });
+    });
+
+
+</script>
 
     <script>
 

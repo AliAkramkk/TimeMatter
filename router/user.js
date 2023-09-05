@@ -7,6 +7,7 @@ const categoryController = require("../controller/user/categoryController")
 const userSess = require("../middleware/user");
 const { catchErrors } = require("../utility/errorHandler");
 const wishlistController = require("../controller/user/wishlistController")
+const walletController = require("../controller/user/walletController")
 
 
 routers.get("/login", userSess.islogin, user.loadHome);
@@ -48,6 +49,7 @@ routers.get(
 ); // view all orders placed by user
 routers.get("/orderDetails", userSess.islogin, cartController.orderDetails);
 routers.put("/cancelOrder/:orderId", cartController.cancelOrder);
+routers.put("/cancelProduct/:orderId", cartController.cancelProduct);
 routers.put("/returnOrder/:orderId", cartController.returnOrder);
 routers.get("/applyCoupon", cartController.applyCoupon);
 routers.put("/verifyOnlinePayment", cartController.verifyOnlinePayment);
@@ -55,12 +57,12 @@ routers.put("/verifyOnlinePayment", cartController.verifyOnlinePayment);
 routers.get('/categories', categoryController.viewCategories); // display category page
 
 // filter products by radio button
-routers.get('/getProducts',categoryController.getRadioProducts); // 
+
 
 routers.get('/category',productController.viewCategories)
 routers.get('/getProducts',productController.getRadioProducts)
 routers.get('/filterCat',productController.filterCat);
-routers.get('/allCat',productController.allCategory);
+
 
 routers.get('/addToWishlist',userSess.islogin,userSess.isAccess , wishlistController.addToWishlist);
 routers.get('/wishlist', userSess.islogin,userSess.isAccess ,wishlistController.loadWishlist);
@@ -70,4 +72,8 @@ routers.get('/removeFromWishlist', userSess.islogin,userSess.isAccess , wishlist
 // routers.delete('/deleteCoupon', catchErrors(userController.deleteCoupon)); // delete coupon which is added at checkout
 routers.get( '/coupons',userSess.islogin,userSess.isAccess,cartController.viewCoupons); // list all coupons available to user
 
+routers.get('/wallet',userSess.islogin, walletController.viewWalletPage);
+routers.post('/wallet',  walletController.addDataWallet);
+routers.put('/verifyWalletPayment',  walletController.verifyWalletPayment);
+routers.get("/errorPage",user.errorMessage);
 module.exports = routers;

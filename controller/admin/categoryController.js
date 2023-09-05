@@ -11,7 +11,7 @@ const productModel  =require('../../model/productSchema');
             }
             res.render('Admin/categories',{categories,productsValue})
         } catch (error) {
-            console.log(error.message);
+            res.redirect('/errorPage');
         }
     }
 
@@ -36,7 +36,7 @@ const productModel  =require('../../model/productSchema');
                 res.redirect('/admin/category')
             }
         } catch (error) {
-            console.log(error.message);
+            res.redirect('/errorPage');
         }
     }
     const loadEditCategory = async(req,res)=>{
@@ -45,20 +45,15 @@ const productModel  =require('../../model/productSchema');
             const categoryData = await categoryModel.findOne({_id: id});
             res.render('Admin/editCategory',{message:null,category: categoryData})
         } catch (error) {
-            console.log(error.message);
+            res.redirect('/errorPage');
         }
     }
 
     const editCategory = async (req,res)=> {
         try {
-            // const id = req.query.id
-            // const categoryName = req.body.name
-    
-            // await categoryModel.findByIdAndUpdate(id, { categoryName: categoryName })
-            // res.redirect('/admin/category');
-            const id = req.query.id;
+            
+       const id = req.query.id;
         const newCategoryName = req.body.categoryName;
-
         // Check if the new category name is unique and doesn't already exist in the database
         const existingCategory = await categoryModel.findOne({ categoryName: { $regex: new RegExp(`^${newCategoryName}$`, "i") } });
 
@@ -72,7 +67,7 @@ const productModel  =require('../../model/productSchema');
 
         }
         } catch (error) {
-            console.log(error.message);
+            res.redirect('/errorPage');
         }
     
     }

@@ -152,9 +152,7 @@
                                                   </div>
                                               </div>
                                           </div>
-
-                                          <% }
-                                          ) %>
+                                    <% })%>                                         
                                   </div>
                                   
 <div class="col-12 col-md-5 mb-2">
@@ -335,20 +333,40 @@
                 }
  
                 function checkout() {
-                    const url = window.location.origin
-                  const code = document.getElementById('coupon_id').value
-                  console.log("hi"+code+"hi");
-                  const productPric = document.getElementById('totalPrice').innerText
-                  const discountPrice = document.getElementById('totalDiscount').innerText
-                  const updatedPrice = document.getElementById('totalAmount').innerText
-             console.log("new" + updatedPrice);
-                    
-                            const productPrice = parseFloat(productPric);
+    const url = window.location.origin;
+    const code = document.getElementById('coupon_id').value;
+    console.log("hi" + code + "hi");
+    const productPric = document.getElementById('totalPrice').innerText;
+    const discountPrice = document.getElementById('totalDiscount').innerText;
+    const updatedPrice = document.getElementById('totalAmount').innerText;
+    console.log("new" + updatedPrice);
+
+    const productPrice = parseFloat(productPric);
     const formattedUpdatedPrice = parseFloat(updatedPrice).toFixed(2); // Format to two decimal places
-    const formatedDiscountPrice = parseFloat(discountPrice).toFixed(2)
-    window.location.href = `${url}/checkout?code=${code}&&discountPrice=${formatedDiscountPrice}&&productPrice=${productPrice}&&updatedPrice=${formattedUpdatedPrice}`;
-                    
-                }
+    const formatedDiscountPrice = parseFloat(discountPrice).toFixed(2);
+
+    fetch(`${url}/quantityCheck`, {
+        method: 'GET',
+        headers: {
+            "Content-Type": "application/json",
+        }
+    }).then((response) => response.json()).then((data) => {
+        if (data.insufficientStock == true) {
+    Swal.fire({
+        title: 'Sorry',
+        text: "Out of stock product present in cart",
+        icon: 'warning',
+        showConfirmButton: true,
+    });
+    // Don't proceed to checkout if there's insufficient stock
+} else {
+    // Proceed to checkout with the provided query parameters
+    window.location.href = `${url}/checkout?code=${code}&discountPrice=${formatedDiscountPrice}&productPrice=${productPrice}&updatedPrice=${formattedUpdatedPrice}`;
+}
+
+    });
+}
+
 
                 function applycoupon() {
         const url = window.location.origin;
