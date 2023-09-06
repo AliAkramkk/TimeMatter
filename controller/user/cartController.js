@@ -431,30 +431,6 @@ const checkout = async (req, res) => {
 
 };
 
-// const viewOrders = async (req, res) => {
-//   const userId = req.session.User_id;
-//   const user = await User.findOne({ _id: userId });
-//   const cart = await Cart.find({ user: userId }).populate("product");
-//   const categories = await Category.find({});
-//   const wishlist = await wishlistModel.findOne({ userId: userId }).populate("items");
-//   const orders = await Order.find({ user: userId })
-//     .populate({
-//       path: "product.product_id",
-//       model: "product",
-//     })
-//     .sort({ order_id: -1 });
-//     const PageSize = 6;
-//     const page = parseInt(req.query.page) || 1;
-//     const skip = (page - 1) * PageSize;
-//     const productCount = await Product.countDocuments();
-//     const count = Math.ceil(productCount / PageSize);
-
-//     // const products=orders.product[0].product_id.image[0].url
-   
-   
-   
-//     res.render("User/orderHistory", { categories, orders, user,cart,wishlist ,page,count});
-// };
 
 const viewOrders = async (req, res) => {
   try {
@@ -541,7 +517,10 @@ const cancelOrder = async (req, res) => {
   const userId = req.session.User_id;
   const newStatus = await Order.findOne({_id:_id})
   const netTot=newStatus.netTotal;
+  const payment=newStatus.payment_method;
+  if(payment=="online"||"wallet"){
   const userWallet = await User.findOneAndUpdate({_id:userId},{$inc:{wallet:netTot}})
+  }
  await Order.updateOne(
     { _id },
     {
@@ -559,6 +538,8 @@ const cancelOrder = async (req, res) => {
   res.redirect('/errorPage');
 }
 };
+
+// cancel product individually from order
 const cancelProduct = async (req, res) => {
   try {
     const _id = req.params.orderId;
@@ -669,12 +650,6 @@ const applyCoupon = async (req, res) => {
           { $inc: { stock: -quantity } }
         );
       }
-
-
-
-
-
-
 
     if(code!=""){
      

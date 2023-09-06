@@ -49,7 +49,7 @@ routers.get(
 ); // view all orders placed by user
 routers.get("/orderDetails", userSess.islogin, cartController.orderDetails);
 routers.put("/cancelOrder/:orderId", cartController.cancelOrder);
-routers.put("/cancelProduct/:orderId", cartController.cancelProduct);
+routers.put("/cancelProduct/:orderId/:productId", cartController.cancelProduct);
 routers.put("/returnOrder/:orderId", cartController.returnOrder);
 routers.get("/applyCoupon", cartController.applyCoupon);
 routers.put("/verifyOnlinePayment", cartController.verifyOnlinePayment);
