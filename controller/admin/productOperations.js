@@ -437,7 +437,7 @@ const getSalesReport = async (req, res) => {
     filter = 'lastWeek';
   }
 
-  res.render('admin/salesReport', {
+  res.render('Admin/salesReport', {
     orders,
     startDate: moment(
       new Date(startDate).setDate(new Date(startDate).getDate() + 1)
