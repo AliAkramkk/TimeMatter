@@ -22,7 +22,7 @@ const verifyEmail = async (body) => {
             from: process.env.AU_EMAIL,
             to: body.email,
             subject: 'Welcome to TimeMatter',
-            html: `<p>Hello <strong>${body.username}</strong>, Please click the link below to verify your Time Matter account. If this is not done by you, you can safely ignore this email.</p><a href="http://localhost:3003/successemail/${body.username}">Verify now</a>`
+            html: `<p>Hello <strong>${body.username}</strong>, Please click the link below to verify your Time Matter account. If this is not done by you, you can safely ignore this email.</p><a href="65.2.144.47/successemail/${body.username}">Verify now</a>`
         };
 
         const info = await transporter.sendMail(mailOptions);
