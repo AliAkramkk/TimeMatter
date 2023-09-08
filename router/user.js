@@ -38,7 +38,7 @@ routers.get("/quantityCheck", userSess.islogin, cartController.checkQuantity);
 routers.get("/checkOut", userSess.islogin,userSess.isAccess ,cartController.getCheckOut);
 routers.get("/forget", user.forget);
 routers.post("/forget", user.forgetverif);
-routers.get("/changepass/:email", userSess.islogin, user.changePass);
+routers.get("/changepass/:email", user.changePass);
 routers.post("/resetPass", user.resetPass);
 routers.post("/checkOut",userSess.islogin,catchErrors(cartController.checkout));
 // orders
