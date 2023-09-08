@@ -170,9 +170,9 @@
                                             <h4>Price: <%= productItem.product_id.price %> </h4>
                                             <p><%= productItem.product_id.description %></p>
                                             <!-- Cancel button for each product -->
-                                            <% if (order.status === 'pending') { %>
+                                            <!-- <% if (order.status === 'pending') { %>
                                                 <button class="btn btn-dark" onclick="cancelProduct('<%= order._id %>', '<%= productItem._id %>')">Cancel Product</button>
-                                            <% } %>
+                                            <% } %> -->
                                         </div>
                                     </div>
                                 </div>
