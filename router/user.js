@@ -15,10 +15,10 @@ routers.post("/login", user.verifyLogin);
 routers.get("/signup", user.signup);
 routers.post("/signup", user.createUser);
 routers.get("/logout", user.userLogout);
-routers.get("/",userSess.isAccess, user.loadHome);
+routers.get("/", user.loadHome);
 routers.get("/successemail/:username", user.successEmail);
 
-routers.get("/shop", userSess.isAccess, productController.loadShop);
+routers.get("/shop",  productController.loadShop);
 routers.get("/shopDetails",  productController.productDetails);
 routers.get("/productDetails", productController.productDetails);
 routers.get("/addToCart", userSess.islogin, cartController.addToCart);
