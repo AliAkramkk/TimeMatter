@@ -68,7 +68,7 @@ const loadEditProduct = async (req, res) => {
   const id = req.query.id;
   const categories = await categoryModel.find();
   const product = await productModel.findOne({ _id: id });
-  res.render("admin/editProduct", { categories, product });
+  res.render("Admin/editProduct", { categories, product });
   }catch{
     res.redirect('/errorPage')
   }
