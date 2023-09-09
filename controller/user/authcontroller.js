@@ -229,7 +229,7 @@ const getEditAddress = async (req, res) => {
     { _id: 0, address: { $elemMatch: { id: req.params.id } } }
   );
 
-  res.render("user/editAddress", { key: "", address: address[0],redirect,cart,wishlist });
+  res.render("User/editAddress", { key: "", address: address[0],redirect,cart,wishlist });
 };
 
 const editAddress = async (req, res) => {
