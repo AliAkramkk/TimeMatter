@@ -167,7 +167,7 @@ const editOrder = async (req, res) => {
     path: "user",
     model: "user",
   });
-  res.render('admin/orderDetails', { order });
+  res.render('Admin/orderDetails', { order });
        
 } catch (error) {
   res.redirect('/errorPage');
