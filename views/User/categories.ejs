@@ -36,7 +36,16 @@
                        
                       </div>
 
-                    
+                      <% if(!user) {%>
+                            
+                            
+
+                        <div class="header__top__right__auth">
+                                          <a onclick="login()"><i class="fa fa-user"></i> Login</a>
+                                      </div>
+          
+                                      <% } else {%>
+                                      
                       
 
                      
@@ -293,6 +302,15 @@
               }
           })
       } 
+
+
+      
+        function login(){
+            const currentUrl = location.href;
+            location.href= `/login?url=${currentUrl}&&a=5`
+        }
+        // document.getElementById("heroItem").height = "420";
+   
   </script>
 
 
