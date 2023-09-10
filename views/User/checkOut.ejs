@@ -251,7 +251,7 @@
                 const url = window.location.origin;
                 const history = `${url}/orders`
 
-                formEl.addEventListener('submit', click => {
+                formEl.addEventListener('submit', event => {
                     event.preventDefault();
                     const formData = new FormData(formEl);
                     const data = Object.fromEntries(formData);
