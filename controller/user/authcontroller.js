@@ -244,7 +244,7 @@ const editAddress = async (req, res) => {
     const redirect = req.query.redirect;
   console.log(redirect);
   res.redirect("/"+redirect);
-  // res.redirect("/profile");
+  
 };
 
 const deleteAddress = async (req, res) => {
