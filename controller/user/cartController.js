@@ -203,27 +203,50 @@ res.send({ data: "this is data", insufficientStock, couponName, discountPrice, p
 }
 };
 
-const getCheckOut = async (req, res) => {
-  try{
-  const {code,discountPrice,productPrice,updatedPrice}=req.query;
-  const userId = req.session.User_id;
-  const user = await User.findOne({ _id: userId });
-  const address = user.address;
-  const carts = await Cart.find({ user: userId }).populate("product");
-  const wishlist = await wishlistModel.findOne({ userId: userId }).populate("items");
-  const categories = await Category.find({});
-  const total = totalAmount(carts);
-  const orders = await Order.findOne({ user: userId })
-          .populate({
-              path: "product.product_id",
-              model: "product",
-          })
-  res.render("User/checkOut", { categories, address, total, user,code,discountPrice,productPrice,updatedPrice,carts,wishlist,orders });
+// const getCheckOut = async (req, res) => {
+//   try{
+//   const {code,discountPrice,productPrice,updatedPrice}=req.query;
+//   const userId = req.session.User_id;
+//   const user = await User.findOne({ _id: userId });
+//   const address = user.address;
+//   const carts = await Cart.find({ user: userId }).populate("product");
+//   const wishlist = await wishlistModel.findOne({ userId: userId }).populate("items");
+//   const categories = await Category.find({});
+//   const total = totalAmount(carts);
+//   const orders = await Order.findOne({ user: userId })
+//           .populate({
+//               path: "product.product_id",
+//               model: "product",
+//           })
+//   res.render("User/checkOut", { categories, address, total, user,code,discountPrice,productPrice,updatedPrice,carts,wishlist,orders });
        
-} catch (error) {
-  res.redirect('/errorPage')
-}
+// } catch (error) {
+//   res.redirect('/errorPage')
+// }
+// };
+
+const getCheckOut = async (req, res) => {
+  try {
+    const userId = req.session.User_id;
+    const user = await User.findOne({ _id: userId });
+    const address = user.address;
+    const carts = await Cart.find({ user: userId }).populate("product");
+    const wishlist = await wishlistModel.findOne({ userId: userId }).populate("items");
+    const categories = await Category.find({});
+    
+    // Calculate the total amount based on cart items
+    const total = totalAmount(carts);
+
+    // Check if updatedPrice is available in the query parameters
+    const { code, discountPrice, productPrice, updatedPrice } = req.query;
+
+    // Render the checkout page with updatedPrice
+    res.render("User/checkOut", { categories, address, total, user, code, discountPrice, productPrice, updatedPrice, carts, wishlist });
+  } catch (error) {
+    res.redirect('/errorPage');
+  }
 };
+
 
 const checkout = async (req, res) => {
   try{

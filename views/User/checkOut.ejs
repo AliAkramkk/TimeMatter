@@ -272,6 +272,7 @@
                     const orderTotalAmount = parseFloat(document.getElementById('totalAmount').innerText);
                     data.totalAmount = orderTotalAmount;
                     const walletAmount = parseFloat(document.getElementById('walletAmount').innerText);
+                    const updatedPrice = parseFloat(document.getElementById('updatedPrice').value);
                     const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
 
     if (paymentMethod === 'wallet' && walletAmount < orderTotalAmount) {
