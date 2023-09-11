@@ -17,6 +17,8 @@ routers.post("/signup", user.createUser);
 routers.get("/logout", user.userLogout);
 routers.get("/", user.loadHome);
 routers.get("/successemail/:username", user.successEmail);
+routers.get("/about", user.aboutPage);
+
 
 routers.get("/shop",  productController.loadShop);
 routers.get("/shopDetails",  productController.productDetails);

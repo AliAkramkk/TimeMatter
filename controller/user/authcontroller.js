@@ -312,6 +312,18 @@ const errorMessage =(req,res)=>{
   res.render("User/404page")
 };
 
+const aboutPage = async (req, res) => {
+  try {
+    const userId =req.session.User_id
+    const user =await User.findOne({_id: userId})
+    const cart = await Cart.find({ user: userId }).populate("product");
+    const wishlist = await wishlistModel.findOne({ userId: userId }).populate("items");
+    res.render("User/aboutPage", { cart,wishlist,user});
+
+  } catch (error) {
+    res.redirect('/errorPage');
+  }
+}
 module.exports = {
   signup,
   createUser,
@@ -331,5 +343,6 @@ module.exports = {
   forgetverif,
   changePass,
   resetPass,
-  errorMessage
+  errorMessage,
+  aboutPage
 };
