@@ -324,6 +324,19 @@ const aboutPage = async (req, res) => {
     res.redirect('/errorPage');
   }
 }
+
+const contactPage = async (req, res) => {
+  try {
+    const userId =req.session.User_id
+    const user =await User.findOne({_id: userId})
+    const cart = await Cart.find({ user: userId }).populate("product");
+    const wishlist = await wishlistModel.findOne({ userId: userId }).populate("items");
+    res.render("User/contact", { cart,wishlist,user});
+
+  } catch (error) {
+    res.redirect('/errorPage');
+  }
+}
 module.exports = {
   signup,
   createUser,
@@ -344,5 +357,6 @@ module.exports = {
   changePass,
   resetPass,
   errorMessage,
-  aboutPage
+  aboutPage,
+  contactPage
 };

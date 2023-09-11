@@ -1,3 +1,5 @@
+
+
 <%- include('./partials/header.ejs') %>
 
 
@@ -76,25 +78,41 @@
   </div>
 </header>
 
+
 <main>
-  <section class="about-section p-3">
-      <div class="container p-3">
-          <div class="row p-4">
-              <div class="col-md-6 p-4">
-                  <h2>About Time Matter</h2>
+  <section class="contact-section">
+      <div class="container">
+          <div class="row">
+              <div class="col-md-6">
+                  <h2>Contact Us</h2>
                   <p>
-                      Welcome to Time Matter, your premier destination for high-quality and stylish watches. At Time Matter, we are passionate about timepieces and believe that a great watch is more than just a way to tell time; it's an expression of your style and personality.
+                      Have a question or need assistance? We're here to help! Feel free to get in touch with our team.
                   </p>
-                  <p>
-                      Our mission is to provide you with a curated selection of watches that blend form and function, offering both timeless classics and the latest trends in watch design. Whether you're looking for a classic dress watch, a rugged sports watch, or a modern smartwatch, we have something for everyone.
-                  </p>
-                  <p>
-                      We take pride in sourcing watches from reputable brands and ensuring their authenticity and quality. Our team of watch enthusiasts is dedicated to helping you find the perfect timepiece that suits your lifestyle and taste.
-                  </p>
+                  <!-- Add your contact information here -->
+                  <ul>
+                      <li>Email: info@timematter.com</li>
+                      <li>Phone: +123-456-7890</li>
+                      <li>Address: 123 Watch Street, Time City</li>
+                  </ul>
               </div>
-              <div class="col-md-6 p-4">
-                  <!-- Include an image of your store or a showcase of watches here -->
-                  <img src="/image/time-matter.png" alt="About Us Image" class="img-fluid">
+              <div class="col-md-6">
+                  <!-- Add a contact form here if needed -->
+                  <!-- Example form: -->
+                  <form action="/contact" method="post">
+                      <div class="form-group">
+                          <label for="name">Name:</label>
+                          <input type="text" id="name" name="name" class="form-control">
+                      </div>
+                      <div class="form-group">
+                          <label for="email">Email:</label>
+                          <input type="email" id="email" name="email" class="form-control">
+                      </div>
+                      <div class="form-group">
+                          <label for="message">Message:</label>
+                          <textarea id="message" name="message" class="form-control" rows="4"></textarea>
+                      </div>
+                      <button type="submit" class="btn btn-primary">Submit</button>
+                  </form>
               </div>
           </div>
       </div>
@@ -103,4 +121,5 @@
   <!-- Additional sections or content can be added as needed -->
   
 </main>
+
 <%- include('./partials/footer.ejs') %>

@@ -18,6 +18,7 @@ routers.get("/logout", user.userLogout);
 routers.get("/", user.loadHome);
 routers.get("/successemail/:username", user.successEmail);
 routers.get("/about", user.aboutPage);
+routers.get("/contact", user.contactPage);
 
 
 routers.get("/shop",  productController.loadShop);
