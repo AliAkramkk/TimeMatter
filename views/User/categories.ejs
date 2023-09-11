@@ -194,7 +194,7 @@
       let newMainUrl = ''
       let trial = new URLSearchParams(window.location.search);
       let cat = trial.get('catId')
-      let url = new URL(`http://localhost:3004/getProducts?category=${cat}`);
+      let url = new URL(`${origin}/getProducts?category=${cat}`);
       let searchParams = url.searchParams;
 
       function gotoPage(page) {
