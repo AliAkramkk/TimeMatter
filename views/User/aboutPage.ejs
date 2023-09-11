@@ -1,5 +1,70 @@
 <%- include('./partials/header.ejs') %>
 
+
+<header class="header">
+
+  <div class="container">
+      <div class="row">
+          <div class="col-lg-3">
+              <div class="header__logo">
+                  <a class="navbar-brand text-dark fs-4 fw-bold" href="/">Time<span class="text-danger">Matter</span></a>
+              </div>
+          </div>
+          <div class="col-lg-6">
+              <nav class="header__menu">
+                  <ul>
+                      <li><a href="/">Home</a></li>
+                      <li class="active"><a href="/shop">Shop</a></li>
+                      <li><a href="/about">About</a></li>
+                      <li><a href="#">Contact</a></li>
+                  </ul>
+              </nav>
+          </div>
+          <div class="col-lg-3">
+            <div class="header__cart">
+
+                <div class="header__top__right__auth">
+
+                   
+                    
+                    
+<!-- 
+                    <div class="header__top__right__auth">
+                        <a onclick="login()"><i class="fa fa-user"></i> Login</a>
+                    </div> -->
+
+                  
+                    
+
+                    <ul><% if(wishlist!=null && wishlist.items.length!=0){%>
+                        <li><a href="/wishlist"><i class="fa fa-heart"></i> <span><%= wishlist.items.length%></span></a></li> <%}else{%>
+                            <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a></li><%}%>
+                        <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span><%=carts.length%></span></a></li> 
+                    </ul>
+
+
+                    <div class="header__top__right__auth">
+                        <a href="/profile"><i class="fa fa-user"></i><%= user.username %></a>
+                    </div>
+
+                    <div class="header__top__right__auth">
+                        <a href="/logout" style="box-shadow: none;border: none;" class="btn btn-sm btn-outline-danger">Logout</a>
+                    </div>
+                    
+                
+                </div>
+               
+
+                
+            </div>
+        </div>
+      </div>
+
+      </div>
+    
+  </div>
+</header>
+
 <main>
   <section class="about-section">
       <div class="container">

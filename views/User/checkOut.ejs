@@ -35,7 +35,15 @@
                       </div> -->
 
                       
+                      <% if(!user) {%>
+                            
+                            
 
+                        <div class="header__top__right__auth">
+                                          <a onclick="login()"><i class="fa fa-user"></i> Login</a>
+                                      </div>
+          
+                                      <% } else {%>
                      
                     <ul><% if(wishlist!=null && wishlist.items.length!=0){%>
                         <li><a href="/wishlist"><i class="fa fa-heart"></i> <span><%= wishlist.items.length%></span></a></li> <%}else{%>
