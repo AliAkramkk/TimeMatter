@@ -925,7 +925,7 @@ ol {
 }
 
 .featured__item__pic__hover li:hover a i {
-	color: #ffffff;
+	color: #0a0909;
 	transform: rotate(360deg);
 }
 
