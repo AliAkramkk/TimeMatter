@@ -73,7 +73,7 @@ const getCart = async (req, res) => {
   try {
     const user = req.session.User_id;
     if (user) {
-      const carts = await Cart.find({ user: user }).populate("product");
+      const carts = await Cart.find({ user: user }).  populate("product");
       const count = await Cart.find({ user: user }).count();
       const total = totalAmount(carts);
       const wishlist = await wishlistModel.findOne({ userId: user }).populate("items");
