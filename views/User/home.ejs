@@ -168,28 +168,29 @@
             </div>
             <div class="row featured__filter ">
                 
-                <% for(let i=0;i<4 && i<products.length;i++){ %>
-                <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
-                    <div class="featured__item align-items-center ">
-                        <a href="/shopDetails?id=<%= products._id %>">
-                        <div class="featured__item__pic set-bg ms-5" data-setbg="<%= products[i].image[0].url %>">
-                        </a>
-                            <ul class="featured__item__pic__hover li">
-                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                <li><a href="#"><i class="fa fa-info"></i></a></li>
-                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                            </ul>
-                        </div>
-                        <div class="featured__item__text">
-                            <h6><a href="/shopDetails"><%= products[i].productName %></a></h6>
-                            <h5>&#8377;<%= products[i].price %></h5>
+                <% for(let i = 0; i < 4 && i < products.length; i++) { %>
+                    <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
+                        <div class="featured__item align-items-center">
+                            <a href="/shopDetails?id=<%= products[i]._id %>">
+                                <div class="featured__item__pic set-bg ms-5" data-setbg="<%= products[i].image[0].url %>">
+                                    <ul class="featured__item__pic__hover li">
+                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-info"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                    </ul>
+                                </div>
+                            </a>
+                            <div class="featured__item__text">
+                                <h6><a href="/shopDetails?id=<%= products[i]._id %>"><%= products[i].productName %></a></h6>
+                                <h5>&#8377;<%= products[i].price %></h5>
+                            </div>
                         </div>
                     </div>
-                </div>
                 <% } %>
-            </div>
-        </div> 
-    </section>
+                </div>
+                </div>
+                </section>
+                
     <!-- Featured Section End -->
 
     <!-- Banner Begin -->
