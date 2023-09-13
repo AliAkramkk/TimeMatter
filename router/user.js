@@ -24,7 +24,10 @@ routers.post('/forget',user.forgotPass);
 routers.get("/otp", user.otpVerifyPage);
 routers.get("/otpResend", user.resendOtp);
 routers.post('/otp/reset',user.resetOtpVerify);
-
+routers.post("/resetPass", user.resetPass);
+routers.get("/changePassword", user.viewChangePass);
+routers.post("/changePassword", user.changePassword);
+routers.get("/verifyEmail", user.verifyEmail);
 
 routers.get("/shop",  productController.loadShop);
 routers.get("/shopDetails",  productController.productDetails);

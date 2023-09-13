@@ -318,11 +318,12 @@ const otpVerify = async (req, res) => {
   }
 };
 
-const changePass = async (req, res) => {
-  const email = req.params.email;
-  res.render("User/newPass", { message: email });
-  // await User.findOneAndUpdate({ email: email }, { $set: { isVerified: true } })
+const verifyEmail = async (req, res) => {
+  const categories = await Category.find({});
+  res.render('verifyEmail', { categories });
 };
+
+
 const resetPass = async (req, res) => {
   const email = req.query.email;
   console.log(email);
@@ -338,6 +339,52 @@ const resetPass = async (req, res) => {
     res.render("User/userlogin", { message: null });
   } else {
     res.render("User/usersignup", { message: "Invalid User" });
+  }
+};
+
+const resetOtpVerify = async (req, res) => {
+  const user = req.query.id;
+  const enteredOTP =
+    req.body.otp1 + req.body.otp2 + req.body.otp3 + req.body.otp4;
+  const storedOTP = req.signedCookies.otpReset;
+  const username = req.signedCookies.usernameReset;
+
+  if (enteredOTP === storedOTP && username === user) {
+    res.clearCookie(storedOTP); // Clear the OTP cookie
+    res.clearCookie(username);
+    res.redirect('/changePassword');
+  } else {
+    req.flash('error', 'Entered otp is incorrect');
+    res.redirect('/otp');
+  }
+};
+
+const viewChangePass = async (req, res) => {
+  const validationHelper = validationHelpers.validationChecker;
+  const categories = await Category.find({});
+  res.render('User/passwordReset', { categories, validationHelper });
+};
+
+const changePassword = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    req.flash('errorObject', errors.array());
+    return res.redirect('/changePassword');
+  }
+  const newPass = req.body.password;
+  const repeatPass = req.body.passwordConfirm;
+
+  if (newPass === repeatPass) {
+    const username = req.signedCookies.usernameReset;
+    const updateUser = await User.findOne({ email: username });
+    await updateUser.setPassword(newPass);
+    await updateUser.save();
+    res.clearCookie(username);
+    req.flash('success', 'Password reset Success!!');
+    res.redirect('/');
+  } else {
+    req.flash('error', 'Passwords do not match.Try again!!');
+    res.redirect('/changePassword');
   }
 };
 
@@ -389,7 +436,11 @@ module.exports = {
   forgotPass,
   otpVerifyPage,
   otpVerify,
-  changePass,
+resetOtpVerify,
+viewChangePass,
+changePassword,
+verifyEmail,
+
   resetPass,
   errorMessage,
   aboutPage,
