@@ -293,6 +293,13 @@ const forgotPass = async (req, res) => {
   }
 };
 
+const resendOtp = (req, res) => {
+  const { user } = req;
+  sendOTP(req, res, user.email);
+  req.flash('message', 'Otp send..Please check..!!');
+  res.redirect('/otp');
+};
+
 const otpVerifyPage = async (req, res) => {
   const document = null;
   const categories = await Category.find({});
@@ -440,6 +447,7 @@ resetOtpVerify,
 viewChangePass,
 changePassword,
 verifyEmail,
+resendOtp,
 
   resetPass,
   errorMessage,

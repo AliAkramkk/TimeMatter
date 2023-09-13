@@ -5,7 +5,6 @@ const productController = require("../controller/user/productController");
 const cartController = require("../controller/user/cartController");
 const categoryController = require("../controller/user/categoryController")
 const userSess = require("../middleware/user");
-const { catchErrors } = require("../utility/errorHandler");
 const wishlistController = require("../controller/user/wishlistController")
 const walletController = require("../controller/user/walletController")
 
