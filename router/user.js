@@ -47,14 +47,13 @@ routers.put("/productDec", userSess.islogin, cartController.decrementCartItems);
 routers.get("/quantityCheck", userSess.islogin, cartController.checkQuantity);
 routers.get("/checkOut", userSess.islogin,userSess.isAccess ,cartController.getCheckOut);
 
-routers.get("/changepass/:email", user.changePass);
 routers.post("/resetPass", user.resetPass);
-routers.post("/checkOut",userSess.islogin,catchErrors(cartController.checkout));
+routers.post("/checkOut",userSess.islogin,cartController.checkout);
 // orders
 routers.get(
   "/orders",
   userSess.islogin,
-  catchErrors(cartController.viewOrders)
+  cartController.viewOrders
 ); // view all orders placed by user
 routers.get("/orderDetails", userSess.islogin, cartController.orderDetails);
 routers.put("/cancelOrder/:orderId", cartController.cancelOrder);

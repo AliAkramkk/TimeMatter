@@ -226,7 +226,7 @@ res.send({ data: "this is data", insufficientStock, couponName, discountPrice, p
 // };
 
 const getCheckOut = async (req, res) => {
-  try {
+ 
     const userId = req.session.User_id;
     const user = await User.findOne({ _id: userId });
     const address = user.address;
@@ -242,9 +242,7 @@ const getCheckOut = async (req, res) => {
 
     // Render the checkout page with updatedPrice
     res.render("User/checkOut", { categories, address, total, user, code, discountPrice, productPrice, updatedPrice, carts, wishlist });
-  } catch (error) {
-    res.redirect('/errorPage');
-  }
+  
 };
 
 
