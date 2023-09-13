@@ -279,6 +279,15 @@ const forget = async (req, res) => {
 };
 
 const forgotPass = async (req, res) => {
+  const id = req.session.User_id;
+
+  const user = await User.findOne({ _id: id });
+  const categories = await Category.find();
+  const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
+  const products = await Product.find({ isActive: true });
+  const cart = await Cart.find({ user: id }).populate("product");
+  
+    
   const  email  = req.body.email;
   console.log(email);
   const document = await User.findOne({ email });
@@ -286,7 +295,14 @@ const forgotPass = async (req, res) => {
     mail.resetOTP(req, res, document);
     
 
-    res.render('User/otp', {  link: 'reset', document });
+    res.render('User/otp', {  link: 'reset', document ,categories,
+    products,
+    user,
+    id,
+    cart,
+    wishlist,
+    message: req.query.message,
+ });
   } else {
     req.flash('error', 'Entered email does not exist');
     res.redirect('/forget');
@@ -301,9 +317,21 @@ const resendOtp = (req, res) => {
 };
 
 const otpVerifyPage = async (req, res) => {
+  const id = req.session.User_id;
+  const user = await User.findOne({ _id: id });
+  const categories = await Category.find();
+  const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
+  const products = await Product.find({ isActive: true });
+  const cart = await Cart.find({ user: id }).populate("product");
+  
   const document = null;
-  const categories = await Category.find({});
-  res.render('User/otp', { categories, link: 'login', document });
+  
+  res.render('User/otp', { categories, link: 'login', document,products,
+  user,
+  id,
+  cart,
+  wishlist,
+  message: req.query.message, });
 };
 
 const otpVerify = async (req, res) => {

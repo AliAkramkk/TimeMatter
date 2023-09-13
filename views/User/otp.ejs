@@ -17,7 +17,71 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Document</title>
 </head>
+<header class="header">
 
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="header__logo">
+                    <a class="navbar-brand text-dark fs-4 fw-bold" href="#" style="font-weight: 700;">Time<span class="text-danger" style="color: #dd2222;">Matter</span></a>
+  
+  
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <nav class="header__menu">
+                    <ul>
+                        <li class="active"><a href="/">Home</a></li>
+                        <li><a href="/shop">Shop</a></li>
+                        <li><a href="/about">About</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3">
+                <div class="header__cart">
+                   
+  
+                    <div class="header__top__right__auth">
+  
+                        <% if(!id) {%>
+                        
+                        
+  
+          <div class="header__top__right__auth">
+                            <a onclick="login()"><i class="fa fa-user"></i> Login</a>
+                        </div>
+  
+                        <% } else {%>
+                        
+  
+                        <ul><% if(wishlist!=null && wishlist.items.length!=0){%>
+                            <li><a href="/wishlist"><i class="fa fa-heart"></i> <span><%= wishlist.items.length%></span></a></li> <%}else{%>
+                                <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a></li><%}%>
+                            <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span><%=cart.length%></span></a></li> 
+                        </ul>
+  
+                        <div class="header__top__right__auth">
+                            <a href="/profile"><i class="fa fa-user"></i><%= user.username %></a>
+                        </div>
+  
+          <div class="header__top__right__auth">
+                            <a href="/logout" style="box-shadow: none;border: none;" class="btn btn-sm btn-outline-danger">Logout</a>
+                        </div>
+                        
+                        <% } %>
+                    </div>
+  
+                </div>
+            </div>
+        </div>
+  
+        </div>
+        <div class="humberger__open">
+            <i class="fa fa-bars"></i>
+        </div>
+    </div>
+  </header><br>
 
     <form method="POST" action="/otp/<%= link %>?id=<% if (document) { %><%= document.email %> <% } %>">
         <div class="container height-100 d-flex justify-content-center align-items-center">
