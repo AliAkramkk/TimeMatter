@@ -399,6 +399,13 @@ const errorMessage =(req,res)=>{
   res.render("User/404page")
 };
 
+const validateResetPass = [
+  body('password', 'Password Cannot be Blank!').notEmpty().escape(),
+  body('passwordConfirm', 'Confirmed Password cannot be blank!')
+    .notEmpty()
+    .escape(),
+];
+
 const aboutPage = async (req, res) => {
   try {
     const userId =req.session.User_id
@@ -448,6 +455,7 @@ viewChangePass,
 changePassword,
 verifyEmail,
 resendOtp,
+validateResetPass,
 
   resetPass,
   errorMessage,
