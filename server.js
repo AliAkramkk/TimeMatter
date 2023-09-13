@@ -8,7 +8,7 @@ const cloudinary = require('cloudinary').v2;
 const flash = require("connect-flash")
 const fileUpload = require('express-fileupload')
 const mongo = require('./config/mongo');
-
+const cookieParser = require('cookie-parser');
 
 mongo()
 
@@ -30,6 +30,7 @@ app.use(fileUpload({
     useTempFiles: true,
     limits: { fileSize: 50 * 2024 * 1024 }
 }));
+app.use(cookieParser(process.env.COOKIE));
 
 app.use(session({
     secret: process.env.SESSION_SECRET,

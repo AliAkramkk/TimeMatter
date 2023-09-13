@@ -6,6 +6,9 @@ const Category = require("../../model/categorySchema");
 const createdId = require("../../actions/createdId");
 const Cart = require("../../model/cartSchema");
 const wishlistModel =require("../../model/wishList");
+const { body, validationResult } = require('express-validator');
+const validationHelpers = require('../../helper')
+const {sendOTP}  =require('../../utility/sendEmail')
 
 const { log } = require("console");
 
@@ -271,17 +274,47 @@ const deleteAddress = async (req, res) => {
 };
 
 const forget = async (req, res) => {
-  res.render("User/forgotPassword");
+  const id = 'reset';
+  res.render("User/forgotPassword",{id});
 };
 
-const forgetverif = async (req, res) => {
-  const email = req.body.email;
+const forgotPass = async (req, res) => {
+  const  email  = req.body.email;
   console.log(email);
-  const user = await User.findOne({ email });
+  const document = await User.findOne({ email });
+  if (document) {
+    mail.resetOTP(req, res, document);
+    
+
+    res.render('User/otp', {  link: 'reset', document });
+  } else {
+    req.flash('error', 'Entered email does not exist');
+    res.redirect('/forget');
+  }
+};
+
+const otpVerifyPage = async (req, res) => {
+  const document = null;
+  const categories = await Category.find({});
+  res.render('User/otp', { categories, link: 'login', document });
+};
+
+const otpVerify = async (req, res) => {
+  const enteredOTP =
+    req.body.otp1 + req.body.otp2 + req.body.otp3 + req.body.otp4;
+  const user = await User.findOne({
+    otpToken: enteredOTP,
+    tokenExpires: { $gt: Date.now() },
+  });
   if (user) {
-    console.log(user);
-    const verify = await mail.changePass(user);
-    res.send("check your email");
+    req.session.isOTPVerified = true;
+    user.otpToken = undefined;
+    user.tokenExpires = undefined;
+    await user.save();
+    res.redirect('/');
+  } else {
+    req.flash('error', 'Entered otp is incorrect/expired');
+    res.redirect('/otp');
   }
 };
 
@@ -353,7 +386,9 @@ module.exports = {
   editAddress,
   deleteAddress,
   forget,
-  forgetverif,
+  forgotPass,
+  otpVerifyPage,
+  otpVerify,
   changePass,
   resetPass,
   errorMessage,

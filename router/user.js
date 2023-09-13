@@ -19,6 +19,11 @@ routers.get("/", user.loadHome);
 routers.get("/successemail/:username", user.successEmail);
 routers.get("/about", user.aboutPage);
 routers.get("/contact", user.contactPage);
+routers.get("/forget", user.forget);
+routers.post('/forget',user.forgotPass);
+routers.get("/otp", user.otpVerifyPage);
+routers.get("/otpResend", user.resendOtp);
+routers.post('/otp/reset',user.resetOtpVerify);
 
 
 routers.get("/shop",  productController.loadShop);
@@ -39,8 +44,7 @@ routers.put("/productInc", userSess.islogin, cartController.incrementCartItems);
 routers.put("/productDec", userSess.islogin, cartController.decrementCartItems);
 routers.get("/quantityCheck", userSess.islogin, cartController.checkQuantity);
 routers.get("/checkOut", userSess.islogin,userSess.isAccess ,cartController.getCheckOut);
-routers.get("/forget", user.forget);
-routers.post("/forget", user.forgetverif);
+
 routers.get("/changepass/:email", user.changePass);
 routers.post("/resetPass", user.resetPass);
 routers.post("/checkOut",userSess.islogin,catchErrors(cartController.checkout));
