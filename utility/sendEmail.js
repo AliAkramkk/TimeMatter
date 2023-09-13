@@ -26,7 +26,7 @@ const verifyEmail = async (body) => {
             from: process.env.AU_EMAIL,
             to: body.email,
             subject: 'Welcome to TimeMatter',
-            html: `<p>Hello <strong>${body.username}</strong>, Please click the link below to verify your Time Matter account. If this is not done by you, you can safely ignore this email.</p><a href="http://localhost:3003/successemail/${body.username}">Verify now</a>`
+            html: `<p>Hello <strong>${body.username}</strong>, Please click the link below to verify your Time Matter account. If this is not done by you, you can safely ignore this email.</p><a href="52.66.213.245/${body.username}">Verify now</a>`
         };
 
         const info = await transporter.sendMail(mailOptions);
@@ -132,7 +132,7 @@ const changePass = async (body) => {
             from: process.env.AU_EMAIL,
             to: body.email,
             subject: 'Welcome to TimeMatter',
-            html: `<p>Hello <strong>${body.username}</strong>, Please click the link below to verify your Time Matter account. If this is not done by you, you can safely ignore this email.</p><a href="http://localhost:3003/changepass/${body.email}">Verify now</a>`
+            html: `<p>Hello <strong>${body.username}</strong>, Please click the link below to verify your Time Matter account. If this is not done by you, you can safely ignore this email.</p><a href="52.66.213.245/${body.email}">Verify now</a>`
         };
 
         const info = await transporter.sendMail(mailOptions);
