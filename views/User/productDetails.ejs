@@ -1,55 +1,62 @@
 <%- include('./partials/header.ejs') %>
 
-    <!-- Page Preloder -->
-    <div id="preloder">
-        <div class="loader"></div>
-    </div>
+    <style>
+        @media (max-width: 767px) {
+            .product_detailspic_item {
+                display: none;
+            }
+        }
+    </style>
 
-    <!-- Humberger Begin -->
-    <!-- <div class="humberger_menu_overlay"></div>
-    <div class="humberger_menu_wrapper">
-        <div class="humberger_menu_logo">
-            <a class="navbar-brand text-dark fs-4 fw-bold" href="#">Time<span class="text-danger">Matter</span></a>
+    <div class="humberger__menu__overlay"></div>
+    <div class="humberger__menu__wrapper">
+        <div class="humberger__menu__logo">
+            <a href="#"><img src="" alt=""></a>
         </div>
-        <div class="humberger_menu_cart">
+        <div class="humberger__menu__cart">
             <ul>
-                <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                <li><a href="/wishlist"><i class="fa fa-heart"></i> <span></span></a></li>
+                <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span></span></a></li>
             </ul>
-            <div class="header_topright_auth">
-                <a href="#"><i class="fa fa-user"></i> Login</a>
+            <div class="header__top__right__auth">
+                <a class="navbar-brand text-dark fs-4 fw-bold" href="/" style="font-weight: 600;">Time<span
+                        class="text-danger" style="color: #dd2222;">Matter</span></a>
+
             </div>
-            
+
         </div>
-        
-        <nav class="humberger_menu_nav mobile-menu">
+
+        <nav class="humberger__menu__nav mobile-menu">
             <ul>
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#">Shop</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
+                <li class="active"><a href="/">Home</a></li>
+                <li><a href="/shop">Shop</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
 
-    </div> -->
+    </div>
     <!-- Humberger End -->
 
     <!-- Header Section Begin -->
-     <header class="header">
+    <header class="header">
 
         <div class="container">
             <div class="row">
                 <div class="col-lg-3">
                     <div class="header__logo">
-                        <a class="navbar-brand text-dark fs-4 fw-bold" href="#">Time<span class="text-danger">Matter</span></a>
+                        <a class="navbar-brand text-dark fs-4 fw-bold" href="#" style="font-weight: 700;">Time<span
+                                class="text-danger" style="color: #dd2222;">Matter</span></a>
+
+
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <nav class="header__menu">
                         <ul>
-                            <li><a href="/">Home</a></li>
-                            <li class="active"><a href="/shop">Shop</a></li>
+                            <li class="active"><a href="/">Home</a></li>
+                            <li><a href="/shop">Shop</a></li>
                             <li><a href="/about">About</a></li>
                             <li><a href="/contact">Contact</a></li>
                         </ul>
@@ -57,45 +64,57 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="header__cart header__menu">
-                       
+
+
                         <div class="header__top__right__auth">
 
-                            <% if(!id) {%>
-                            
-                            
+                            <% if(!user) {%>
 
-							<div class="header__top__right__auth">
-                                <a onclick="login()"><i class="fa fa-user"></i> Login</a>
-                            </div>
 
-                            <% } else {%>
-                            
 
-                           
-                    <ul><% if(wishlist!=null && wishlist.items.length != 0){%>
-                        <li><a href="/wishlist"><i class="fa fa-heart"></i> <span id="wishlist-icon"><%= wishlist.items.length %></span></a></li> <%}else{%>
-                            <li><a href="/wishlist"><i class="fa fa-heart"></i> <span id="wishlist-icon">0</span></a></li><%}%>
-                        <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span id="cartCount"><%=cart.length%></span></a></li> 
-                    </ul>
+                                <div class="header__top__right__auth">
+                                    <a onclick="login()"><i class="fa fa-user"></i> Login</a>
+                                </div>
 
-                            <div class="header__top__right__auth">
-                                <a href="/profile"><i class="fa fa-user"></i><%= user.username %></a>
-                            </div>
+                                <% } else {%>
 
-							<div class="header__top__right__auth">
-                                <a href="/logout" style="box-shadow: none;border: none;" class="btn btn-sm btn-outline-danger">Logout</a>
-                            </div>
-                            
-                            <% } %>
+
+                                    <ul>
+                                        <% if(wishlist!=null && wishlist.items.length!=0){%>
+                                            <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>
+                                                        <%= wishlist.items.length%>
+                                                    </span></a></li>
+                                            <%}else{%>
+                                                <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a>
+                                                </li>
+                                                <%}%>
+                                                    <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span>
+                                                                <%=cart.length%>
+                                                            </span></a></li>
+                                    </ul>
+
+                                    <div class="header__top__right__auth">
+                                        <a href="/profile"><i class="fa fa-user"></i>
+                                            <%= user.username %>
+                                        </a>
+                                    </div>
+
+                                    <div class="header__top__right__auth">
+                                        <a href="/logout" style="box-shadow: none;border: none;"
+                                            class="btn btn-sm btn-outline-danger">Logout</a>
+                                    </div>
+
+                                    <% } %>
                         </div>
+
                     </div>
                 </div>
             </div>
 
-            </div>
-            <div class="humberger__open">
-                <i class="fa fa-bars"></i>
-            </div>
+        </div>
+        <div class="humberger__open">
+            <i class="fa fa-bars"></i>
+        </div>
         </div>
     </header>
     <!-- Header Section End -->
@@ -112,8 +131,10 @@
                         </div> -->
                         <ul>
                             <% categories.forEach((category)=>{ %>
-                            <li><a href="#"><%= category.categoryName %></a></li>
-                            <% }) %>
+                                <li><a href="#">
+                                        <%= category.categoryName %>
+                                    </a></li>
+                                <% }) %>
                         </ul>
                     </div>
                 </div>
@@ -148,79 +169,92 @@
     </section> -->
     <!-- Breadcrumb Section End -->
 
-    
+
 
     <!-- Product Details Section Begin -->
     <section class="product-details spad">
         <div class="container">
             <div class="row mb-5">
                 <div class="col-lg-6 col-md-6">
-                    
-                      
-                        <%- console.log(product) %>
+
+
+                    <%- console.log(product) %>
 
                         <div class="product_details_pic">
-                            <% if (product.image && product.image.length > 0) { %>
+                            <% if (product.image && product.image.length> 0) { %>
                                 <div class="product_detailspic_item" style="text-align: center;">
-                                    <img id="mainImage" class="product_detailspic_item--larg zoom" src="<%= product.image[0].url %>" style="width: 15rem;height: 18rem;justify-content: center;" alt="">
+                                    <img id="mainImage" class="product_detailspic_item--larg zoom"
+                                        src="<%= product.image[0].url %>"
+                                        style="width: 15rem;height: 18rem;justify-content: center;" alt="">
                                 </div>
                                 <div class="product_detailspic_slider owl-carousel">
-                                    <% product.image.forEach((img, index) => { %>
+                                    <% product.image.forEach((img, index)=> { %>
                                         <div class="item">
-                                            <img data-imgbigurl="<%= img.url %>" src="<%= img.url %>" alt="" onclick="changeMainImage('<%= img.url %>')">
+                                            <img data-imgbigurl="<%= img.url %>" src="<%= img.url %>" alt=""
+                                                onclick="changeMainImage('<%= img.url %>')">
                                         </div>
-                                    <% }) %>
+                                        <% }) %>
                                 </div>
-                            <% } else { %>
-                                <p>No image available</p>
+                                <% } else { %>
+                                    <p>No image available</p>
+                                    <% } %>
+                        </div>
+
+
+
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="product_details_text">
+
+                        <h3>
+                            <%= product.productName %>
+                        </h3>
+                        <div class="product_details_rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-half-o"></i>
+                            <span>(18 reviews)</span>
+                        </div>
+                        <div class="product_details_price">&#8377;<%= product.price %>
+                        </div>
+                        <p>
+                            <%= product.blurb %>
+                        </p>
+
+
+                        <div class="mb-2">
+                            <% if(product.quantity !==0){ %>
+                                <div class="button-container">
+                                    <button style="box-shadow: none;background-color: #930202;"
+                                        class=" btn primary-btn text-light" <% if(user) {%> onclick="addToClick('
+                                        <%=product._id%>')" <% }else{ %> onclick="notLogin()" <% } %> >ADD
+                                                    TO CART
+                                    </button>
+                                    <!-- <button id="wishlist-icon" style="border: none;" class="heart-icon rounded" <% if(user) {%> onclick="addToWishlist('<%=product._id%>')" <% }else{ %> onclick="notLogin()"<% } %> ><span class="icon_heart h5"></span></button> -->
+
+                                    <button id="wishlist" style="border: none;" class="heart-icon rounded" <% if(user)
+                                        {%> onclick="addToWishlist('<%=product._id%>')" <% }else{ %>
+                                                onclick="notLogin()" <% } %> ><span
+                                                        class="icon_heart h5 <% if(wishlist && wishlist.items.includes(product._id)){ %> text-danger <% } %>"></span></button>
+
+                                </div>
+                                <% }else{ %>
+                                    <kbd class="bg-danger text-dark"><b>No Stock Available</b></kbd>
+                                    <div class="mt-2"><b>Please try after some time!</b></div>
+                                    <% } %>
+                        </div>
+
+                        <% if(product.quantity !==0 && product.quantity < 5){ %>
+                            <kbd>Only <%= product.quantity %> stock left</kbd>
                             <% } %>
-                        </div>
-                        
-                    
-                        
-                    </div>
-                    <div class="col-lg-6 col-md-6">
-                        <div class="product_details_text">
-                            
-                                <h3><%= product.productName %></h3>
-                                <div class="product_details_rating">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star-half-o"></i>
-                                    <span>(18 reviews)</span>
-                                </div>
-                                <div class="product_details_price">&#8377;<%= product.price %></div>
-                                <p><%= product.blurb %></p>
-                               
-                                
-                                <div class="mb-2">
-                                    <% if(product.quantity !==0){ %>
-                                        <div class="button-container">
-                                        <button style="box-shadow: none;background-color: #930202;" class=" btn primary-btn text-light" <%
-                                          if(user) {%> onclick="addToClick('<%=product._id%>')" <% }else{ %> onclick="notLogin()" <% } %> >ADD
-                                                TO CART</button>
-                                        <!-- <button id="wishlist-icon" style="border: none;" class="heart-icon rounded" <% if(user) {%> onclick="addToWishlist('<%=product._id%>')" <% }else{ %> onclick="notLogin()"<% } %> ><span class="icon_heart h5"></span></button> -->
-
-                                        <button id="wishlist"  style="border: none;" class="heart-icon rounded" <% if(user) {%> onclick="addToWishlist('<%=product._id%>')" <% }else{ %> onclick="notLogin()" <% } %>  ><span  class="icon_heart h5 <% if(wishlist && wishlist.items.includes(product._id)){ %> text-danger <% } %>"></span></button>
-
-                                        </div>
-                                        <% }else{ %>
-                                          <kbd class="bg-danger text-dark"><b>No Stock Available</b></kbd>
-                                          <div class="mt-2"><b>Please try after some time!</b></div>
-                                          <% } %>
-                                    </div>
-                        
-                                    <% if(product.quantity !==0 && product.quantity < 5){ %>
-                                      <kbd>Only <%= product.quantity %> stock left</kbd>
-                                      <% } %>
                                 </ul>
-                            
-                        </div>
+
                     </div>
                 </div>
-                <!-- <div class="col-lg-6 col-md-6">
+            </div>
+            <!-- <div class="col-lg-6 col-md-6">
                     <div class="product_details_text">
                         
                             <h3><%= product.productName %></h3>
@@ -238,8 +272,8 @@
                             
                             <div class="mb-2">
                                 <% if(product.quantity !== 0){ %> -->
-                               <!-- Modify the onclick attribute to pass the correct product ID -->
-<!-- <button style="box-shadow: none; background-color: #7fad39;" class="btn primary-btn text-light" <% if (id) { %> onclick="addToClick('<%= product._id %>')" <% } else { %> onclick="notLogin()" <% } %>>ADD TO CART</button>
+            <!-- Modify the onclick attribute to pass the correct product ID -->
+            <!-- <button style="box-shadow: none; background-color: #7fad39;" class="btn primary-btn text-light" <% if (id) { %> onclick="addToClick('<%= product._id %>')" <% } else { %> onclick="notLogin()" <% } %>>ADD TO CART</button>
 
                                 <button href="#" style="border: none;" class="heart-icon" <% if(!id) {%> disabled <% } %>  ><span class="icon_heart"></span></button>
                                 <% }else{ %>
@@ -260,36 +294,38 @@
                         
                     </div>
                 </div> -->
-                <div class="col-lg-12">
-                    <div class="product_details_tab">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
-                                    aria-selected="true">Description</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"
-                                    aria-selected="false">Reviews <span>(0)</span></a>
-                            </li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="tabs-1" role="tabpanel">
-                                <div class="product_detailstab_desc">
-                                    <h6>Products Infomation</h6>
-                                    <p><%= product.description %></p>
-                                </div>
+            <div class="col-lg-12">
+                <div class="product_details_tab">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
+                                aria-selected="true">Description</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"
+                                aria-selected="false">Reviews <span>(0)</span></a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                            <div class="product_detailstab_desc">
+                                <h6>Products Infomation</h6>
+                                <p>
+                                    <%= product.description %>
+                                </p>
                             </div>
-                            
-                            <div class="tab-pane" id="tabs-3" role="tabpanel">
-                                <div class="product_detailstab_desc">
-                                    <h6>Products Infomation</h6>
-                                    <p></p>
-                                </div>
+                        </div>
+
+                        <div class="tab-pane" id="tabs-3" role="tabpanel">
+                            <div class="product_detailstab_desc">
+                                <h6>Products Infomation</h6>
+                                <p></p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </section>
     <!-- Product Details Section End -- -->
@@ -303,32 +339,40 @@
                         <h2>Related Product</h2>
                     </div>
                 </div>
-            </div> 
+            </div>
             <div class="row">
-                <% products.forEach((prod) =>{ %>
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="product__item">
-                        <a href="/productDetails?id=<%= prod._id %>"> 
-                            <div class="product_item_pic set-bg" data-setbg="<%= prod.image[0].url %>" style="width: 75%; height: 250px; background-size: cover; margin-left: 30px;">
-                                <ul class="product_itempic_hover">
-                                    <!-- Your hover icons or actions here -->
-                                </ul>
+                <% products.forEach((prod)=>{ %>
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="product__item">
+                            <a href="/productDetails?id=<%= prod._id %>">
+                                <div class="product_item_pic set-bg" data-setbg="<%= prod.image[0].url %>"
+                                    style="width: 75%; height: 250px; background-size: cover; margin-left: 30px;">
+                                    <ul class="product_itempic_hover">
+                                        <!-- Your hover icons or actions here -->
+                                    </ul>
+                                </div>
+                                <br>
+                            </a>
+                            <div class="product_item_text" style="text-align: center;">
+                                <h6 style="font-weight: bold;">
+                                    <%= prod.productName %>
+                                </h6>
+                                <h5>&#8377;<%= prod.price %>
+                                </h5>
                             </div>
-                            <br>
-                        </a>
-                        <div class="product_item_text"style="text-align: center;">
-                            <h6 style="font-weight: bold;"><%= prod.productName %></h6>
-                            <h5>&#8377;<%= prod.price %></h5>
                         </div>
                     </div>
-                </div>
-                <% }) %>
+                    <% }) %>
             </div>
         </div>
     </section>
-    
-    <div id="snackbar" ><%= product.productName%> added to cart...</div>
-    <div id="snackbar-error"><%= product.productName%> has no stock left...</div> 
+
+    <div id="snackbar">
+        <%= product.productName%> added to cart...
+    </div>
+    <div id="snackbar-error">
+        <%= product.productName%> has no stock left...
+    </div>
     <!-- Related Product Section End
 
      axios cdn  -->
@@ -339,143 +383,143 @@
 
 
     <!-- Include jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- Include ElevateZoom -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
+    <!-- Include ElevateZoom -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
 
 
 
-    
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script> 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
 
 
     <!-- Include jQuery (required for Owl Carousel) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- Include Owl Carousel JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <!-- Include Owl Carousel JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
-<script>
- 
-   
+    <script>
 
-    function changeMainImage(newImageUrl) {
-        document.getElementById('mainImage').src = newImageUrl;
-    }
 
-    $(document).ready(function() {
-        $('.product_detailspic_slider').owlCarousel({
-            loop: true,
-            margin: 10,
-            nav: true,
-            navText: ['<i class="fa fa-chevron-left"></i>', '<i class="fa fa-chevron-right"></i>'],
-            responsive: {
-                0: {
-                    items: 1
-                },
-                600: {
-                    items: 3
-                },
-                1000: {
-                    items: 5
+
+        function changeMainImage(newImageUrl) {
+            document.getElementById('mainImage').src = newImageUrl;
+        }
+
+        $(document).ready(function () {
+            $('.product_detailspic_slider').owlCarousel({
+                loop: true,
+                margin: 10,
+                nav: true,
+                navText: ['<i class="fa fa-chevron-left"></i>', '<i class="fa fa-chevron-right"></i>'],
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    600: {
+                        items: 3
+                    },
+                    1000: {
+                        items: 5
+                    }
                 }
-            }
+            });
         });
-    });
 
 
-</script>
+    </script>
 
     <script>
 
         function addToClick(id) {
-     console.log(id);
-          axios.get(`/addToCart?productId=${id}`)
-            .then((result) => {
-              if (result.data.response) {
-                let x = document.getElementById("snackbar");
-                x.className = "show";
-                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
-                $.get(location.href, function (data) {
-                  $("#cart").html($(data).find("#cart").html());
-                  $("#cartCount").html($(data).find("#cartCount").html());
+            console.log(id);
+            axios.get(`/addToCart?productId=${id}`)
+                .then((result) => {
+                    if (result.data.response) {
+                        let x = document.getElementById("snackbar");
+                        x.className = "show";
+                        setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+                        $.get(location.href, function (data) {
+                            $("#cart").html($(data).find("#cart").html());
+                            $("#cartCount").html($(data).find("#cartCount").html());
+                        })
+                    } else {
+                        let x = document.getElementById("snackbar-error");
+                        x.className = "show";
+                        setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+                    }
+
                 })
-              } else {
-                let x = document.getElementById("snackbar-error");
-                x.className = "show";
-                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
-              }
-  
-            })
-  
+
         }
-  
+
         function addToWishlist(id) {
-    $.ajax({
-        type: "GET",
-        url: "/addToWishlist",
-        data: {
-            productId: id,
-        },
-        success: function (res) {
-            console.log("sdljflas");
-            $.get(location.href, function(data){
-                $("#wishlist").html($(data).find("#wishlist").html());
-                $("#wishlist-icon").html($(data).find("#wishlist-icon").html());
+            $.ajax({
+                type: "GET",
+                url: "/addToWishlist",
+                data: {
+                    productId: id,
+                },
+                success: function (res) {
+                    console.log("sdljflas");
+                    $.get(location.href, function (data) {
+                        $("#wishlist").html($(data).find("#wishlist").html());
+                        $("#wishlist-icon").html($(data).find("#wishlist-icon").html());
+                    })
+                }
+            });
+        }
+
+        function notLogin() {
+            Swal.fire({
+                icon: "warning",
+                title: "You Are Not Logged In",
+                showCancelButton: true,
+                confirmButtonColor: "#15A78F",
+                cancelButtonColor: "#d33",
+                confirmButtonText: " Login ",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const currentUrl = location.href;
+                    location.href = `/login?url=${currentUrl}`
+                }
             })
         }
-    });
-}
-  
-        function notLogin() {
-          Swal.fire({
-            icon: "warning",
-            title: "You Are Not Logged In",
-            showCancelButton: true,
-            confirmButtonColor: "#15A78F",
-            cancelButtonColor: "#d33",
-            confirmButtonText: " Login ",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              const currentUrl = location.href;
-              location.href = `/login?url=${currentUrl}`
-            }
-          })
-        }
-  
+
         function login() {
-          const currentUrl = location.href;
-          location.href = `/login?url=${currentUrl}`
+            const currentUrl = location.href;
+            location.href = `/login?url=${currentUrl}`
         }
-  
-  
-  
+
+
+
         function zoomIn(event) {
-          var element = document.getElementById("overlay");
-          element.style.display = "inline-block";
-          var img = document.getElementById("imgZoom");
-          const src = img.getAttribute('src');
-          var posX = event.offsetX ? (event.offsetX) : event.pageX - img.offsetLeft;
-          var posY = event.offsetY ? (event.offsetY) : event.pageY - img.offsetTop;
-  
-          element.style.backgroundImage = `url(${src})`;
-  
-          element.style.backgroundPosition = (-posX * 2) + "px " + (-posY * 2) + "px";
+            var element = document.getElementById("overlay");
+            element.style.display = "inline-block";
+            var img = document.getElementById("imgZoom");
+            const src = img.getAttribute('src');
+            var posX = event.offsetX ? (event.offsetX) : event.pageX - img.offsetLeft;
+            var posY = event.offsetY ? (event.offsetY) : event.pageY - img.offsetTop;
+
+            element.style.backgroundImage = `url(${src})`;
+
+            element.style.backgroundPosition = (-posX * 2) + "px " + (-posY * 2) + "px";
         }
-  
+
         function zoomOut() {
-          var element = document.getElementById("overlay");
-          element.style.display = "none";
+            var element = document.getElementById("overlay");
+            element.style.display = "none";
         }
-  
+
         function productsInCat(catId) {
-          location.href = `/category?categoryId=${catId}`
+            location.href = `/category?categoryId=${catId}`
         }
-  
-      </script>
-  
+
+    </script>
+
 
 
     <%- include('./partials/footer.ejs') %>

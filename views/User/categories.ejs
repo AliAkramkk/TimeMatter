@@ -1,235 +1,279 @@
 <%- include('./partials/header.ejs') %>
 
-<div id="preloder">
-  <div class="loader"></div>
-</div>
+    <div class="humberger__menu__overlay"></div>
+    <div class="humberger__menu__wrapper">
+        <div class="humberger__menu__logo">
+            <a href="#"><img src="" alt=""></a>
+        </div>
+        <div class="humberger__menu__cart">
+            <ul>
+                <li><a href="/wishlist"><i class="fa fa-heart"></i> <span></span></a></li>
+                <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span></span></a></li>
+            </ul>
+            <div class="header__top__right__auth">
+                <a class="navbar-brand text-dark fs-4 fw-bold" href="/" style="font-weight: 600;">Time<span
+                        class="text-danger" style="color: #dd2222;">Matter</span></a>
 
-<header class="header">
+            </div>
 
-  <div class="container">
-      <div class="row">
-          <div class="col-lg-3">
-              <div class="header__logo">
-                  <a class="navbar-brand text-dark fs-4 fw-bold" href="#">Time<span class="text-danger">Matter</span></a>
-              </div>
-          </div>
-          <div class="col-lg-6">
-              <nav class="header__menu">
-                  <ul>
-                      <li><a href="/">Home</a></li>
-                      <li class="active"><a href="/shop">Shop</a></li>
-                      <li><a href="/about">About</a></li>
-                      <li><a href="/contact">Contact</a></li>
-                  </ul>
-              </nav>
-          </div>
-          <div class="col-lg-3">
-              <div class="header__cart">
-                 
-                  <div class="header__top__right__auth">
+        </div>
 
-                    
-                      
-                      
+        <nav class="humberger__menu__nav mobile-menu">
+            <ul>
+                <li class="active"><a href="/">Home</a></li>
+                <li><a href="/shop">Shop</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div id="mobile-menu-wrap"></div>
 
-        <div class="header__top__right__auth">
-                       
-                      </div>
+    </div>
+    <!-- Humberger End -->
 
-                      <% if(!user) {%>
-                            
-                            
+    <!-- Header Section Begin -->
+    <header class="header">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="header__logo">
+                        <a class="navbar-brand text-dark fs-4 fw-bold" href="/" style="font-weight: 700;">Time<span
+                                class="text-danger" style="color: #dd2222;">Matter</span></a>
+
+
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <nav class="header__menu">
+                        <ul>
+                            <li class="active"><a href="/">Home</a></li>
+                            <li><a href="/shop">Shop</a></li>
+                            <li><a href="/about">About</a></li>
+                            <li><a href="/contact">Contact</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-3">
+                    <div class="header__cart header__menu">
+
 
                         <div class="header__top__right__auth">
-                                          <a onclick="login()"><i class="fa fa-user"></i> Login</a>
-                                      </div>
-          
-                                      <% } else {%>
-                                      
-                      
 
-                     
-                    <ul><% if(wishlist!=null && wishlist.items.length!=0){%>
-                        <li><a href="/wishlist"><i class="fa fa-heart"></i> <span><%= wishlist.items.length%></span></a></li> <%}else{%>
-                            <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a></li><%}%>
-                        <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span><%=cart.length%></span></a></li> 
+                            <% if(!user) {%>
+
+
+
+                                <div class="header__top__right__auth">
+                                    <a onclick="login()"><i class="fa fa-user"></i> Login</a>
+                                </div>
+
+                                <% } else {%>
+
+
+                                    <ul>
+                                        <% if(wishlist!=null && wishlist.items.length!=0){%>
+                                            <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>
+                                                        <%= wishlist.items.length%>
+                                                    </span></a></li>
+                                            <%}else{%>
+                                                <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a>
+                                                </li>
+                                                <%}%>
+                                                    <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span>
+                                                                <%=cart.length%>
+                                                            </span></a></li>
+                                    </ul>
+
+                                    <div class="header__top__right__auth">
+                                        <a href="/profile"><i class="fa fa-user"></i>
+                                            <%= user.username %>
+                                        </a>
+                                    </div>
+
+                                    <div class="header__top__right__auth">
+                                        <a href="/logout" style="box-shadow: none;border: none;"
+                                            class="btn btn-sm btn-outline-danger">Logout</a>
+                                    </div>
+
+                                    <% } %>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="humberger__open">
+            <i class="fa fa-bars"></i>
+        </div>
+        </div>
+    </header>
+
+
+    <div class="container mt-3 mb-3">
+        <div class="row">
+            <div class="col-12 col-md-3">
+                <form class="filter-sec" method="get">
+                    <div class="row bg-white d-md-none d-flex p-2">
+                        <div class="col d-flex flex-row-reverse align-items-center" onclick="hideFilter()">
+                            <i class="ri-close-fill" style="margin-top: 10px; font-size: 1.8rem;"></i>
+                        </div>
+                    </div>
+                    <input type="text" value="" name="key" style="height: 0px; visibility: hidden;">
+                    <div class="row p-2">
+                        <h6>Category</h6>
+                    </div>
+                    <div class="filter-options mt-3">
+                        <div class="ft-option">
+                            <input type="radio" value="" name="category" id="d" <% if (category=="" ) { %> checked <% }
+                                %>
+                                onchange="handleChange('category', '')" />
+                                <label for="d">All</label>
+                        </div>
+                        <% categories.forEach(item=> { %>
+                            <div class="ft-option">
+                                <input type="radio" value="<%= item._id %>" name="category" id="<%= item._id %>" <% if
+                                    (category==item._id) { %>
+                                checked <% } %> onchange="handleChange('category', '<%= item._id %>')" />
+                                        <label for="<%= item._id %>">
+                                            <%= item.categoryName %>
+                                        </label>
+                            </div>
+                            <% }) %>
+                    </div>
+                    <div class="row mt-5">
+                        <h6>Sort By </h6>
+                    </div>
+                    <div class="filter-options mt-3">
+                        <div class="ft-option">
+                            <input type="radio" value="1" name="filter" id="lowToHigh" <% if (filter==1) { %> checked
+                            <% } %> onchange="handleChange('filter', 1)" />
+                                <label for="lowToHigh">Price - Low to High</label>
+                        </div>
+                        <div class="ft-option">
+                            <input type="radio" value="-1" name="filter" id="highToLow" <% if (filter==-1) { %>
+                            checked <% } %> onchange="handleChange('filter', -1)" />
+                                <label for="highToLow">Price - High to Low</label>
+                        </div>
+                        <div class="ft-option">
+                            <input type="radio" value="0" name="filter" id="newLaunches" <% if (filter==0) { %>
+                            checked <% } %> onchange="handleChange('filter', 0)" />
+                                <label for="newLaunches">New Launches</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-12 col-md-9 pt-5">
+                <div class="form-outline">
+                    <form class="d-flex nav-link text-light " role="search" action="/category">
+                        <input class="form-control me-2" type="search" placeholder="search products" aria-label="Search"
+                            name="key">
+                        <button class="btn btn-dark loginButton">Search</button>
+                    </form>
+                </div>
+                <h2 class="mb-3">Products</h2>
+                <div class="row d-flex flex-wrap" id="productList">
+                    <% products.forEach((object)=> { %>
+                        <div class="col-12 col-sm-6 col-md-4">
+                            <div class="card mb-3">
+                                <a href="/shopDetails?id=<%= object._id %>" class="text-decoration-none"
+                                    style="color: black;">
+                                    <div class="card-img-container">
+                                        <img src="<%= object.image[0].url %>" class="card-img-top" />
+                                    </div>
+                                    <div class="card-body">
+                                        <h4 class="card-title">
+                                            <%= object.productName %>
+                                        </h4>
+                                        <p class="card-text">
+                                            <%= object.blurb %>
+                                        </p>
+                                        <div class="buy d-flex justify-content-between align-items-center">
+                                            <div class="price text-success">
+                                                <h5 class="mt-4">₹<%= object.price %>
+                                                </h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <% }) %>
+                </div>
+
+            </div>
+            <nav aria-label="Page navigation example text-dark pl-pagination" id="pagination p-3">
+                <% if (pageCount> 1) { %>
+                    <ul class="pagination d-flex justify-content-center text-dark categoryPagination">
+                        <li class="page-item <% if (page == 0) { %> disabled <% } %>">
+                            <span class="page-link text-dark" aria-label="Previous">
+                                <span aria-hidden="true" onclick="gotoPage('<%= parseInt(page) - 1 %>')">&laquo;</span>
+                            </span>
+                        </li>
+                        <% for (let i=0; i < pageCount; i++) { %>
+                            <li class="page-item"><span onclick="gotoPage('<%= i %>')" class="page-link text-dark" <% if
+                                    (page==i) { %> style="font-weight:1000;" <% }%>
+                                        ><%= i + 1 %> </span></li>
+                            <% } %>
+                                <li class="page-item <% if (parseInt(page) + 1 == pageCount) { %> disabled <% } %>">
+                                    <span class="page-link text-dark" aria-label="Next">
+                                        <span aria-hidden="true"
+                                            onclick="gotoPage('<%=parseInt(page)+1%>')">&raquo;</span>
+                                    </span>
+                                </li>
                     </ul>
-
-
-                      <div class="header__top__right__auth">
-                          <a href="/profile"><i class="fa fa-user"></i><%= user.username %></a>
-                      </div>
-
-        <div class="header__top__right__auth">
-                          <a href="/logout" style="box-shadow: none;border: none;" class="btn btn-sm btn-outline-danger">Logout</a>
-                      </div>
-                      <% } %>
-                  </div>
-              </div>
-          </div>
-      </div>
-
-      </div>
-      <div class="humberger__open">
-          <i class="fa fa-bars"></i>
-      </div>
-  </div>
-</header>
-
-<div class="container mt-3 mb-3">
-  <div class="row">
-      <div class="col-12 col-md-3">
-          <form class="filter-sec" method="get">
-              <div class="row bg-white d-md-none d-flex p-2">
-                  <div class="col d-flex flex-row-reverse align-items-center" onclick="hideFilter()">
-                      <i class="ri-close-fill" style="margin-top: 10px; font-size: 1.8rem;"></i>
-                  </div>
-              </div>
-              <input type="text" value="" name="key" style="height: 0px; visibility: hidden;">
-              <div class="row p-2">
-                  <h6>Category</h6>
-              </div>
-              <div class="filter-options mt-3">
-                  <div class="ft-option">
-                      <input type="radio" value="" name="category" id="d" <% if (category == "") { %> checked <% } %>
-                          onchange="handleChange('category', '')" />
-                      <label for="d">All</label>
-                  </div>
-                  <% categories.forEach(item => { %>
-                  <div class="ft-option">
-                      <input type="radio" value="<%= item._id %>" name="category" id="<%= item._id %>" <% if (category == item._id) { %>
-                          checked <% } %> onchange="handleChange('category', '<%= item._id %>')" />
-                      <label for="<%= item._id %>">
-                          <%= item.categoryName %>
-                      </label>
-                  </div>
-                  <% }) %>
-              </div>
-              <div class="row mt-5">
-                  <h6>Sort By </h6>
-              </div>
-              <div class="filter-options mt-3">
-                  <div class="ft-option">
-                      <input type="radio" value="1" name="filter" id="lowToHigh" <% if (filter == 1) { %> checked
-                          <% } %> onchange="handleChange('filter', 1)" />
-                      <label for="lowToHigh">Price - Low to High</label>
-                  </div>
-                  <div class="ft-option">
-                      <input type="radio" value="-1" name="filter" id="highToLow" <% if (filter == -1) { %>
-                          checked <% } %> onchange="handleChange('filter', -1)" />
-                      <label for="highToLow">Price - High to Low</label>
-                  </div>
-                  <div class="ft-option">
-                      <input type="radio" value="0" name="filter" id="newLaunches" <% if (filter == 0) { %>
-                          checked <% } %> onchange="handleChange('filter', 0)" />
-                      <label for="newLaunches">New Launches</label>
-                  </div>
-              </div>
-          </form>
-      </div>
-
-      <div class="col-12 col-md-9 pt-5">
-          <div class="form-outline">
-              <form class="d-flex nav-link text-light " role="search" action="/category">
-                  <input class="form-control me-2" type="search" placeholder="search products" aria-label="Search"
-                      name="key">
-                  <button class="btn btn-dark loginButton">Search</button>
-              </form>
-          </div>
-          <h2 class="mb-3">Products</h2>
-          <div class="row d-flex flex-wrap" id="productList">
-              <% products.forEach((object) => { %>
-              <div class="col-12 col-sm-6 col-md-4">
-                  <div class="card mb-3">
-                      <a href="/shopDetails?id=<%= object._id %>" class="text-decoration-none" style="color: black;">
-                          <img src="<%= object.image[0].url %>" class="card-img-top" style="aspect-ratio: 1 / 1" />
-                          <div class="card-body">
-                              <h4 class="card-title">
-                                  <%= object.productName %>
-                              </h4>
-                              <p class="card-text">
-                                  <%= object.blurb %>
-                              </p>
-                              <div class="buy d-flex justify-content-between align-items-center">
-                                  <div class="price text-success">
-                                      <h5 class="mt-4">₹<%= object.price %></h5>
-                                  </div>
-                              </div>
-                          </div>
-                      </a>
-                  </div>
-              </div>
-              <% }) %>
-          </div>
-          <nav aria-label="Page navigation example text-dark pl-pagination" id="pagination p-3">
-              <% if (pageCount > 1) { %>
-              <ul class="pagination d-flex justify-content-center text-dark categoryPagination">
-                  <li class="page-item <% if (page == 0) { %> disabled <% } %>">
-                      <span class="page-link text-dark" aria-label="Previous">
-                          <span aria-hidden="true" onclick="gotoPage('<%= parseInt(page) - 1 %>')">&laquo;</span>
-                      </span>
-                  </li>
-                  <% for (let i = 0; i < pageCount; i++) { %>
-                  <li class="page-item"><span onclick="gotoPage('<%= i %>')" class="page-link text-dark" <%
-                      if (page == i) { %> style="font-weight:1000;" <% }%>
-                  ><%= i + 1 %> </span></li>
-            <% } %>
-            <li class="page-item <% if (parseInt(page) + 1 == pageCount) { %> disabled <% } %>">
-              <span class="page-link text-dark" aria-label="Next">
-                <span aria-hidden="true" onclick="gotoPage('<%=parseInt(page)+1%>')">&raquo;</span>
-              </span>
-            </li>
-          </ul>
-          <% } %>
-        </nav>
-      </div>
+                    <% } %>
+            </nav>
+        </div>
     </div>
-  </div>
+    </div>
 
-  <script>
-      let key = '<%=key%>'
-      let origin = window.location.origin;
-      let mainUrl = new URL(window.location.href);
-      let mainSearchParams = mainUrl.searchParams
-      let newMainUrl = ''
-      let trial = new URLSearchParams(window.location.search);
-      let cat = trial.get('catId')
-      let url = new URL(`${origin}/getProducts?category=${cat}`);
-      let searchParams = url.searchParams;
+    <script>
+        let key = '<%=key%>'
+        let origin = window.location.origin;
+        let mainUrl = new URL(window.location.href);
+        let mainSearchParams = mainUrl.searchParams
+        let newMainUrl = ''
+        let trial = new URLSearchParams(window.location.search);
+        let cat = trial.get('catId')
+        let url = new URL(`${origin}/getProducts?category=${cat}`);
+        let searchParams = url.searchParams;
 
-      function gotoPage(page) {
-          mainSearchParams.set('page', page);
-          mainSearchParams.set('key', key);
-          mainUrl.search = mainSearchParams.toString();
-          newMainUrl = mainUrl.toString();
-          window.location.href = newMainUrl
-      }
+        function gotoPage(page) {
+            mainSearchParams.set('page', page);
+            mainSearchParams.set('key', key);
+            mainUrl.search = mainSearchParams.toString();
+            newMainUrl = mainUrl.toString();
+            window.location.href = newMainUrl
+        }
 
-   
 
-      function handleChange(setName, value) {
-          searchParams.set(setName, value);
-          searchParams.set('key', key);
-          mainSearchParams.set(setName, value);
-          url.search = searchParams.toString();
-          mainUrl.search = mainSearchParams.toString();
-          var newURL = url.toString();
-          newMainURL = url.toString();
-          console.log(newURL)
-          fetch(newURL, {
-              method: 'GET',
-              headers: {
-                  'Accept': 'application/json',
-                  "Content-Type": "application/json",
-              }
-          }).then((response) => response.json()).then((data) => {
-              console.log(data)
-              let productList = document.getElementById('productList');
-              productList.innerHTML = "";
-              data.products.forEach((item, index) => {
-                  let div = document.createElement('div');
-                  div.setAttribute('class', "col-12 col-sm-6 col-md-4");
-                  div.innerHTML = `
+
+        function handleChange(setName, value) {
+            searchParams.set(setName, value);
+            searchParams.set('key', key);
+            mainSearchParams.set(setName, value);
+            url.search = searchParams.toString();
+            mainUrl.search = mainSearchParams.toString();
+            var newURL = url.toString();
+            newMainURL = url.toString();
+            console.log(newURL)
+            fetch(newURL, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    "Content-Type": "application/json",
+                }
+            }).then((response) => response.json()).then((data) => {
+                console.log(data)
+                let productList = document.getElementById('productList');
+                productList.innerHTML = "";
+                data.products.forEach((item, index) => {
+                    let div = document.createElement('div');
+                    div.setAttribute('class', "col-12 col-sm-6 col-md-4");
+                    div.innerHTML = `
  
                   <div class="card">
                                                 <a href="/shopDetails?id= ${item._id}" class="text-decoration-none"
@@ -255,59 +299,59 @@
                
 
 `;
-                  productList.appendChild(div);
-              });
-              if (data?.pageCount <= 1) {
-                  let pagination = document.getElementById('pagination')
-                  pagination.innerHTML = ""
-              } else {
-                  let pagination = document.getElementById('pagination')
-                  pagination.innerHTML = `
+                    productList.appendChild(div);
+                });
+                if (data?.pageCount <= 1) {
+                    let pagination = document.getElementById('pagination')
+                    pagination.innerHTML = ""
+                } else {
+                    let pagination = document.getElementById('pagination')
+                    pagination.innerHTML = `
 <nav aria-label="Page navigation example text-dark pl-pagination">
       <ul class="pagination d-flex justify-content-center mt-3 categoryPagination" id="paginationUl">
       </ul>
     </nav>
 `
-                  let paginationUl = document.getElementById('paginationUl');
-                  let li1 = document.createElement('li');
-                  li1.setAttribute('class', 'page-item if(data.page == 0) { disabled }')
-                  li1.innerHTML = `
+                    let paginationUl = document.getElementById('paginationUl');
+                    let li1 = document.createElement('li');
+                    li1.setAttribute('class', 'page-item if(data.page == 0) { disabled }')
+                    li1.innerHTML = `
     <span class="page-link text-dark" aria-label="Previous">
       <span aria-hidden="true" onclick="gotoPage('${data.page - 1}')">&laquo;</span>
     </span>
 `
-                  paginationUl.appendChild(li1)
-                  for (let i = 0; i < data.pageCount; i++) {
-                      let li2 = document.createElement('li');
-                      li2.setAttribute('class', 'page-item')
-                      li2.innerHTML = `
+                    paginationUl.appendChild(li1)
+                    for (let i = 0; i < data.pageCount; i++) {
+                        let li2 = document.createElement('li');
+                        li2.setAttribute('class', 'page-item')
+                        li2.innerHTML = `
   <span onclick="gotoPage('${i}')" class="page-link text-dark" > ${i + 1} </span>
   
   `
-                      paginationUl.appendChild(li2)
-                  }
-                  let li3 = document.createElement('li');
-                  li3.setAttribute('class', 'page-item')
-                  li3.innerHTML = `
+                        paginationUl.appendChild(li2)
+                    }
+                    let li3 = document.createElement('li');
+                    li3.setAttribute('class', 'page-item')
+                    li3.innerHTML = `
 <span class="page-link text-dark" aria-label="Next">
             <span aria-hidden="true" onclick="gotoPage('${data.page + 1}')">&raquo;</span>
           </span>
 `
-                  paginationUl.appendChild(li3)
-              }
-          })
-      } 
+                    paginationUl.appendChild(li3)
+                }
+            })
+        }
 
 
-      
-        function login(){
+
+        function login() {
             const currentUrl = location.href;
-            location.href= `/login?url=${currentUrl}&&a=5`
+            location.href = `/login?url=${currentUrl}&&a=5`
         }
         // document.getElementById("heroItem").height = "420";
-   
-  </script>
+
+    </script>
 
 
 
-<%- include('./partials/footer.ejs') %>
+    <%- include('./partials/footer.ejs') %>

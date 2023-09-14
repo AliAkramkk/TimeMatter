@@ -1,153 +1,207 @@
 <%- include('./partials/header.ejs') %>
-<header class="header">
+  <div class="humberger__menu__overlay"></div>
+  <div class="humberger__menu__wrapper">
+    <div class="humberger__menu__logo">
+      <a href="#"><img src="" alt=""></a>
+    </div>
+    <div class="humberger__menu__cart">
+      <ul>
+        <li><a href="/wishlist"><i class="fa fa-heart"></i> <span></span></a></li>
+        <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span></span></a></li>
+      </ul>
+      <div class="header__top__right__auth">
+        <a class="navbar-brand text-dark fs-4 fw-bold" href="/" style="font-weight: 600;">Time<span class="text-danger"
+            style="color: #dd2222;">Matter</span></a>
 
-  
+      </div>
+
+    </div>
+
+    <nav class="humberger__menu__nav mobile-menu">
+      <ul>
+        <li class="active"><a href="/">Home</a></li>
+        <li><a href="/shop">Shop</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div id="mobile-menu-wrap"></div>
+
+  </div>
+  <!-- Humberger End -->
+
+  <!-- Header Section Begin -->
+  <header class="header">
+
+    <div class="container">
       <div class="row">
-          <div class="col-lg-3">
-              <div class="header__logo">
-                  <a class="navbar-brand text-dark fs-4 fw-bold" href="#">Time<span class="text-danger">Matter</span></a>
-              </div>
+        <div class="col-lg-3">
+          <div class="header__logo">
+            <a class="navbar-brand text-dark fs-4 fw-bold" href="/" style="font-weight: 700;">Time<span
+                class="text-danger" style="color: #dd2222;">Matter</span></a>
+
+
           </div>
-          <div class="col-lg-6">
-              <nav class="header__menu">
+        </div>
+        <div class="col-lg-6">
+          <nav class="header__menu">
+            <ul>
+              <li class="active"><a href="/">Home</a></li>
+              <li><a href="/shop">Shop</a></li>
+              <li><a href="/about">About</a></li>
+              <li><a href="/contact">Contact</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="col-lg-3">
+          <div class="header__cart header__menu">
+
+
+            <div class="header__top__right__auth">
+
+              <% if(!user) {%>
+
+
+
+                <div class="header__top__right__auth">
+                  <a onclick="login()"><i class="fa fa-user"></i> Login</a>
+                </div>
+
+                <% } else {%>
+
+
                   <ul>
-                      <li><a href="/">Home</a></li>
-                      <li class="active"><a href="/shop">Shop</a></li>
-                      <li><a href="/about">About</a></li>
-                      <li><a href="/contact">Contact</a></li>
-                  </ul>
-              </nav>
-          </div>
-          <div class="col-lg-3">
-              <div class="header__cart">
-                 
-                  <div class="header_topright_auth">
-
-                  
-                      
-
-
-                   
-                      
-
-                    <ul><% if(wishlist!=null && wishlist.items.length!=0){%>
-                      <li><a href="/wishlist"><i class="fa fa-heart"></i> <span><%= wishlist.items.length%></span></a></li> <%}else{%>
-                          <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a></li><%}%>
-                      <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span><%=cart.length%></span></a></li> 
+                    <% if(wishlist!=null && wishlist.items.length!=0){%>
+                      <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>
+                            <%= wishlist.items.length%>
+                          </span></a></li>
+                      <%}else{%>
+                        <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a>
+                        </li>
+                        <%}%>
+                          <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span>
+                                <%=cart.length%>
+                              </span></a></li>
                   </ul>
 
-  
-                      <div class="header__top__right__auth">
-                          <a href="/profile"><i class="fa fa-user"></i><%= user.username %></a>
-                      </div>
-  
-                      <div class="header__top__right__auth">
-                          <a href="/logout" style="box-shadow: none;border: none;" class="btn btn-sm btn-outline-danger">Logout</a>
-                      </div>
-                      
-
-                    
-                      
-                     
+                  <div class="header__top__right__auth">
+                    <a href="/profile"><i class="fa fa-user"></i>
+                      <%= user.username %>
+                    </a>
                   </div>
-              </div>
+
+                  <div class="header__top__right__auth">
+                    <a href="/logout" style="box-shadow: none;border: none;"
+                      class="btn btn-sm btn-outline-danger">Logout</a>
+                  </div>
+
+                  <% } %>
+            </div>
+
           </div>
+        </div>
       </div>
 
+    </div>
+    <div class="humberger__open">
+      <i class="fa fa-bars"></i>
+    </div>
+    </div>
+  </header>
+  <div class="wishlist-main mt-5">
+    <div class="container mt-5" style="width: 100%;">
+
+      <h3 class="wish-head p-4">Order History <i class="fa fa-shopping-bag"></i></h3>
+      <div class="containerprob mt-3">
+
+        <div class="row">
+
+          <% orders.forEach((item)=>{ %>
+
+
+            <div class="d-flex  col-md-12 mt-3 mb-3 p-2 container pro">
+
+              <div class="col-lg-4" style="height: 100%;">
+
+                <% item.product.forEach((productItem,i)=> {%>
+                  <% if(i==0){%>
+
+
+                    <img src="image/orderHistory.png" class="card-img-top" alt="..." style="height: 8rem; width: 8rem;">
+
+                    <%}%>
+                      <%})%>
+              </div>
+
+              <div class="col-lg-4" style="padding-top: 1rem;">
+                <h5 class="">order id:<%= item.order_id%>
+                </h5>
+
+
+                <h5 class="">order date:<%= item.orderTime.toLocaleString('en-US', { weekday: 'short' , month: 'short' ,
+                    day: 'numeric' , year: 'numeric' , hour: 'numeric' , minute: 'numeric' , second: 'numeric' }) %>
+                </h5>
+
+
+
+                <h5 class="">Total Price:<%= item.total_amount%>
+                </h5>
+
+
+                <% item.product.forEach((productItem)=> { %>
+                  <h5>
+                    <%= productItem.product_id.productName %>
+                      :<%= productItem.quantity %>
+                  </h5>
+                  <% }) %>
+              </div>
+
+              <div class="order-status d-flex">
+                <div class="<%=item.orderStatus%>">
+                  <a href="/orderDetails?order_id=<%= item.order_id%>&address=<%= item.address%>">
+                    <%= item.status%>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+
+
+            <% }) %>
+
+
+
+        </div>
+        <% if(!orders[0]){ %>
+          <div class="d-flex flex-column justify-content-center align-items-center" style="gap: 10px">
+            <img src="/img/noOrders.png" style="width: 300px" alt="" />
+            <h3>No Orders found!</h3>
+            <p class="text-center">Looks like you haven't ordered anything yet</p>
+          </div>
+          <% } %>
       </div>
-    
-  </div>
-</header>
-<div class="wishlist-main mt-5">
-<div class="container mt-5" style="width: 100%;" >
- 
-  <h3 class="wish-head p-4" >Order History <i class="fa fa-shopping-bag"></i></h3>
-  <div class="containerprob mt-3">
-   
-    <div class="row">
-     
-      <% orders.forEach((item)=>{ %> 
-       
-           
-      <div class="d-flex  col-md-12 mt-3 mb-3 p-2 container pro" >
-       
-        <div class="col-lg-4" style="height: 100%;">
-         
-          <% item.product.forEach((productItem,i)=> {%>
-            <% if(i==0){%>
-              
-              
-              <img src="image/orderHistory.png" class="card-img-top" alt="..." style="height: 8rem; width: 8rem;">
-            
-          <%}%>
-          <%})%>
-        </div>
-        
-        <div class="col-lg-4" style="padding-top: 1rem;">
-          <h5 class="">order id:<%= item.order_id%></h5>
-          
-
-         <h5 class="">order date:<%= item.orderTime.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }) %></h5>
-
-         
-
-          <h5 class="">Total Price:<%= item.total_amount%></h5>
-          
-
-          <% item.product.forEach((productItem) => { %>
-            <h5> 
-               <%= productItem.product_id.productName %>
-               :<%= productItem.quantity %></h5>
-          <% }) %>
-        </div>
-       
- <div class="order-status d-flex">
-  <div class="<%=item.orderStatus%>">
-    <a href="/orderDetails?order_id=<%= item.order_id%>&address=<%= item.address%>" >
-     <%= item.status%>
-    </a>
     </div>
-  </div>
-    </div>
-
-     
-         
-      <% }) %> 
-      
-      
-      
-    </div>
-    <% if(!orders[0]){ %>
-    <div
-      class="d-flex flex-column justify-content-center align-items-center"
-      style="gap: 10px"
-    >
-      <img src="/img/noOrders.png" style="width: 300px" alt="" />
-      <h3>No Orders found!</h3>
-      <p class="text-center">Looks like you haven't ordered anything yet</p>
-    </div>
-    <% } %>
-  </div>
-</div>
-</div><br>
-<nav aria-label="Page navigation example p-4">
-  <ul class="pagination justify-content-center">
-    <li class="page-item <% if(page==1){%>disabled <%}%> ">
-      <a class="page-link" href="/orders?page=<%=page-1%>">Previous</a>
-    </li>
-    <% for(let i =1; i<=pageCount;i++){%>
-    <li class="page-item"><a class="page-link" href="/orders?page=<%=i%>"><%=i%></a></li>
-   <%}%>
-    <li class="page-item <% if(pageCount ==page){%>disabled <%}%> ">
-      <a class="page-link" href="/orders?page=<%=page+1%>">Next</a>
-    </li>
-  </ul>
-</nav><br>
+  </div><br>
+  <nav aria-label="Page navigation example p-4">
+    <ul class="pagination justify-content-center">
+      <li class="page-item <% if(page==1){%>disabled <%}%> ">
+        <a class="page-link" href="/orders?page=<%=page-1%>">Previous</a>
+      </li>
+      <% for(let i=1; i<=pageCount;i++){%>
+        <li class="page-item"><a class="page-link" href="/orders?page=<%=i%>">
+            <%=i%>
+          </a></li>
+        <%}%>
+          <li class="page-item <% if(pageCount ==page){%>disabled <%}%> ">
+            <a class="page-link" href="/orders?page=<%=page+1%>">Next</a>
+          </li>
+    </ul>
+  </nav><br>
 
 
 
 
-<!-- axios cdn -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
+  <!-- axios cdn -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
 
-<%- include('./partials/footer.ejs') %>
+  <%- include('./partials/footer.ejs') %>

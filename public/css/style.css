@@ -3828,3 +3828,40 @@ shop product
 	display: flex;
 	align-items: center;
 }
+
+/* Add this CSS to ensure the card images cover their containers */
+.card-img-container {
+	overflow: hidden;
+	/* Hide overflow to crop images */
+	height: 200px;
+	/* Set a fixed height for the card */
+}
+
+.card-img-top {
+	object-fit: cover;
+	/* Ensure the image covers the container */
+	width: 100%;
+	height: 100%;
+}
+
+.card-title {
+	font-size: 1.25rem;
+	/* Adjust font size as needed */
+}
+
+.card-text {
+	font-size: 0.875rem;
+	/* Adjust font size as needed */
+}
+
+.price {
+	font-size: 1rem;
+	/* Adjust font size as needed */
+}
+
+/* Style for the card border and rounded corners */
+.card {
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	margin: 10px;
+}

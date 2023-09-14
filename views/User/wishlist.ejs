@@ -1,155 +1,208 @@
 <%- include('./partials/header.ejs') %>
 
-<header class="header">
+  <div class="humberger__menu__overlay"></div>
+  <div class="humberger__menu__wrapper">
+    <div class="humberger__menu__logo">
+      <a href="#"><img src="" alt=""></a>
+    </div>
+    <div class="humberger__menu__cart">
+      <ul>
+        <li><a href="/wishlist"><i class="fa fa-heart"></i> <span></span></a></li>
+        <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span></span></a></li>
+      </ul>
+      <div class="header__top__right__auth">
+        <a class="navbar-brand text-dark fs-4 fw-bold" href="/" style="font-weight: 600;">Time<span class="text-danger"
+            style="color: #dd2222;">Matter</span></a>
 
-  <div class="container">
+      </div>
+
+    </div>
+
+    <nav class="humberger__menu__nav mobile-menu">
+      <ul>
+        <li class="active"><a href="/">Home</a></li>
+        <li><a href="/shop">Shop</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div id="mobile-menu-wrap"></div>
+
+  </div>
+  <!-- Humberger End -->
+
+  <!-- Header Section Begin -->
+  <header class="header">
+
+    <div class="container">
       <div class="row">
-          <div class="col-lg-3">
-              <div class="header__logo">
-                  <a class="navbar-brand text-dark fs-4 fw-bold" href="#">Time<span class="text-danger">Matter</span></a>
-              </div>
+        <div class="col-lg-3">
+          <div class="header__logo">
+            <a class="navbar-brand text-dark fs-4 fw-bold" href="#" style="font-weight: 700;">Time<span
+                class="text-danger" style="color: #dd2222;">Matter</span></a>
+
+
           </div>
-          <div class="col-lg-6">
-              <nav class="header__menu">
-                  <ul>
-                      <li><a href="/">Home</a></li>
-                      <li class="active"><a href="/shop">Shop</a></li>
-                      <li><a href="/about">About</a></li>
-                      <li><a href="/contact">Contact</a></li>
-                  </ul>
-              </nav>
-          </div>
-          <div class="col-lg-3">
-            <div class="header__cart">
+        </div>
+        <div class="col-lg-6">
+          <nav class="header__menu">
+            <ul>
+              <li class="active"><a href="/">Home</a></li>
+              <li><a href="/shop">Shop</a></li>
+              <li><a href="/about">About</a></li>
+              <li><a href="/contact">Contact</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="col-lg-3">
+          <div class="header__cart header__menu">
+
+
+            <div class="header__top__right__auth">
+
+              <% if(!user) {%>
+
+
 
                 <div class="header__top__right__auth">
-
-                   
-                    
-                    
-<!-- 
-                    <div class="header__top__right__auth">
-                        <a onclick="login()"><i class="fa fa-user"></i> Login</a>
-                    </div> -->
-
-                  
-                    
-
-                   
-                    <ul><% if(wishlist!=null && wishlist.items.length!=0){%>
-                        <li><a href="/wishlist"><i class="fa fa-heart"></i> <span id="wishlist" ><%= wishlist.items.length%></span></a></li> <%}else{%>
-                            <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a></li><%}%>
-                        <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span id="cartCount"><%=cart .length%></span></a></li> 
-                    </ul>
-
-                    <div class="header__top__right__auth">
-                        <a href="/profile"><i class="fa fa-user"></i><%= user.username %></a>
-                    </div>
-
-                    <div class="header__top__right__auth">
-                        <a href="/logout" style="box-shadow: none;border: none;" class="btn btn-sm btn-outline-danger">Logout</a>
-                    </div>
-                    
-                
+                  <a onclick="login()"><i class="fa fa-user"></i> Login</a>
                 </div>
-               
 
-                
+                <% } else {%>
+
+
+                  <ul>
+                    <% if(wishlist!=null && wishlist.items.length!=0){%>
+                      <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>
+                            <%= wishlist.items.length%>
+                          </span></a></li>
+                      <%}else{%>
+                        <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a></li>
+                        <%}%>
+                          <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span>
+                                <%=cart.length%>
+                              </span></a></li>
+                  </ul>
+
+                  <div class="header__top__right__auth">
+                    <a href="/profile"><i class="fa fa-user"></i>
+                      <%= user.username %>
+                    </a>
+                  </div>
+
+                  <div class="header__top__right__auth">
+                    <a href="/logout" style="box-shadow: none;border: none;"
+                      class="btn btn-sm btn-outline-danger">Logout</a>
+                  </div>
+
+                  <% } %>
             </div>
+
+          </div>
         </div>
       </div>
 
-      </div>
-    
-  </div>
-</header>
-<!-- Header Section End -->
+    </div>
+    <div class="humberger__open">
+      <i class="fa fa-bars"></i>
+    </div>
+    </div>
+  </header>
+  <!-- Header Section End -->
 
-<head>
+  <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.min.css">
   </head>
 
-  
-<div class="wishlist mt-5">
-  <div class="container" id="row">
-    <% if(wishlist){ %>
-      <% if(wishlist.items.length > 0) { %>
-        <h3 class="wish-head text-center mb-5 font-weight-bold p-3">Wishlist <i class="ri-heart-line"></i></h3>
-      <% } %>
-      <div class="row">
-        <% for(let i=0; i < wishlist.items.length; i++ ) { %>
-          <div class="col-lg-4 col-md-6 mb-4" id="changeWish">
-            <div class="wish-item border ">
-              <a href="" class="wish-img">
-                <img  src="<%= wishlist.items[i].image[0].url %>" alt="" class="img-fluid rounded" style="width: 140px">
-              </a>
-              <div class="wish-detail ">
-                <b><%= wishlist.items[i].productName %></b>
-                <h5>₹<%= wishlist.items[i].price %></h5>
-              </div>
-              <div class="wish-actions mt-2">
-                <button class="btn btn-primary btn-block" style="background-color: #15A78F;" onclick="addToClick('<%= wishlist.items[i]._id %>')">ADD TO CART</button>
-                <button class="btn btn-danger btn-block mt-2" onclick="removeFromWishlist('<%= wishlist.items[i]._id %>')">Remove</button>
-              </div>
-            </div>
-          </div>
-        <% } %>
-      </div>
-      <div class="row" id="emptyWishlist">
-        <% if(wishlist.items.length == 0){ %>
-          <div class="empty-container w-100 h-50 d-flex flex-column justify-content-center align-items-center gap-3">
-            <img src="https://res.cloudinary.com/dtbohkfpy/image/upload/v1691169381/wishlist_mekzmp.png" height="250px" alt="" style="opacity: 0.5;">
-            <h3>Your wishlist is empty!</h3>
-            <p>Tap the Heart button to start saving your favorites</p>
-          </div>
-        <% } %>
-      </div>
-    <% } %>
-  </div>
-</div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-<script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <div class="wishlist mt-5">
+    <div class="container" id="row">
+      <% if(wishlist){ %>
+        <% if(wishlist.items.length> 0) { %>
+          <h3 class="wish-head text-center mb-5 font-weight-bold p-3">Wishlist <i class="ri-heart-line"></i></h3>
+          <% } %>
+            <div class="row">
+              <% for(let i=0; i < wishlist.items.length; i++ ) { %>
+                <div class="col-lg-4 col-md-6 mb-4" id="changeWish">
+                  <div class="wish-item border ">
+                    <a href="" class="wish-img">
+                      <img src="<%= wishlist.items[i].image[0].url %>" alt="" class="img-fluid rounded"
+                        style="width: 140px">
+                    </a>
+                    <div class="wish-detail ">
+                      <b>
+                        <%= wishlist.items[i].productName %>
+                      </b>
+                      <h5>₹<%= wishlist.items[i].price %>
+                      </h5>
+                    </div>
+                    <div class="wish-actions mt-2">
+                      <button class="btn btn-primary btn-block" style="background-color: #15A78F;"
+                        onclick="addToClick('<%= wishlist.items[i]._id %>')">ADD TO CART</button>
+                      <button class="btn btn-danger btn-block mt-2"
+                        onclick="removeFromWishlist('<%= wishlist.items[i]._id %>')">Remove</button>
+                    </div>
+                  </div>
+                </div>
+                <% } %>
+            </div>
+            <div class="row" id="emptyWishlist">
+              <% if(wishlist.items.length==0){ %>
+                <div
+                  class="empty-container w-100 h-50 d-flex flex-column justify-content-center align-items-center gap-3">
+                  <img src="https://res.cloudinary.com/dtbohkfpy/image/upload/v1691169381/wishlist_mekzmp.png"
+                    height="250px" alt="" style="opacity: 0.5;">
+                  <h3>Your wishlist is empty!</h3>
+                  <p>Tap the Heart button to start saving your favorites</p>
+                </div>
+                <% } %>
+            </div>
+            <% } %>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script>
-   const addToClick = async (id) => {
-  try {
-    const wishlist = true
-    const result = await axios.get(`/addToCart?productId=${id}&&wishlist=${true}`);
-    
-    if (result.data.response) {
-      Swal.fire({
-        icon: 'success',
-        title: 'Success!',
-        text: `${result.data.productName} added to cart`,
-        showConfirmButton: false,
-        timer: 1500
-      });
-      
-      // Update the cart and cart count on the page
-      $.get(location.href, function (data) {
-        $("#cart").html($(data).find("#cart").html());
-        $("#cartCount").html($(data).find("#cartCount").html());
-        $("#changeWish").html($(data).find("#changeWish").html());
+    const addToClick = async (id) => {
+      try {
+        const wishlist = true
+        const result = await axios.get(`/addToCart?productId=${id}&&wishlist=${true}`);
 
-      });
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: `${result.data.productName} has no stock left`
-      });
-    }
-  } catch (error) {
-    console.error(error);
-    Swal.fire({
-      icon: 'error',
-      title: 'Oops...',
-      text: 'Failed to add to cart'
-    });
-  }
-};  
+        if (result.data.response) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: `${result.data.productName} added to cart`,
+            showConfirmButton: false,
+            timer: 1500
+          });
+
+          // Update the cart and cart count on the page
+          $.get(location.href, function (data) {
+            $("#cart").html($(data).find("#cart").html());
+            $("#cartCount").html($(data).find("#cartCount").html());
+            $("#changeWish").html($(data).find("#changeWish").html());
+
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `${result.data.productName} has no stock left`
+          });
+        }
+      } catch (error) {
+        console.error(error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Failed to add to cart'
+        });
+      }
+    };
 
 
     async function removeFromWishlist(productId) {
@@ -184,4 +237,4 @@
 
 
   </script>
-<%- include('./partials/footer.ejs') %>
+  <%- include('./partials/footer.ejs') %>
