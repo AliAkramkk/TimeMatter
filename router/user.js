@@ -15,21 +15,21 @@ routers.get("/signup", user.signup);
 routers.post("/signup", user.createUser);
 routers.get("/logout", user.userLogout);
 routers.get("/", user.loadHome);
-routers.get("/successemail/:username", user.successEmail);
+routers.get("/successemail/:username/:emailToken", user.successEmail);
 routers.get("/about", user.aboutPage);
 routers.get("/contact", user.contactPage);
 routers.get("/forget", user.forget);
-routers.post('/forget',user.forgotPass);
+routers.post('/forget', user.forgotPass);
 routers.get("/otp", user.otpVerifyPage);
 routers.get("/otpResend", user.resendOtp);
-routers.post('/otp/reset',user.resetOtpVerify);
+routers.post('/otp/reset', user.resetOtpVerify);
 routers.post("/resetPass", user.resetPass);
 routers.get("/changePassword", user.viewChangePass);
 routers.post("/changePassword", user.changePassword);
 routers.get("/verifyEmail", user.verifyEmail);
 
-routers.get("/shop",  productController.loadShop);
-routers.get("/shopDetails",  productController.productDetails);
+routers.get("/shop", productController.loadShop);
+routers.get("/shopDetails", productController.productDetails);
 routers.get("/productDetails", productController.productDetails);
 routers.get("/addToCart", userSess.islogin, cartController.addToCart);
 routers.get("/profile", userSess.islogin, user.getUserProfile);
@@ -38,17 +38,18 @@ routers.post("/edit-profile", user.updatedProfile);
 routers.get("/add-address", userSess.islogin, user.getAddAddress);
 routers.post("/add-address", userSess.islogin, user.addAddress);
 routers.get("/edit-address/:id", userSess.islogin, user.getEditAddress);
-routers.post("/edit-address", userSess.islogin,user.editAddress);
+routers.post("/edit-address", userSess.islogin, user.editAddress);
 routers.get("/delete-address/:id", userSess.islogin, user.deleteAddress);
 routers.get("/cart", userSess.islogin, cartController.getCart);
-routers.put( "/cartDelete/:id", userSess.islogin, cartController.deleteCartItems);
+routers.put("/cartDelete/:id", userSess.islogin, cartController.deleteCartItems);
 routers.put("/productInc", userSess.islogin, cartController.incrementCartItems);
 routers.put("/productDec", userSess.islogin, cartController.decrementCartItems);
 routers.get("/quantityCheck", userSess.islogin, cartController.checkQuantity);
-routers.get("/checkOut", userSess.islogin,userSess.isAccess ,cartController.getCheckOut);
+routers.post("/checkout", userSess.islogin, userSess.isAccess, cartController.checkout);
+routers.get("/checkout", cartController.getCheckOut)
 
 routers.post("/resetPass", user.resetPass);
-routers.post("/checkOut",userSess.islogin,cartController.checkout);
+routers.post("/checkOut", userSess.islogin, cartController.checkout);
 // orders
 routers.get(
   "/orders",
@@ -67,21 +68,21 @@ routers.get('/categories', categoryController.viewCategories); // display catego
 // filter products by radio button
 
 
-routers.get('/category',productController.viewCategories)
-routers.get('/getProducts',productController.getRadioProducts)
-routers.get('/filterCat',productController.filterCat);
+routers.get('/category', productController.viewCategories)
+routers.get('/getProducts', productController.getRadioProducts)
+routers.get('/filterCat', productController.filterCat);
 
 
-routers.get('/addToWishlist',userSess.islogin,userSess.isAccess , wishlistController.addToWishlist);
-routers.get('/wishlist', userSess.islogin,userSess.isAccess ,wishlistController.loadWishlist);
-routers.get('/removeFromWishlist', userSess.islogin,userSess.isAccess , wishlistController.removeFromWishlist);
+routers.get('/addToWishlist', userSess.islogin, userSess.isAccess, wishlistController.addToWishlist);
+routers.get('/wishlist', userSess.islogin, userSess.isAccess, wishlistController.loadWishlist);
+routers.get('/removeFromWishlist', userSess.islogin, userSess.isAccess, wishlistController.removeFromWishlist);
 // coupon
 // routers.post('/applyCoupon', catchErrors(userController.applyCoupon)); // apply coupon at checkout
 // routers.delete('/deleteCoupon', catchErrors(userController.deleteCoupon)); // delete coupon which is added at checkout
-routers.get( '/coupons',userSess.islogin,userSess.isAccess,cartController.viewCoupons); // list all coupons available to user
+routers.get('/coupons', userSess.islogin, userSess.isAccess, cartController.viewCoupons); // list all coupons available to user
 
-routers.get('/wallet',userSess.islogin, walletController.viewWalletPage);
-routers.post('/wallet',  walletController.addDataWallet);
-routers.put('/verifyWalletPayment',  walletController.verifyWalletPayment);
-routers.get("/errorPage",user.errorMessage);
+routers.get('/wallet', userSess.islogin, walletController.viewWalletPage);
+routers.post('/wallet', walletController.addDataWallet);
+routers.put('/verifyWalletPayment', walletController.verifyWalletPayment);
+routers.get("/errorPage", user.errorMessage);
 module.exports = routers;

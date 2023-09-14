@@ -56,7 +56,7 @@
                     </nav>
                 </div>
                 <div class="col-lg-3">
-                    <div class="header__cart">
+                    <div class="header__cart header__menu">
                        
                         <div class="header__top__right__auth">
 
@@ -72,9 +72,9 @@
                             
 
                            
-                    <ul><% if(wishlist!=null && wishlist.items.length!=0){%>
-                        <li><a href="/wishlist"><i class="fa fa-heart"></i> <span id="wishlist-icon"><%= wishlist.items.length%></span></a></li> <%}else{%>
-                            <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a></li><%}%>
+                    <ul><% if(wishlist!=null && wishlist.items.length != 0){%>
+                        <li><a href="/wishlist"><i class="fa fa-heart"></i> <span id="wishlist-icon"><%= wishlist.items.length %></span></a></li> <%}else{%>
+                            <li><a href="/wishlist"><i class="fa fa-heart"></i> <span id="wishlist-icon">0</span></a></li><%}%>
                         <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span id="cartCount"><%=cart.length%></span></a></li> 
                     </ul>
 
@@ -201,9 +201,10 @@
                                         <button style="box-shadow: none;background-color: #930202;" class=" btn primary-btn text-light" <%
                                           if(user) {%> onclick="addToClick('<%=product._id%>')" <% }else{ %> onclick="notLogin()" <% } %> >ADD
                                                 TO CART</button>
-                                        <button id="wishlist-icon" style="border: none;" class="heart-icon rounded" <% if(user) {%>
-                                          onclick="addToWishlist('<%=product._id%>')" <% }else{ %> onclick="notLogin()" <% } %> ><span
-                                                  class="icon_heart h5 <% if(wish){ %>text-danger<% } %>"></span></button>
+                                        <!-- <button id="wishlist-icon" style="border: none;" class="heart-icon rounded" <% if(user) {%> onclick="addToWishlist('<%=product._id%>')" <% }else{ %> onclick="notLogin()"<% } %> ><span class="icon_heart h5"></span></button> -->
+
+                                        <button id="wishlist"  style="border: none;" class="heart-icon rounded" <% if(user) {%> onclick="addToWishlist('<%=product._id%>')" <% }else{ %> onclick="notLogin()" <% } %>  ><span  class="icon_heart h5 <% if(wishlist && wishlist.items.includes(product._id)){ %> text-danger <% } %>"></span></button>
+
                                         </div>
                                         <% }else{ %>
                                           <kbd class="bg-danger text-dark"><b>No Stock Available</b></kbd>
@@ -419,20 +420,11 @@
             productId: id,
         },
         success: function (res) {
-            $.get(location.href, function (data) {
+            console.log("sdljflas");
+            $.get(location.href, function(data){
                 $("#wishlist").html($(data).find("#wishlist").html());
                 $("#wishlist-icon").html($(data).find("#wishlist-icon").html());
-
-                // Check if the product was just added to the wishlist
-                if (res.response) {
-                    // Product was added, show SweetAlert
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Added to Wishlist',
-                        text: 'This product has been added to your wishlist.',
-                    });
-                }
-            });
+            })
         }
     });
 }

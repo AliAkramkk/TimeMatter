@@ -59,14 +59,14 @@
   </div>
 </header>
 <!-- end of header section -->
-<div class="add-address-main">
+<div class="add-address-main p-4">
   <div class="container">
     <h3>Add Address</h3>
     <div class="add-address-container">
       <form
         class="add-box mt-3"
         id="addAddressForm"
-        action="/add-address?redirect=<%=redirect%>"
+        action="/add-address?redirect=<%=redirect%>&couponId=<%=couponId%>"
         method="post"
       >
         <input

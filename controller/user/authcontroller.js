@@ -5,10 +5,10 @@ const Product = require("../../model/productSchema");
 const Category = require("../../model/categorySchema");
 const createdId = require("../../actions/createdId");
 const Cart = require("../../model/cartSchema");
-const wishlistModel =require("../../model/wishList");
+const wishlistModel = require("../../model/wishList");
 const { body, validationResult } = require('express-validator');
 const validationHelpers = require('../../helper')
-const {sendOTP}  =require('../../utility/sendEmail')
+const { sendOTP } = require('../../utility/sendEmail')
 
 const { log } = require("console");
 
@@ -58,63 +58,63 @@ const createUser = async (req, res) => {
 // Existing user Login
 
 const verifyLogin = async (req, res) => {
-  try{
-  const email = req.body.email;
-  const password = req.body.password;
-  const userData = await User.findOne({ email: email });
-  if (userData) {
-    const passMatch = await bcrypt.compare(password, userData.password);
-    if (passMatch) {
-      if (userData.isVerified) {
-        if (userData.isAccess) {
-          if (userData.isAdmin) {
-            req.session.Admin = userData._id;
+  try {
+    const email = req.body.email;
+    const password = req.body.password;
+    const userData = await User.findOne({ email: email });
+    if (userData) {
+      const passMatch = await bcrypt.compare(password, userData.password);
+      if (passMatch) {
+        if (userData.isVerified) {
+          if (userData.isAccess) {
+            if (userData.isAdmin) {
+              req.session.Admin = userData._id;
+            }
+            req.session.User_id = userData._id;
+            return res.redirect("/"); // Redirect to home page
+          } else {
+            return res.render("User/userlogin", { message: "Access Denied" });
           }
-          req.session.User_id = userData._id;
-          return res.redirect("/"); // Redirect to home page
         } else {
-          return res.render("User/userlogin", { message: "Access Denied" });
+          const verify = await mail.verifyEmail(userData);
+          return res.render("User/userlogin", { message: "Invalid User" });
         }
       } else {
-        const verify = await mail.verifyEmail(userData);
         return res.render("User/userlogin", { message: "Invalid User" });
       }
     } else {
       return res.render("User/userlogin", { message: "Invalid User" });
     }
-  } else {
-    return res.render("User/userlogin", { message: "Invalid User" });
+  } catch {
+    res.redirect('/errorPage')
   }
-}catch{
-  res.redirect('/errorPage')
-}
-  
+
 };
 
 // Home if session, else Login
 const loadHome = async (req, res) => {
   try {
-    
- 
-  const id = req.session.User_id;
 
-  const user = await User.findOne({ _id: id });
-  const categories = await Category.find();
-  const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
-  const products = await Product.find({ isActive: true });
-  const cart = await Cart.find({ user: id }).populate("product");
-  res.render("User/home", {
-    categories,
-    products,
-    user,
-    id,
-    cart,
-    wishlist,
-    message: req.query.message,
-  });
-} catch (error) {
+
+    const id = req.session.User_id;
+
+    const user = await User.findOne({ _id: id });
+    const categories = await Category.find();
+    const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
+    const products = await Product.find({ isActive: true });
+    const cart = await Cart.find({ user: id }).populate("product");
+    res.render("User/home", {
+      categories,
+      products,
+      user,
+      id,
+      cart,
+      wishlist,
+      message: req.query.message,
+    });
+  } catch (error) {
     res.redirect('/errorPage')
-}
+  }
 };
 
 // User Logout
@@ -129,16 +129,44 @@ const userLogout = async (req, res) => {
 };
 
 const successEmail = async (req, res) => {
-  try{
-  res.render("User/successEmail", { message: req.params.username });
-  const username = req.params.username;
-  await User.findOneAndUpdate(
-    { username: username },
-    { $set: { isVerified: true } }
-  );
-  }catch{
+  try {
+    const username = req.params.username;
+    const token = req.params.emailToken
+    const user = await User.findOne({
+      emailToken: token,
+    });
+    if (user) {
+      user.emailToken = undefined;
+      await user.save();
+      res.render("User/successEmail", { message: req.params.username });
+      await User.findOneAndUpdate(
+        { username: username },
+        { $set: { isVerified: true } }
+      );
+    } else {
+      res.redirect('/errorPage')
+    }
+  } catch {
     res.redirect('/errorPage')
   }
+  // const otpVerify = async (req, res) => {
+  //   const enteredOTP =
+  //     req.body.otp1 + req.body.otp2 + req.body.otp3 + req.body.otp4;
+  //   const user = await User.findOne({
+  //     otpToken: enteredOTP,
+  //     tokenExpires: { $gt: Date.now() },
+  //   });
+  //   if (user) {
+  //     req.session.isOTPVerified = true;
+  //     user.otpToken = undefined;
+  //     user.tokenExpires = undefined;
+  //     await user.save();
+  //     res.redirect('/');
+  //   } else {
+  //     req.flash('error', 'Entered otp is incorrect/expired');
+  //     res.redirect('/otp');
+  //   }
+  // };
 };
 
 // Function to get user profile data
@@ -151,7 +179,7 @@ const getUserProfile = async (req, res) => {
       return res.render("User/userlogin", { message: "Invalid User" });
     }
     const cart = await Cart.find({ user: userId }).populate("product");
-    res.render("User/userProfile", { user, message: req.query.message,cart ,wishlist });
+    res.render("User/userProfile", { user, message: req.query.message, cart, wishlist });
   } catch (error) {
     res.redirect('/errorPage')
   }
@@ -166,8 +194,8 @@ const profileEdit = async (req, res) => {
     if (!user) {
       return res.render("User/userlogin");
     }
-   
-    res.render("User/editProfile",{cart,wishlist,user});
+
+    res.render("User/editProfile", { cart, wishlist, user });
   } catch (error) {
     console.log(error.message);
   }
@@ -187,17 +215,20 @@ const updatedProfile = async (req, res) => {
     );
     return res.redirect("/profile");
   }
-  return res.redirect("/edit-Profile" );
+  return res.redirect("/edit-Profile");
 };
 const getAddAddress = async (req, res) => {
+  const couponId = req.query.couponId ?? null;
   const userId = req.session.User_id;
   const wishlist = await wishlistModel.findOne({ userId: userId }).populate("items");
   const cart = await Cart.find({ user: userId }).populate("product");
   const redirect = req.query.redirect;
-  res.render("User/addAddress", { redirect,wishlist ,cart});
+  res.render("User/addAddress", { redirect, wishlist, cart, couponId });
 };
 
 const addAddress = async (req, res) => {
+  const couponId = req.query.couponId ?? null;
+  console.log(couponId);
   const { username, mobile, pincode, locality, address, city, state } =
     req.body;
   await User.updateOne(
@@ -219,20 +250,23 @@ const addAddress = async (req, res) => {
     }
   );
   const redirect = req.query.redirect;
-  res.redirect("/" + redirect);
+  res.redirect("/" + redirect + '?' + "couponId=" + couponId);
 };
 
 const getEditAddress = async (req, res) => {
-  const userId =req.session.User_id
+  const couponId = req.query.couponId ?? null;
+  console.log(couponId);
+  const userId = req.session.User_id
   const redirect = req.query.redirect;
+  const discountP = req.query.updatedPrice
   const cart = await Cart.find({ user: userId }).populate("product");
   const wishlist = await wishlistModel.findOne({ userId: userId }).populate("items");
   let { address } = await User.findOne(
     { "address.id": req.params.id },
     { _id: 0, address: { $elemMatch: { id: req.params.id } } }
   );
+  res.render("User/editAddress", { key: "", address: address[0], redirect, cart, wishlist, discountP, couponId });
 
-  res.render("User/editAddress", { key: "", address: address[0],redirect,cart,wishlist });
 };
 
 const editAddress = async (req, res) => {
@@ -244,10 +278,11 @@ const editAddress = async (req, res) => {
       },
     }
   );
-    const redirect = req.query.redirect;
+  const redirect = req.query.redirect;
+  const couponId = req.query.couponId
   console.log(redirect);
-  res.redirect("/"+redirect);
-  
+  res.redirect("/" + redirect + '?' + "couponId=" + couponId);
+
 };
 
 const deleteAddress = async (req, res) => {
@@ -267,7 +302,7 @@ const deleteAddress = async (req, res) => {
     );
     const redirect = req.query.redirect;
     console.log(redirect);
-    res.redirect("/"+redirect);
+    res.redirect("/" + redirect);
   } catch (error) {
     res.redirect('/errorPage');
   }
@@ -275,7 +310,7 @@ const deleteAddress = async (req, res) => {
 
 const forget = async (req, res) => {
   const id = 'reset';
-  res.render("User/forgotPassword",{id});
+  res.render("User/forgotPassword", { id });
 };
 
 const forgotPass = async (req, res) => {
@@ -286,23 +321,24 @@ const forgotPass = async (req, res) => {
   const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
   const products = await Product.find({ isActive: true });
   const cart = await Cart.find({ user: id }).populate("product");
-  
-    
-  const  email  = req.body.email;
+
+
+  const email = req.body.email;
   console.log(email);
   const document = await User.findOne({ email });
   if (document) {
     mail.resetOTP(req, res, document);
-    
 
-    res.render('User/otp', {  link: 'reset', document ,categories,
-    products,
-    user,
-    id,
-    cart,
-    wishlist,
-    message: req.query.message,
- });
+
+    res.render('User/otp', {
+      link: 'reset', document, categories,
+      products,
+      user,
+      id,
+      cart,
+      wishlist,
+      message: req.query.message,
+    });
   } else {
     req.flash('error', 'Entered email does not exist');
     res.redirect('/forget');
@@ -323,15 +359,17 @@ const otpVerifyPage = async (req, res) => {
   const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
   const products = await Product.find({ isActive: true });
   const cart = await Cart.find({ user: id }).populate("product");
-  
+
   const document = null;
-  
-  res.render('User/otp', { categories, link: 'login', document,products,
-  user,
-  id,
-  cart,
-  wishlist,
-  message: req.query.message, });
+
+  res.render('User/otp', {
+    categories, link: 'login', document, products,
+    user,
+    id,
+    cart,
+    wishlist,
+    message: req.query.message,
+  });
 };
 
 const otpVerify = async (req, res) => {
@@ -423,7 +461,7 @@ const changePassword = async (req, res) => {
   }
 };
 
-const errorMessage =(req,res)=>{
+const errorMessage = (req, res) => {
   res.render("User/404page")
 };
 
@@ -436,11 +474,11 @@ const validateResetPass = [
 
 const aboutPage = async (req, res) => {
   try {
-    const userId =req.session.User_id
-    const user =await User.findOne({_id: userId})
+    const userId = req.session.User_id
+    const user = await User.findOne({ _id: userId })
     const cart = await Cart.find({ user: userId }).populate("product");
     const wishlist = await wishlistModel.findOne({ userId: userId }).populate("items");
-    res.render("User/aboutPage", { cart,wishlist,user});
+    res.render("User/aboutPage", { cart, wishlist, user });
 
   } catch (error) {
     res.redirect('/errorPage');
@@ -449,11 +487,11 @@ const aboutPage = async (req, res) => {
 
 const contactPage = async (req, res) => {
   try {
-    const userId =req.session.User_id
-    const user =await User.findOne({_id: userId})
+    const userId = req.session.User_id
+    const user = await User.findOne({ _id: userId })
     const cart = await Cart.find({ user: userId }).populate("product");
     const wishlist = await wishlistModel.findOne({ userId: userId }).populate("items");
-    res.render("User/contact", { cart,wishlist,user});
+    res.render("User/contact", { cart, wishlist, user });
 
   } catch (error) {
     res.redirect('/errorPage');
@@ -478,12 +516,12 @@ module.exports = {
   forgotPass,
   otpVerifyPage,
   otpVerify,
-resetOtpVerify,
-viewChangePass,
-changePassword,
-verifyEmail,
-resendOtp,
-validateResetPass,
+  resetOtpVerify,
+  viewChangePass,
+  changePassword,
+  verifyEmail,
+  resendOtp,
+  validateResetPass,
 
   resetPass,
   errorMessage,

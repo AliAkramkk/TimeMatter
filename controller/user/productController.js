@@ -78,13 +78,8 @@ const  productDetails = async (req, res) => {
     const categories = await Category.find();
     const cart = await Cart.find({ user: id}).populate("product");
     
-    const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
-    let wish = false;
-    if (user && wishlist && wishlist.items.length > 0) {
-        if (wishlist.items.includes(product._id)) {
-            wish = true;
-        }
-    }
+    const wishlist = await wishlistModel.findOne({ userId: id });
+
     res.render("User/productDetails", {
       categories,
       product,
@@ -93,7 +88,6 @@ const  productDetails = async (req, res) => {
       user,
       id,
       cart,
-      wish,
       wishlist
       
     });

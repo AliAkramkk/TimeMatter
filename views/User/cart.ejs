@@ -171,9 +171,11 @@
             </div>
             <div class="p-2">
                 <label for="">Coupon</label>
-                <input id="coupon_id" type="text" name="couponname">
+                <input id="coupon_id"  type="text" name="couponname">
                 <button style="background-color: rgb(3, 3, 3); color: rgb(255, 255, 252);" onclick="applycoupon()">Apply Coupon</button>
             </div>
+
+            <input type="text" style="display: none;" id="couponId">
 
 
                                           
@@ -241,6 +243,8 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -252,6 +256,7 @@
         });
     });
 </script>
+
 
 
 <script>
@@ -332,43 +337,78 @@
                     })
                 }
  
-                function checkout() {
-    const url = window.location.origin;
-    const code = document.getElementById('coupon_id').value;
-    console.log("hi" + code + "hi");
-    const productPric = document.getElementById('totalPrice').innerText;
-    const discountPrice = document.getElementById('totalDiscount').innerText;
-    const updatedPrice = document.getElementById('totalAmount').innerText;
-    console.log("new" + updatedPrice);
+    function checkout() {
+        const url = window.location.origin;
+        const code = document.getElementById('couponId').value;
+        const couponId = $('#couponId').val();
+        console.log("hi" + code + "hi");
+        const productPric = document.getElementById('totalPrice').innerText;
+        const discountPrice = document.getElementById('totalDiscount').innerText;
+        const updatedPrice = document.getElementById('totalAmount').innerText;
+        console.log("new" + updatedPrice);
 
-    const productPrice = parseFloat(productPric);
-    const formattedUpdatedPrice = parseFloat(updatedPrice).toFixed(2); // Format to two decimal places
-    const formatedDiscountPrice = parseFloat(discountPrice).toFixed(2);
+        const productPrice = parseFloat(productPric);
+        const formattedUpdatedPrice = parseFloat(updatedPrice).toFixed(2); // Format to two decimal places
+        const formatedDiscountPrice = parseFloat(discountPrice).toFixed(2);
 
-    fetch(`${url}/quantityCheck`, {
-        method: 'GET',
-        headers: {
-            "Content-Type": "application/json",
-        }
-    }).then((response) => response.json()).then((data) => {
-        if (data.insufficientStock == true) {
-    Swal.fire({
-        title: 'Sorry',
-        text: "Out of stock product present in cart",
-        icon: 'warning',
-        showConfirmButton: true,
-    });
-    // Don't proceed to checkout if there's insufficient stock
-} else {
-    // Proceed to checkout with the provided query parameters
-    window.location.href = `${url}/checkout?code=${code}&discountPrice=${formatedDiscountPrice}&productPrice=${productPrice}&updatedPrice=${formattedUpdatedPrice}`;
-}
+        const queryParams = new URLSearchParams({
+            productPrice,
+            formattedUpdatedPrice,
+            formatedDiscountPrice,
+        });
 
-    });
-}
+        fetch(`${url}/quantityCheck?${queryParams}`, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+            }
+        }).then((response) => response.json()).then((data) => {
+            if (data.insufficientStock == true) {
+                Swal.fire({
+                    title: 'Sorry',
+                    text: "Out of stock product present in cart",
+                    icon: 'warning',
+                    showConfirmButton: true,
+                });
+            // Don't proceed to checkout if there's insufficient stock
+            } else {
+            // Proceed to checkout with the provided query parameters
+            // window.location.href = `${url}/checkout?code=${code}&discountPrice=${formatedDiscountPrice}&productPrice=${productPrice}&updatedPrice=${formattedUpdatedPrice}`;
+
+                // const postData = {
+                //     code,
+                //     discountPrice: formatedDiscountPrice,
+                //     productPrice,
+                //     updatedPrice: formattedUpdatedPrice,
+                // };
+
+                // console.log("postData",postData)
+
+                // axios.post(`/checkout`, postData)
+                // .then(response => {
+                //             console.log('Response:', response);
+                //     // window.location.href=`/checkOutoo?data=${JSON.stringify(response.data)}`
+                //         window.location.href = `/checkOutoo?data=${JSON.stringify(response.data)}`;
+                //     // Handle the response from the server if needed
+                    
+                // })
+                // .catch(error => {
+                //     // Handle any errors that occur during the request
+                //     console.error('Error:', error);
+                // });
+
+                // axios.post("/testCheckout",{
+                //     couponId: code
+                // })
+                location.href=`/checkout?couponId= ${couponId}`
+                    
+            }
+
+        });
+    }
 
 
-                function applycoupon() {
+        function applycoupon() {
         const url = window.location.origin;
         const code = document.getElementById('coupon_id').value;
         console.log(code)
@@ -381,12 +421,14 @@
         }).then((response) => response.json()).then((data) => {
             console.log(data.msg);
             const discountCoupon = data.Discount;
-            console.log(discountCoupon);
+            console.log(data);
+            alert(data.id)
             const total = parseInt(document.getElementById('totalPrice').innerText);
             console.log(total);
             const discountdPrice = parseInt((total * discountCoupon) / 100);
             console.log(discountdPrice);
 
+            $('#couponId').val(data.id);
             document.getElementById('totalDiscount').innerText = discountdPrice;
             document.getElementById('totalAmount').innerText = total - discountdPrice;
 
