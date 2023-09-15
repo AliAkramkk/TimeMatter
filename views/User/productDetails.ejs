@@ -88,9 +88,11 @@
                                                 <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a>
                                                 </li>
                                                 <%}%>
-                                                    <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span>
+                                                    <li><a href="/cart"><i class="fa fa-shopping-bag"></i>
+                                                            <span id="cartCount">
                                                                 <%=cart.length%>
-                                                            </span></a></li>
+                                                            </span>
+                                                        </a></li>
                                     </ul>
 
                                     <div class="header__top__right__auth">
@@ -227,17 +229,30 @@
                         <div class="mb-2">
                             <% if(product.quantity !==0){ %>
                                 <div class="button-container">
-                                    <button style="box-shadow: none;background-color: #930202;"
+                                    <!-- <button style="box-shadow: none;background-color: #930202;"
                                         class=" btn primary-btn text-light" <% if(user) {%> onclick="addToClick('
                                         <%=product._id%>')" <% }else{ %> onclick="notLogin()" <% } %> >ADD
                                                     TO CART
-                                    </button>
-                                    <!-- <button id="wishlist-icon" style="border: none;" class="heart-icon rounded" <% if(user) {%> onclick="addToWishlist('<%=product._id%>')" <% }else{ %> onclick="notLogin()"<% } %> ><span class="icon_heart h5"></span></button> -->
+                                    </button> -->
+                                    <% if(user){ %>
+                                        <button style="box-shadow: none;background-color: #930202;"
+                                            class=" btn primary-btn text-light"
+                                            onclick="addToClick('<%= product._id %>')">ADD
+                                            TO CART
+                                        </button>
+                                        <% }else{ %>
+                                            <button style="box-shadow: none;background-color: #930202;"
+                                                class=" btn primary-btn text-light" onclick="notLogin()">ADD
+                                                TO CART
+                                            </button>
+                                            <% } %>
+                                                <!-- <button id="wishlist-icon" style="border: none;" class="heart-icon rounded" <% if(user) {%> onclick="addToWishlist('<%=product._id%>')" <% }else{ %> onclick="notLogin()"<% } %> ><span class="icon_heart h5"></span></button> -->
 
-                                    <button id="wishlist" style="border: none;" class="heart-icon rounded" <% if(user)
-                                        {%> onclick="addToWishlist('<%=product._id%>')" <% }else{ %>
-                                                onclick="notLogin()" <% } %> ><span
-                                                        class="icon_heart h5 <% if(wishlist && wishlist.items.includes(product._id)){ %> text-danger <% } %>"></span></button>
+                                                <button id="wishlist" style="border: none;" class="heart-icon rounded"
+                                                    <% if(user) {%> onclick="addToWishlist('<%=product._id%>')" <%
+                                                            }else{ %>
+                                                            onclick="notLogin()" <% } %> ><span
+                                                                    class="icon_heart h5 <% if(wishlist && wishlist.items.includes(product._id)){ %> text-danger <% } %>"></span></button>
 
                                 </div>
                                 <% }else{ %>

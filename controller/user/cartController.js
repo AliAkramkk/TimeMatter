@@ -18,8 +18,7 @@ const { toString } = require("express-validator/src/utils");
 
 const addToCart = async (req, res) => {
   try {
-
-
+    console.log("hi");
     const userId = req.session.User_id;
     const productId = req.query.productId;
     // if (req.user.wishlist) {
