@@ -5,15 +5,48 @@
             <a href="#"><img src="" alt=""></a>
         </div>
         <div class="humberger__menu__cart">
-            <ul>
-                <li><a href="/wishlist"><i class="fa fa-heart"></i> <span></span></a></li>
-                <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span></span></a></li>
-            </ul>
-            <div class="header__top__right__auth">
-                <a class="navbar-brand text-dark fs-4 fw-bold" href="/" style="font-weight: 600;">Time<span
-                        class="text-danger" style="color: #dd2222;">Matter</span></a>
+            <% if(!user) {%>
 
-            </div>
+
+
+                <div class="header__top__right__auth">
+                    <a onclick="login()"><i class="fa fa-user"></i> Login</a>
+                </div>
+
+                <% } else {%>
+
+
+                    <ul>
+                        <% if(wishlist!=null && wishlist.items.length!=0){%>
+                            <li><a href="/wishlist"><i class="fa fa-heart"></i> <span id="wishlist-icon">
+                                        <%= wishlist.items.length%>
+                                    </span></a></li>
+                            <%}else{%>
+                                <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a>
+                                </li>
+                                <%}%>
+                                    <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span id="cartCount">
+                                                <%=carts.length%>
+                                            </span></a></li>
+                    </ul>
+
+                    <div class="header__top__right__auth">
+                        <a href="/profile"><i class="fa fa-user"></i>
+                            <%= user.username %>
+                        </a>
+                    </div>
+
+                    <div class="header__top__right__auth">
+                        <a href="/logout" style="box-shadow: none;border: none;"
+                            class="btn btn-sm btn-outline-danger">Logout</a>
+                    </div>
+
+                    <% } %>
+                        <div class="header__top__right__auth">
+                            <a class="navbar-brand text-dark fs-4 fw-bold" href="/" style="font-weight: 600;">Time<span
+                                    class="text-danger" style="color: #dd2222;">Matter</span></a>
+
+                        </div>
 
         </div>
 
