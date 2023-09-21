@@ -116,9 +116,9 @@
       <div class="containerprob mt-3">
 
         <div class="row">
-          <a href="/orderDetails?order_id=<%= item.order_id%>&address=<%= item.address%>">
-            <% orders.forEach((item)=>{ %>
 
+          <% orders.forEach((item)=>{ %>
+            <a href="/orderDetails?order_id=<%= item.order_id%>&address=<%= item.address%>">
 
               <div class="d-flex  col-md-12 mt-3 mb-3 p-2 container pro">
 
@@ -172,7 +172,7 @@
               <% }) %>
 
 
-          </a>
+            </a>
         </div>
         <% if(!orders[0]){ %>
           <div class="d-flex flex-column justify-content-center align-items-center" style="gap: 10px">
