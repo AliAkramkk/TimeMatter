@@ -1,65 +1,64 @@
-<%- include('./partials/header.ejs') %> 
-<%- include('./partials/sidebar.ejs') %>
-<div class="orders-table">
-    <% if (flashes.success) { %>
-        <div class="container alert alert-success alert-dismissible fade show" role="alert">
-            <%= flashes.success %>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                    aria-label="Close"></button>
+<%- include('./partials/header.ejs') %>
+    <%- include('./partials/sidebar.ejs') %>
+        <div class="orders-table">
+            <% if (flashes.success) { %>
+                <div class="container alert alert-success alert-dismissible fade show" role="alert">
+                    <%= flashes.success %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% } %>
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="ordersDataTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Order ID</th>
+                                    <th scope="col">User</th>
+                                    <th scope="col">Payment Status</th>
+                                    <th scope="col">Total Amount</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% order.forEach((item)=>{ %>
+                                    <tr>
+                                        <a>
+                                            <th scope="row" class="pt-3">
+                                                <%= item.order_id %>
+                                            </th>
+
+                                            <td class="pt-3">
+                                                <%= item.user.username %>
+                                            </td>
+                                            <td class="pt-3">
+                                                <div class=" del-status <%= item.status  %> ">
+                                                    <%= item.status %>
+                                                </div>
+                                            </td>
+
+                                            <td class="pt-3" style="color: green;">
+                                                ₹ <%=item.total_amount %>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-success"
+                                                    href="/admin/orderSummary/<%=item._id%>">View</a>
+                                                <a class="btn btn-info" href="/admin/editOrder/<%=item._id%>">Edit</a>
+
+                                            </td>
+                                    </tr>
+                                    <%}) %>
+
+
+                            </tbody>
+                        </table>
+                    </div>
         </div>
-        <% } %>
-        <div class="table-responsive">
-  <table class="table table-striped" id="ordersDataTable">
-      <thead>
-          <tr>
-              <th scope="col">Order ID</th>
-              <th scope="col">User</th>
-              <th scope="col">Payment Status</th>
-              <th scope="col">Total Amount</th>
-              <th scope="col">Actions</th>
-          </tr>
-      </thead>
-      <tbody>
-          <% order.forEach((item)=>{ %>
-              <tr>
-                  <a>
-                      <th scope="row" class="pt-3">
-                          <%= item.order_id %>
-                      </th>
-
-                      <td class="pt-3">
-                          <%= item.user.username %>
-                      </td>
-                      <td class="pt-3">
-                          <div class=" del-status <%= item.status  %> ">
-                              <%= item.status %>
-                          </div>
-                      </td>
-
-                      <td class="pt-3" style="color: green;">
-                          ₹ <%=item.total_amount %>
-                      </td>
-                      <td>
-                          <a class="btn btn-success"
-                              href="/admin/orderSummary/<%=item._id%>">View</a>
-                          <a class="btn btn-info" href="/admin/editOrder/<%=item._id%>">Edit</a>
-
-                      </td>
-              </tr>
-              <%}) %>
-
-
-      </tbody>
-  </table>
-</div>
-</div>
 
 
 
 
-<script>
-    $(document).ready(function() {
-        $('.table').DataTable();
-    });
-</script>
-<%- include('./partials/footer.ejs') %>
+        <script>
+            $(document).ready(function () {
+                $('.table').DataTable();
+            });
+        </script>
+        <%- include('./partials/footer.ejs') %>
