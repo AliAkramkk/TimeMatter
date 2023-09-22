@@ -175,5 +175,11 @@
         <!-- Additional sections or content can be added as needed -->
 
     </main>
-
+    <script>
+        function login() {
+            const currentUrl = location.href;
+            location.href = `/login?url=${currentUrl}`
+        }
+        // document.getElementById("heroItem").height = "420";
+    </script>
     <%- include('./partials/footer.ejs') %>

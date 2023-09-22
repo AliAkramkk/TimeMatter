@@ -1,106 +1,132 @@
 <%- include('./partials/header.ejs') %>
 
 
-<header class="header">
+    <header class="header">
 
-  <div class="container">
-      <div class="row">
-          <div class="col-lg-3">
-              <div class="header__logo">
-                  <a class="navbar-brand text-dark fs-4 fw-bold" href="/">Time<span class="text-danger">Matter</span></a>
-              </div>
-          </div>
-          <div class="col-lg-6">
-              <nav class="header__menu">
-                  <ul>
-                      <li><a href="/">Home</a></li>
-                      <li class="active"><a href="/shop">Shop</a></li>
-                      <li><a href="/about">About</a></li>
-                      <li><a href="/contact">Contact</a></li>
-                  </ul>
-              </nav>
-          </div>
-          <div class="col-lg-3">
-            <div class="header__cart">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="header__logo">
+                        <a class="navbar-brand text-dark fs-4 fw-bold" href="/">Time<span
+                                class="text-danger">Matter</span></a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <nav class="header__menu">
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li class="active"><a href="/shop">Shop</a></li>
+                            <li><a href="/about">About</a></li>
+                            <li><a href="/contact">Contact</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-3">
+                    <div class="header__cart">
 
-                <div class="header__top__right__auth">
+                        <div class="header__top__right__auth">
 
-                   
-                    
-                    
-<!-- 
+
+
+
+                            <!-- 
                     <div class="header__top__right__auth">
                         <a onclick="login()"><i class="fa fa-user"></i> Login</a>
                     </div> -->
 
-                  
-                    <% if(!user) {%>
-                            
-                            
 
-                      <div class="header__top__right__auth">
-                                        <a onclick="login()"><i class="fa fa-user"></i> Login</a>
+                            <% if(!user) {%>
+
+
+
+                                <div class="header__top__right__auth">
+                                    <a onclick="login()"><i class="fa fa-user"></i> Login</a>
+                                </div>
+
+                                <% } else {%>
+
+
+
+
+                                    <ul>
+                                        <% if(wishlist!=null && wishlist.items.length!=0){%>
+                                            <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>
+                                                        <%= wishlist.items.length%>
+                                                    </span></a></li>
+                                            <%}else{%>
+                                                <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a>
+                                                </li>
+                                                <%}%>
+                                                    <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span>
+                                                                <%=cart.length%>
+                                                            </span></a></li>
+                                    </ul>
+
+
+                                    <div class="header__top__right__auth">
+                                        <a href="/profile"><i class="fa fa-user"></i>
+                                            <%= user.username %>
+                                        </a>
                                     </div>
-        
-                                    <% } else {%>
-                                    
-                    
-                    
 
-                    <ul><% if(wishlist!=null && wishlist.items.length!=0){%>
-                        <li><a href="/wishlist"><i class="fa fa-heart"></i> <span><%= wishlist.items.length%></span></a></li> <%}else{%>
-                            <li><a href="/wishlist"><i class="fa fa-heart"></i> <span>0</span></a></li><%}%>
-                        <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span><%=cart.length%></span></a></li> 
-                    </ul>
+                                    <div class="header__top__right__auth">
+                                        <a href="/logout" style="box-shadow: none;border: none;"
+                                            class="btn btn-sm btn-outline-danger">Logout</a>
+                                    </div>
+                                    <% } %>
+
+                        </div>
 
 
-                    <div class="header__top__right__auth">
-                        <a href="/profile"><i class="fa fa-user"></i><%= user.username %></a>
+
                     </div>
-
-                    <div class="header__top__right__auth">
-                        <a href="/logout" style="box-shadow: none;border: none;" class="btn btn-sm btn-outline-danger">Logout</a>
-                    </div>
-                    <% } %>
-                
                 </div>
-               
-
-                
             </div>
+
         </div>
-      </div>
 
-      </div>
-    
-  </div>
-</header>
+        </div>
+    </header>
 
-<main>
-  <section class="about-section p-3">
-      <div class="container p-3">
-          <div class="row p-4">
-              <div class="col-md-6 p-4">
-                  <h2>About Time Matter</h2>
-                  <p>
-                      Welcome to Time Matter, your premier destination for high-quality and stylish watches. At Time Matter, we are passionate about timepieces and believe that a great watch is more than just a way to tell time; it's an expression of your style and personality.
-                  </p>
-                  <p>
-                      Our mission is to provide you with a curated selection of watches that blend form and function, offering both timeless classics and the latest trends in watch design. Whether you're looking for a classic dress watch, a rugged sports watch, or a modern smartwatch, we have something for everyone.
-                  </p>
-                  <p>
-                      We take pride in sourcing watches from reputable brands and ensuring their authenticity and quality. Our team of watch enthusiasts is dedicated to helping you find the perfect timepiece that suits your lifestyle and taste.
-                  </p>
-              </div>
-              <div class="col-md-6 p-4">
-                  <!-- Include an image of your store or a showcase of watches here -->
-                  <img src="/image/time-matter.png" alt="About Us Image" class="img-fluid">
-              </div>
-          </div>
-      </div>
-  </section>
-  
-  <!-- Additional sections or content can be added as needed -->
-  
-</main>
-<%- include('./partials/footer.ejs') %>
+    <main>
+        <section class="about-section p-3">
+            <div class="container p-3">
+                <div class="row p-4">
+                    <div class="col-md-6 p-4">
+                        <h2>About Time Matter</h2>
+                        <p>
+                            Welcome to Time Matter, your premier destination for high-quality and stylish watches. At
+                            Time Matter, we are passionate about timepieces and believe that a great watch is more than
+                            just a way to tell time; it's an expression of your style and personality.
+                        </p>
+                        <p>
+                            Our mission is to provide you with a curated selection of watches that blend form and
+                            function, offering both timeless classics and the latest trends in watch design. Whether
+                            you're looking for a classic dress watch, a rugged sports watch, or a modern smartwatch, we
+                            have something for everyone.
+                        </p>
+                        <p>
+                            We take pride in sourcing watches from reputable brands and ensuring their authenticity and
+                            quality. Our team of watch enthusiasts is dedicated to helping you find the perfect
+                            timepiece that suits your lifestyle and taste.
+                        </p>
+                    </div>
+                    <div class="col-md-6 p-4">
+                        <!-- Include an image of your store or a showcase of watches here -->
+                        <img src="/image/time-matter.png" alt="About Us Image" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Additional sections or content can be added as needed -->
+
+    </main>
+    <script>
+        function login() {
+            const currentUrl = location.href;
+            location.href = `/login?url=${currentUrl}`
+        }
+        // document.getElementById("heroItem").height = "420";
+    </script>
+    <%- include('./partials/footer.ejs') %>
